@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 interface Event {
     startTime: string;
@@ -15,7 +15,7 @@ interface ScheduleProps {
 
 export const ScheduleScreen: React.FC<ScheduleProps> = props => {
     return (
-        <View style={styles.container}>
+        <View>
             <Text>Aikataulu:</Text>
             {/* {props.events.map(event =>
                 <Text>{event.startTime}-{event.endTime}: {event.title}</Text>
@@ -23,13 +23,3 @@ export const ScheduleScreen: React.FC<ScheduleProps> = props => {
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        marginTop: 20,
-        paddingVertical: 30,
-        paddingHorizontal: 20,
-    }
-});

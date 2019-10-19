@@ -1,6 +1,6 @@
 import React from 'react';
 // import { UserScreen } from './UserScreen';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 interface User {
     userName: string;
@@ -13,7 +13,7 @@ interface UserListProps {
 
 export const UserListScreen: React.FC<UserListProps> = props => {
     return (
-        <View style={styles.container}>
+        <View>
             <Text>Nää tyypit on sun mukana matkassa!</Text>
             {/* {props.users.map(user =>
                 <UserScreen {...user} />
@@ -21,13 +21,3 @@ export const UserListScreen: React.FC<UserListProps> = props => {
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        marginTop: 20,
-        paddingVertical: 30,
-        paddingHorizontal: 20,
-    }
-});
