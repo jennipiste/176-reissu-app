@@ -22,7 +22,7 @@ export const LoginScreen: React.FC = () => {
     return (
         <View>
             <Text>Loggaa sisää</Text>
-            <TextInput placeholder="Email" keyboardType='email-address' value={email} onChangeText={(text) => setEmail(text)}/>
+            <TextInput placeholder="Email" keyboardType='email-address' autoCapitalize='none' value={email} onChangeText={(text) => setEmail(text)}/>
             <TextInput secureTextEntry={true} placeholder="Password" value={password} onChangeText={(text) => setPassword(text)}/>
             <View style={styles.button}>
                 <Button title="OK" onPress={() => onLoginPress()}/>

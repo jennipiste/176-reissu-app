@@ -31,7 +31,7 @@ export const SignupScreen: React.FC = () => {
         <View>
             <Text>Lisää ittes reissuun!</Text>
             <TextInput placeholder="Username" value={username} onChangeText={(text) => setUsername(text)}/>
-            <TextInput placeholder="Email" keyboardType='email-address' value={email} onChangeText={(text) => setEmail(text)}/>
+            <TextInput placeholder="Email" keyboardType='email-address' autoCapitalize='none' value={email} onChangeText={(text) => setEmail(text)}/>
             <TextInput secureTextEntry={true} placeholder="Password" value={password} onChangeText={(text) => setPassword(text)}/>
             <View style={styles.button}>
                 <Button title="OK" onPress={() => onSignupPress()}/>
