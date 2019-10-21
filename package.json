@@ -13,7 +13,9 @@
   },
   "dependencies": {
     "@react-navigation/web": "^1.0.0-alpha.9",
+    "@types/uuid": "^3.4.5",
     "expo": "^35.0.0",
+    "expo-image-picker": "^7.0.0",
     "firebase": "^7.2.1",
     "moment": "^2.24.0",
     "react": "16.8.3",
@@ -41,7 +43,8 @@
     "eslint": "^6.5.0",
     "eslint-plugin-react": "^7.14.3",
     "jest-expo": "^35.0.0",
-    "tslint": "^5.20.0"
+    "tslint": "^5.20.0",
+    "uuid": "^3.3.3"
   },
   "private": true
 }

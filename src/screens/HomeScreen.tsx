@@ -1,24 +1,27 @@
 import React, { useState,  useEffect } from 'react';
 import { StyleSheet, Text, View, Button, Image, TouchableNativeFeedback } from 'react-native';
+import { useNavigation } from 'react-navigation-hooks';
 import firebase from 'firebase';
 import moment from 'moment';
 
 
 export const HomeScreen: React.FC = () => {
 
-    const [ username, setUsername ] = useState<string>(undefined);
+    const [ username, setUsername ] = useState<string>('');
     const [ isLoading, setIsLoading ] = useState<boolean>(true);
     const [ timeUntil, setTimeUntil ] =  useState<{days: number, hours: number, minutes: number}>(undefined);
     const [ days, setDays ] = useState<{destination: string}[]>(undefined);
 
     const database = firebase.database();
 
+    const { navigate } = useNavigation();
+
     const logout = () => {
         firebase.auth().signOut();
     };
 
     const onDatePress = (dateIndex: number) => {
-        console.log('date pressed', dateIndex);
+        navigate('Day', { dateIndex });
     };
 
     useEffect(() => {
