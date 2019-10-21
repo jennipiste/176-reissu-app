@@ -1,66 +1,31 @@
-// import { createStackNavigator, createBottomTabNavigator, StackNavigatorConfig } from 'react-navigation';
-import { createAppContainer } from 'react-navigation';
+import { createAppContainer, createStackNavigator } from 'react-navigation';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 
 import { HomeScreen } from '../src/screens/HomeScreen';
-import { ScheduleScreen } from '../src/screens/ScheduleScreen';
-import { UserListScreen } from '../src/screens/UserListScreen';
+import { DayScreen } from '../src/screens/DayScreen';
+import { TodoScreen } from '../src/screens/TodoScreen';
+import { CreatePostScreen } from '../src/screens/CreatePostScreen';
+import { PostScreen } from '../src/screens/PostScreen';
 
-// const config: StackNavigatorConfig = {
-//   headerMode: 'screen',
-//   headerBackTitleVisible: true,
-// };
-
-// const HomeStack = createStackNavigator(
-//   {
-//     Home: HomeScreen,
-//   },
-//   config
-// );
-
-// HomeStack.navigationOptions = {
-//   tabBarLabel: 'Home',
-// };
-
-// const ScheduleStack = createStackNavigator(
-//   {
-//     Schedule: ScheduleScreen,
-//   },
-//   config
-// );
-
-// ScheduleStack.navigationOptions = {
-//   tabBarLabel: 'Schedule',
-// };
-
-// const UserListStack = createStackNavigator(
-//   {
-//     UserList: UserListScreen,
-//   },
-//   config
-// );
-
-// UserListStack.navigationOptions = {
-//   tabBarLabel: 'Users',
-// };
-
-// const tabNavigator = createBottomTabNavigator({
-//   HomeStack,
-//   ScheduleStack,
-//   UserListStack,
-// });
+const HomeStack = createStackNavigator({
+    Home: HomeScreen,
+    Day: DayScreen,
+    CreatePost: CreatePostScreen,
+    Post: PostScreen,
+}, {
+    headerMode: 'none',
+});
 
 export default createAppContainer(createMaterialTopTabNavigator({
-  Home: HomeScreen,
-  Users: UserListScreen,
-  Schedule: ScheduleScreen,
+    Home: HomeStack,
+    Todo: TodoScreen,
 }, {
-  tabBarPosition: 'bottom',
-  tabBarOptions: {
-    activeTintColor: '#000',
-    inactiveTintColor: 'grey',
-    style: {
-      backgroundColor: '#fff',
+    tabBarPosition: 'bottom',
+    tabBarOptions: {
+        activeTintColor: '#000',
+        inactiveTintColor: 'grey',
+        style: {
+        backgroundColor: '#fff',
+        }
     }
-  }
 }));
