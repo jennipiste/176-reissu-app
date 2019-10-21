@@ -2,16 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Text, View, Button, StyleSheet, TouchableNativeFeedback } from 'react-native';
 import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
 import firebase from 'firebase';
-
-export interface Post {
-    title: string;
-    text: string;
-    date: number;
-    downloadURL: string;
-    userUid: string;
-    createdAt: string;
-    uid: string;
-}
+import { Post } from './PostScreen';
 
 export const DayScreen: React.FC = () => {
 

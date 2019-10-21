@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, Image } from 'react-native';
-import { Post } from './DayScreen';
 import { useNavigationParam } from 'react-navigation-hooks';
 import firebase from 'firebase';
 
+export interface Post {
+    title: string;
+    text: string;
+    date: number;
+    downloadURL: string;
+    userUid: string;
+    userName: string;
+    createdAt: string;
+    uid: string;
+}
 
 export const PostScreen: React.FC = () => {
 
@@ -25,7 +34,7 @@ export const PostScreen: React.FC = () => {
             {post
                 ? <View>
                     <Text>{`Day ${post.date}`}</Text>
-                    <Text>{`Created by ${post.userUid}`}</Text>
+                    <Text>{`Created by ${post.userName}`}</Text>
                     <Text>{post.title}</Text>
                     <Text>{post.text}</Text>
                     {post.downloadURL &&

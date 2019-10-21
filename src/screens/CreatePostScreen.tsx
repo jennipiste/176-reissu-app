@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, Button, TextInput, StyleSheet, Image, Alert } from 'react-native';
+import { Text, View, Button, TextInput, StyleSheet, Image, Alert, AsyncStorage } from 'react-native';
 import { useNavigationParam } from 'react-navigation-hooks';
 import * as ImagePicker from 'expo-image-picker';
 import firebase from 'firebase';
@@ -19,6 +19,12 @@ export const CreatePostScreen: React.FC = () => {
 
     const onCreatePress = async () => {
         const postUid = uuid();
+        let userName: string;
+        try {
+            userName = await AsyncStorage.getItem('userName');
+        } catch (error) {
+            console.log(error);
+        }
         if (imageUri) {
             const response: Response = await fetch(imageUri);
             const blob: Blob = await response.blob();
@@ -47,6 +53,7 @@ export const CreatePostScreen: React.FC = () => {
                     text,
                     date: dateIndex,
                     downloadURL,
+                    userName,
                     userUid: firebase.auth().currentUser.uid,
                     createdAt: moment().toISOString(true),
                     uid: postUid,

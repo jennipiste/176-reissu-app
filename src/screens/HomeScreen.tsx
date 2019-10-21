@@ -1,5 +1,5 @@
 import React, { useState,  useEffect } from 'react';
-import { StyleSheet, Text, View, Button, Image, TouchableNativeFeedback } from 'react-native';
+import { StyleSheet, Text, View, Button, Image, TouchableNativeFeedback, AsyncStorage } from 'react-native';
 import { useNavigation } from 'react-navigation-hooks';
 import firebase from 'firebase';
 import moment from 'moment';
@@ -27,9 +27,13 @@ export const HomeScreen: React.FC = () => {
     useEffect(() => {
         const userId = firebase.auth().currentUser.uid;
         database.ref(`users/${userId}`).once('value')
-        .then((snapshot) => {
-            console.log(snapshot.val().username);
+        .then(async (snapshot) => {
             setUsername(snapshot.val().username);
+            try {
+                await AsyncStorage.setItem('userName', snapshot.val().username);
+            } catch (error) {
+                console.log("error", error);
+            }
         });
     }, []);
 
