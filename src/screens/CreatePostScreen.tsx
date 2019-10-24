@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Text, View, Button, TextInput, StyleSheet, Image, Alert, AsyncStorage } from 'react-native';
-import { useNavigationParam } from 'react-navigation-hooks';
+import { useNavigationParam, useNavigation } from 'react-navigation-hooks';
 import * as ImagePicker from 'expo-image-picker';
 import firebase from 'firebase';
 import uuid from 'uuid/v4';
@@ -10,14 +10,17 @@ import moment from 'moment';
 export const CreatePostScreen: React.FC = () => {
 
     const dateIndex = useNavigationParam('dateIndex');
+    const { goBack } = useNavigation();
 
     const [ title, setTitle ] = useState<string>('');
     const [ text, setText ] = useState<string>('');
     const [ imageUri, setImageUri ] = useState<string>('');
+    const [ isUploading, setIsUploading ] = useState<boolean>(false);
 
     const database = firebase.database();
 
     const onCreatePress = async () => {
+        setIsUploading(true);
         const postUid = uuid();
         let userName: string;
         try {
@@ -58,6 +61,7 @@ export const CreatePostScreen: React.FC = () => {
                     createdAt: moment().toISOString(true),
                     uid: postUid,
                 });
+                goBack();
             });
         } else {
             database.ref(`posts/${postUid}`).set({
@@ -68,6 +72,7 @@ export const CreatePostScreen: React.FC = () => {
                 createdAt: moment().toISOString(true),
                 uid: postUid,
             });
+            goBack();
         }
     };
 
@@ -82,20 +87,25 @@ export const CreatePostScreen: React.FC = () => {
 
     return (
         <View>
-            <Text>{`Create post for Day ${dateIndex}`}</Text>
-            <TextInput placeholder='Title' value={title} onChangeText={(text) => setTitle(text)} />
-            <TextInput placeholder='Text' value={text} onChangeText={(text) => setText(text)} multiline={true} numberOfLines={6}/>
-            <View style={styles.button}>
-                <Button title='Pick image' onPress={onPickImagePress} />
-            </View>
-            {imageUri.length > 0 &&
-                <View>
-                    <Image source={{ uri: imageUri }} style={styles.image} />
+            {isUploading
+                ? <Text>Creating post...</Text>
+                : <View>
+                    <Text>{`Create post for Day ${dateIndex}`}</Text>
+                    <TextInput placeholder='Title' value={title} onChangeText={(text) => setTitle(text)} />
+                    <TextInput placeholder='Text' value={text} onChangeText={(text) => setText(text)} multiline={true} numberOfLines={6}/>
+                    <View style={styles.button}>
+                        <Button title='Pick image' onPress={onPickImagePress} />
+                    </View>
+                    {imageUri.length > 0 &&
+                        <View>
+                            <Image source={{ uri: imageUri }} style={styles.image} />
+                        </View>
+                    }
+                    <View style={styles.button}>
+                        <Button title='Create' onPress={onCreatePress} />
+                    </View>
                 </View>
             }
-            <View style={styles.button}>
-                <Button title='Create' onPress={onCreatePress} />
-            </View>
         </View>
     );
 };

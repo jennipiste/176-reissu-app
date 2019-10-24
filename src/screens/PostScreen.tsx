@@ -19,6 +19,7 @@ export const PostScreen: React.FC = () => {
     const postUid = useNavigationParam('postUid');
 
     const [ post, setPost ] = useState<Post>(undefined);
+    const [ isLoadingImage, setIsLoadingImage ] = useState<boolean>(true);
 
     const database = firebase.database();
 
@@ -38,7 +39,14 @@ export const PostScreen: React.FC = () => {
                     <Text>{post.title}</Text>
                     <Text>{post.text}</Text>
                     {post.downloadURL &&
-                        <Image source={{ uri: post.downloadURL}} style={{width: 200, height: 100 }}/>
+                        <View>
+                            {isLoadingImage && <Text>Loading image...</Text>}
+                            <Image
+                                source={{ uri: post.downloadURL}}
+                                style={{width: 200, height: 100 }}
+                                onLoadEnd={() => setIsLoadingImage(false)}
+                            />
+                        </View>
                     }
                 </View>
                 : <Text>Loading...</Text>
