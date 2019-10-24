@@ -2,17 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Text, View, Image } from 'react-native';
 import { useNavigationParam } from 'react-navigation-hooks';
 import firebase from 'firebase';
-
-export interface Post {
-    title: string;
-    text: string;
-    date: number;
-    downloadURL: string;
-    userUid: string;
-    userName: string;
-    createdAt: string;
-    uid: string;
-}
+import { Post } from '../interfaces';
 
 export const PostScreen: React.FC = () => {
 
@@ -38,11 +28,11 @@ export const PostScreen: React.FC = () => {
                     <Text>{`Created by ${post.userName}`}</Text>
                     <Text>{post.title}</Text>
                     <Text>{post.text}</Text>
-                    {post.downloadURL &&
+                    {post.imageUrl &&
                         <View>
                             {isLoadingImage && <Text>Loading image...</Text>}
                             <Image
-                                source={{ uri: post.downloadURL}}
+                                source={{ uri: post.imageUrl}}
                                 style={{width: 200, height: 100 }}
                                 onLoadEnd={() => setIsLoadingImage(false)}
                             />

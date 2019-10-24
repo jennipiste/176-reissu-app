@@ -1,23 +1,52 @@
-import React from 'react';
-// import { UserScreen } from './UserScreen';
-import { Text, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, View, Image, StyleSheet } from 'react-native';
+import firebase from 'firebase';
+import { User } from '../interfaces';
 
-interface User {
-    userName: string;
-    fact: string;
-}
 
-interface UserListProps {
-    users: User[];
-}
+export const UserListScreen: React.FC = () => {
 
-export const UserListScreen: React.FC<UserListProps> = props => {
+    const [ users, setUsers ] = useState<User[]>([]);
+
+    useEffect(() => {
+        firebase.database().ref('users').on('value', (snapshot) => {
+            const result = snapshot.val();
+            if (result) {
+                const usersList = Object.keys(result).map(key => {
+                    return result[key];
+                });
+                console.log("users", usersList);
+                setUsers(usersList);
+            }
+        });
+    }, []);
+
     return (
         <View>
             <Text>Nää tyypit on sun mukana matkassa!</Text>
-            {/* {props.users.map(user =>
-                <UserScreen {...user} />
-            )} */}
+            {users.map(user =>
+                <View style={styles.view}>
+                    {user.avatarUrl
+                        ? <Image source={{ uri: user.avatarUrl }} style={styles.image} />
+                        : <Image source={require('../../assets/no_avatar.png')} style={styles.image} />
+                    }
+                    <Text>{user.username}</Text>
+                </View>
+            )}
         </View>
     );
 };
+
+const styles = StyleSheet.create({
+    view: {
+        display: 'flex',
+        flexDirection: 'row',
+        marginTop: 20,
+        marginBottom: 20,
+    },
+    image: {
+        height: 50,
+        width: 50,
+        marginRight: 20,
+    }
+});

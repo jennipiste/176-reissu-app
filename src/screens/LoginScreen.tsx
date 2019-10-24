@@ -6,8 +6,8 @@ import firebase from 'firebase';
 
 export const LoginScreen: React.FC = () => {
 
-    const [email, setEmail] = useState(undefined);
-    const [password, setPassword] = useState(undefined);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
     const { navigate } = useNavigation();
 

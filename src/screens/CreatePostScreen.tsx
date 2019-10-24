@@ -55,7 +55,7 @@ export const CreatePostScreen: React.FC = () => {
                     title,
                     text,
                     date: dateIndex,
-                    downloadURL,
+                    imageUrl: downloadURL,
                     userName,
                     userUid: firebase.auth().currentUser.uid,
                     createdAt: moment().toISOString(true),

@@ -6,12 +6,16 @@ import { DayScreen } from '../src/screens/DayScreen';
 import { TodoScreen } from '../src/screens/TodoScreen';
 import { CreatePostScreen } from '../src/screens/CreatePostScreen';
 import { PostScreen } from '../src/screens/PostScreen';
+import { UserScreen } from '../src/screens/UserScreen';
+import { UserListScreen } from '../src/screens/UserListScreen';
 
 const HomeStack = createStackNavigator({
     Home: HomeScreen,
     Day: DayScreen,
     CreatePost: CreatePostScreen,
     Post: PostScreen,
+    Profile: UserScreen,
+    Users: UserListScreen,
 }, {
     headerMode: 'none',
 });

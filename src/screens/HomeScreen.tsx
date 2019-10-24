@@ -16,12 +16,20 @@ export const HomeScreen: React.FC = () => {
 
     const { navigate } = useNavigation();
 
-    const logout = () => {
+    const onLogoutPress = () => {
         firebase.auth().signOut();
     };
 
     const onDatePress = (dateIndex: number) => {
         navigate('Day', { dateIndex });
+    };
+
+    const onProfilePress = () => {
+        navigate('Profile');
+    };
+
+    const onUsersPress = () => {
+        navigate('Users');
     };
 
     useEffect(() => {
@@ -74,7 +82,13 @@ export const HomeScreen: React.FC = () => {
                         </View>
                     }
                     <View style={styles.button}>
-                        <Button title="Logout" onPress={() => logout()}/>
+                        <Button title="Profile" onPress={() => onProfilePress()}/>
+                    </View>
+                    <View style={styles.button}>
+                        <Button title="All users" onPress={() => onUsersPress()}/>
+                    </View>
+                    <View style={styles.button}>
+                        <Button title="Logout" onPress={() => onLogoutPress()}/>
                     </View>
                 </View>
             }

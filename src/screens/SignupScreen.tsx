@@ -17,9 +17,11 @@ export const SignupScreen: React.FC = () => {
     const onSignupPress = () => {
         firebase.auth().createUserWithEmailAndPassword(email, password)
             .then((userCredential: firebase.auth.UserCredential) => {
+                const uid = userCredential.user.uid;
                 database.ref(`users/${userCredential.user.uid}`).set({
                     username,
                     email,
+                    uid,
                 });
                 navigate('Home');
             }, (error) => {
