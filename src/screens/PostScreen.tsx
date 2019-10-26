@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, Image } from 'react-native';
+import { Text, View, Image, StyleSheet } from 'react-native';
 import { useNavigationParam } from 'react-navigation-hooks';
 import firebase from 'firebase';
 import { Post } from '../interfaces';
@@ -33,7 +33,7 @@ export const PostScreen: React.FC = () => {
                             {isLoadingImage && <Text>Loading image...</Text>}
                             <Image
                                 source={{ uri: post.imageUrl}}
-                                style={{width: 200, height: 100 }}
+                                style={styles.image}
                                 onLoadEnd={() => setIsLoadingImage(false)}
                             />
                         </View>
@@ -44,3 +44,9 @@ export const PostScreen: React.FC = () => {
         </View>
     );
 };
+
+const styles = StyleSheet.create({
+    image: {
+        height: 300,
+    }
+});

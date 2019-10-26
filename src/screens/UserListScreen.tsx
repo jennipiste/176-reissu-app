@@ -25,7 +25,7 @@ export const UserListScreen: React.FC = () => {
         <View>
             <Text>Nää tyypit on sun mukana matkassa!</Text>
             {users.map(user =>
-                <View style={styles.view}>
+                <View key={user.uid} style={styles.view}>
                     {user.avatarUrl
                         ? <Image source={{ uri: user.avatarUrl }} style={styles.image} />
                         : <Image source={require('../../assets/no_avatar.png')} style={styles.image} />
@@ -45,8 +45,8 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     image: {
-        height: 50,
-        width: 50,
+        height: 75,
+        width: 75,
         marginRight: 20,
     }
 });

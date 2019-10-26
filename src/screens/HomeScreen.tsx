@@ -68,7 +68,6 @@ export const HomeScreen: React.FC = () => {
                         ? <Text>{`Matkan alkuun ${-timeUntil.days}d ${-timeUntil.hours}h ${-timeUntil.minutes}min`}</Text>
                         : <View>
                             {days.map((_, index) =>
-                                // <Text key={`day-${index}`}>{`Day ${index}}`}</Text>
                                 <TouchableNativeFeedback
                                     background={TouchableNativeFeedback.SelectableBackground()}
                                     onPress={() => onDatePress(index)}
