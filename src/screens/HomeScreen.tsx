@@ -81,10 +81,7 @@ export const HomeScreen: React.FC = () => {
                         </View>
                     }
                     <View style={styles.button}>
-                        <Button title="Profile" onPress={() => onProfilePress()}/>
-                    </View>
-                    <View style={styles.button}>
-                        <Button title="All users" onPress={() => onUsersPress()}/>
+                        <Button title="Users" onPress={() => onUsersPress()}/>
                     </View>
                     <View style={styles.button}>
                         <Button title="Logout" onPress={() => onLogoutPress()}/>

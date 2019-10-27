@@ -1,12 +1,39 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Image, StyleSheet } from 'react-native';
+import { Text, View, Image, StyleSheet, ScrollView, Button, Modal, TextInput, TouchableNativeFeedback, Alert } from 'react-native';
 import firebase from 'firebase';
 import { User } from '../interfaces';
+import * as ImagePicker from 'expo-image-picker';
+import uuid from 'uuid/v4';
 
 
 export const UserListScreen: React.FC = () => {
 
+    const [ currentUser, setCurrentUser ] = useState<User>(undefined);
+    const [ username, setUsername ] = useState<string>('');
+    const [ description, setDescription ] = useState<string>('');
+    const [ newAvatarUrl, setNewAvatarUrl ] = useState<string>('');
     const [ users, setUsers ] = useState<User[]>([]);
+    const [ isModalVisible, setIsModalVisible ] = useState<boolean>(false);
+    const [ isLoading, setIsLoading ] = useState<boolean>(true);
+    const [ isSaving, setIsSaving ] = useState<boolean>(false);
+
+    useEffect(() => {
+        updateUser();
+    }, []);
+
+    const updateUser = () => {
+        console.log("updateUser");
+        const userId = firebase.auth().currentUser.uid;
+        firebase.database().ref(`users/${userId}`).once('value')
+            .then(async (snapshot) => {
+                console.log("user", snapshot.val());
+                const user: User = snapshot.val();
+                setCurrentUser(user);
+                setUsername(user.username);
+                setDescription(user.description);
+                setIsLoading(false);
+            });
+    };
 
     useEffect(() => {
         firebase.database().ref('users').on('value', (snapshot) => {
@@ -21,32 +48,181 @@ export const UserListScreen: React.FC = () => {
         });
     }, []);
 
+    const onPickImagePress = async () => {
+        const result: ImagePicker.ImagePickerResult = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            aspect: [1, 1],
+            allowsEditing: true,
+        });
+        if (result.cancelled === false) {
+            setNewAvatarUrl(result.uri);
+        }
+    };
+
+    const onSaveUserPress = async () => {
+        setIsSaving(true);
+        if (newAvatarUrl) {
+            const response: Response = await fetch(newAvatarUrl);
+            const blob: Blob = await response.blob();
+            const ext = newAvatarUrl.split('.').pop();
+            const filename = `${uuid()}.${ext}`;
+
+            const uploadTask = firebase.storage().ref().child(`images/${filename}`).put(blob);
+
+            uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Upload is ' + progress + '% done');
+                switch (snapshot.state) {
+                    case firebase.storage.TaskState.PAUSED:
+                        console.log('Upload is paused');
+                        break;
+                    case firebase.storage.TaskState.RUNNING:
+                        console.log('Upload is running');
+                        break;
+                }
+            }, (error) => {
+                Alert.alert(error.message);
+            }, async () => {
+                const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+                firebase.database().ref(`users/${currentUser.uid}`).update({
+                    avatarUrl: downloadURL,
+                    username,
+                    description,
+                }).finally(() => {
+                    updateUser();
+                    setIsSaving(false);
+                    setIsModalVisible(false);
+                });
+            });
+        } else {
+            firebase.database().ref(`users/${currentUser.uid}`).update({
+                username,
+                description,
+            }).finally(() => {
+                updateUser();
+                setIsSaving(false);
+                setIsModalVisible(false);
+            });
+        }
+    };
+
     return (
-        <View>
-            <Text>Nää tyypit on sun mukana matkassa!</Text>
-            {users.map(user =>
-                <View key={user.uid} style={styles.view}>
-                    {user.avatarUrl
-                        ? <Image source={{ uri: user.avatarUrl }} style={styles.image} />
-                        : <Image source={require('../../assets/no_avatar.png')} style={styles.image} />
+        <ScrollView>
+            {isLoading
+                ? <Text>Loading...</Text>
+                : <>
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={isModalVisible}
+                    >
+                        <View style={styles.modal}>
+                            {isSaving
+                                ? <Text>Saving...</Text>
+                                : <View style={styles.modalContent}>
+                                    <TouchableNativeFeedback onPress={onPickImagePress}>
+                                        {newAvatarUrl
+                                            ? <Image source={{ uri: newAvatarUrl }} style={styles.currentUserImage} />
+                                            : <Image source={{ uri: currentUser.avatarUrl }} style={styles.currentUserImage} />
+                                        }
+                                    </TouchableNativeFeedback>
+                                    <TextInput style={styles.textInput} placeholder="Username" value={username} onChangeText={(text) => setUsername(text)}/>
+                                    <TextInput style={styles.textInput} placeholder="Description" value={description} onChangeText={(text) => setDescription(text)} multiline={true} numberOfLines={2}/>
+                                    <Button title='Tallenna' onPress={() => onSaveUserPress()} />
+                                </View>
+                            }
+                        </View>
+                    </Modal>
+                    {currentUser &&
+                        <View style={styles.currentUser}>
+                            <View style={styles.button}>
+                                <Button title='Muokkaa' onPress={() => setIsModalVisible(true)} />
+                            </View>
+                            {currentUser.avatarUrl
+                                ? <Image source={{ uri: currentUser.avatarUrl }} style={styles.currentUserImage} />
+                                : <Image source={require('../../assets/no_avatar.png')} style={styles.currentUserImage} />
+                            }
+                            <Text>{currentUser.username}</Text>
+                            <Text style={styles.text}>{currentUser.description}</Text>
+                        </View>
                     }
-                    <Text>{user.username}</Text>
-                </View>
-            )}
-        </View>
+                    {currentUser && users.map(user => {
+                        if (user.uid === currentUser.uid) {
+                            return;
+                        }
+                        return <View key={user.uid} style={styles.user}>
+                            {user.avatarUrl
+                                ? <Image source={{ uri: user.avatarUrl }} style={styles.image} />
+                                : <Image source={require('../../assets/no_avatar.png')} style={styles.image} />
+                            }
+                            <View style={styles.usersText}>
+                                <Text>{user.username}</Text>
+                                <Text>{user.description}</Text>
+                            </View>
+                        </View>;
+                    })}
+                </>
+            }
+        </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
-    view: {
-        display: 'flex',
+    user: {
         flexDirection: 'row',
         marginTop: 20,
+    },
+    currentUser: {
+        alignItems: 'center',
         marginBottom: 20,
     },
+    currentUserImage: {
+        width: 100,
+        height: 100,
+        borderRadius: 50,
+        borderWidth: 1,
+        overflow: 'hidden',
+        margin: 10,
+    },
     image: {
-        height: 75,
-        width: 75,
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        borderWidth: 1,
+        overflow: 'hidden',
         marginRight: 20,
-    }
+    },
+    button: {
+        position: 'absolute',
+        right: 0,
+        top: 10,
+    },
+    textInput: {
+        borderColor: 'gray',
+        borderRadius: 5,
+        borderWidth: 1,
+        width: '80%',
+        padding: 10,
+        margin: 10,
+    },
+    modal: {
+        width: '80%',
+        height: 400,
+        alignSelf: 'center',
+        borderWidth: 1,
+        borderRadius: 5,
+        backgroundColor: '#fff',
+        marginTop: 100,
+    },
+    modalContent: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    text: {
+        maxWidth: '70%',
+    },
+    usersText: {
+        flex: 1,
+    },
 });

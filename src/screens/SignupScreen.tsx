@@ -61,7 +61,7 @@ export const SignupScreen: React.FC = () => {
                 }
             </TouchableNativeFeedback>
             <TextInput style={styles.textInput} placeholder="Username" value={username} onChangeText={(text) => setUsername(text)}/>
-            <TextInput style={styles.textInput} placeholder="Description" value={description} onChangeText={(text) => setDescription(text)}/>
+            <TextInput style={styles.textInput} placeholder="Description" value={description} onChangeText={(text) => setDescription(text)} multiline={true} numberOfLines={2}/>
             <TextInput style={styles.textInput} placeholder="Email" keyboardType='email-address' autoCapitalize='none' value={email} onChangeText={(text) => setEmail(text)}/>
             <TextInput style={styles.textInput} secureTextEntry={true} placeholder="Password" value={password} onChangeText={(text) => setPassword(text)}/>
             <View style={styles.button}>
