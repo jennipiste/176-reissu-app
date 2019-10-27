@@ -106,6 +106,10 @@ export const UserListScreen: React.FC = () => {
         }
     };
 
+    const onLogoutPress = () => {
+        firebase.auth().signOut();
+    };
+
     return (
         <ScrollView>
             {isLoading
@@ -135,8 +139,9 @@ export const UserListScreen: React.FC = () => {
                     </Modal>
                     {currentUser &&
                         <View style={styles.currentUser}>
-                            <View style={styles.button}>
+                            <View style={styles.buttons}>
                                 <Button title='Muokkaa' onPress={() => setIsModalVisible(true)} />
+                                <Button title="Logout" onPress={() => onLogoutPress()}/>
                             </View>
                             {currentUser.avatarUrl
                                 ? <Image source={{ uri: currentUser.avatarUrl }} style={styles.currentUserImage} />
@@ -192,7 +197,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         marginRight: 20,
     },
-    button: {
+    buttons: {
         position: 'absolute',
         right: 0,
         top: 10,
