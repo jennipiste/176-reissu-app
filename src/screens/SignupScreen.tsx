@@ -42,6 +42,7 @@ export const SignupScreen: React.FC = () => {
                         email,
                         uid,
                         description,
+                        avatarUrl,
                     });
                     navigate('Home');
                 }, (error) => {
@@ -52,7 +53,7 @@ export const SignupScreen: React.FC = () => {
 
     return (
         <View style={styles.view}>
-            <Text style={styles.text}>Lisää ittes reissuun!</Text>
+            <Text style={styles.text}>Rekisteröidy reissuun!</Text>
             <TouchableNativeFeedback onPress={onPickImagePress}>
                 {avatarUrl.length > 0
                     ? <Image source={{ uri: avatarUrl }} style={styles.image} />
@@ -64,11 +65,11 @@ export const SignupScreen: React.FC = () => {
             <TextInput style={styles.textInput} placeholder="Email" keyboardType='email-address' autoCapitalize='none' value={email} onChangeText={(text) => setEmail(text)}/>
             <TextInput style={styles.textInput} secureTextEntry={true} placeholder="Password" value={password} onChangeText={(text) => setPassword(text)}/>
             <View style={styles.button}>
-                <Button title="Lisää" onPress={() => onSignupPress()}/>
+                <Button title="OK" onPress={() => onSignupPress()}/>
             </View>
             <Text style={styles.text}>TAI</Text>
             <View>
-                <Button title="Loggaa sisää" onPress={() => navigate('Login')}></Button>
+                <Button title="Kirjaudu sisään" onPress={() => navigate('Login')}></Button>
             </View>
         </View>
     );

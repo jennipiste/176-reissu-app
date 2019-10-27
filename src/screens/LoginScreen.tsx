@@ -22,7 +22,7 @@ export const LoginScreen: React.FC = () => {
 
     return (
         <View style={styles.view}>
-            <Text style={styles.text}>Loggaa sisää!</Text>
+            <Text style={styles.text}>Kirjaudu sisään</Text>
             <TextInput style={styles.textInput} placeholder="Email" keyboardType='email-address' autoCapitalize='none' value={email} onChangeText={(text) => setEmail(text)}/>
             <TextInput style={styles.textInput} secureTextEntry={true} placeholder="Password" value={password} onChangeText={(text) => setPassword(text)}/>
             <View style={styles.button}>
@@ -30,7 +30,7 @@ export const LoginScreen: React.FC = () => {
             </View>
             <Text style={styles.text}>TAI</Text>
             <View style={styles.button}>
-                <Button title="En oo ines bro" onPress={() => navigate('Signup')}></Button>
+                <Button title="Rekisteröidy" onPress={() => navigate('Signup')}></Button>
             </View>
         </View>
     );
