@@ -24,10 +24,6 @@ export const HomeScreen: React.FC = () => {
         navigate('Day', { dateIndex });
     };
 
-    const onProfilePress = () => {
-        navigate('Profile');
-    };
-
     const onUsersPress = () => {
         navigate('Users');
     };
