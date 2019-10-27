@@ -6,28 +6,30 @@ import firebase from 'firebase';
 
 export const LoginScreen: React.FC = () => {
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [ email, setEmail ] = useState<string>('');
+    const [ password, setPassword ] = useState<string>('');
 
     const { navigate } = useNavigation();
 
-    const onLoginPress = () => {
-        firebase.auth().signInWithEmailAndPassword(email, password)
-        .then(() => {
-        }, (error) => {
+    const onLoginPress = async () => {
+        try {
+            await firebase.auth().signInWithEmailAndPassword(email, password);
+            navigate('Home');
+        } catch (error) {
             Alert.alert(error.message);
-        }).finally(() => navigate('Home'));
+        }
     };
 
     return (
-        <View>
-            <Text>Loggaa sisää</Text>
-            <TextInput placeholder="Email" keyboardType='email-address' autoCapitalize='none' value={email} onChangeText={(text) => setEmail(text)}/>
-            <TextInput secureTextEntry={true} placeholder="Password" value={password} onChangeText={(text) => setPassword(text)}/>
+        <View style={styles.view}>
+            <Text style={styles.text}>Loggaa sisää!</Text>
+            <TextInput style={styles.textInput} placeholder="Email" keyboardType='email-address' autoCapitalize='none' value={email} onChangeText={(text) => setEmail(text)}/>
+            <TextInput style={styles.textInput} secureTextEntry={true} placeholder="Password" value={password} onChangeText={(text) => setPassword(text)}/>
             <View style={styles.button}>
                 <Button title="OK" onPress={() => onLoginPress()}/>
             </View>
-            <View>
+            <Text style={styles.text}>TAI</Text>
+            <View style={styles.button}>
                 <Button title="En oo ines bro" onPress={() => navigate('Signup')}></Button>
             </View>
         </View>
@@ -35,8 +37,25 @@ export const LoginScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
+    view: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     button: {
         marginTop: 10,
         marginBottom: 10,
-    }
+        borderRadius: 5,
+    },
+    textInput: {
+        borderColor: 'gray',
+        borderRadius: 5,
+        borderWidth: 1,
+        width: '80%',
+        padding: 10,
+        margin: 10,
+    },
+    text: {
+        margin: 20,
+    },
 });
