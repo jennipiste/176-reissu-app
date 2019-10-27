@@ -2,7 +2,8 @@ export interface User {
     uid: string;
     username: string;
     email: string;
-    avatarUrl?: string;
+    avatarUrl: string;
+    description: string;
 }
 
 export interface Post {
