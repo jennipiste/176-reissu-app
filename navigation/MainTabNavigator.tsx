@@ -19,7 +19,6 @@ const navigationOptions = ({ navigation }) => {
             marginTop: -24,
             marginBottom: -24,
         },
-        headerLeft: <FontAwesome name='chevron-left' size={20} style={{ marginLeft: 20 }} onPress={ () => { navigation.goBack(); } }  />
     };
 };
 
