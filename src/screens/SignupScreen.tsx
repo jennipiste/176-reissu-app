@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, TextInput, Button, StyleSheet, Alert, Image, TouchableNativeFeedback } from 'react-native';
+import { Text, View, TextInput, Button, StyleSheet, Alert, Image, TouchableNativeFeedback, AsyncStorage } from 'react-native';
 import { useNavigation } from 'react-navigation-hooks';
 import * as ImagePicker from 'expo-image-picker';
 import firebase from 'firebase';
@@ -44,6 +44,13 @@ export const SignupScreen: React.FC = () => {
                         uid,
                         description,
                     });
+
+                    try {
+                        await AsyncStorage.setItem('userName', username);
+                    } catch (error) {
+                        console.log("error", error);
+                    }
+
                     const response: Response = await fetch(avatarUrl);
                     const blob: Blob = await response.blob();
                     const ext = avatarUrl.split('.').pop();
