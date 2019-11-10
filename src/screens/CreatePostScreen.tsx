@@ -1,23 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, Button, TextInput, StyleSheet, Image, Alert, AsyncStorage } from 'react-native';
 import { useNavigationParam, useNavigation } from 'react-navigation-hooks';
 import * as ImagePicker from 'expo-image-picker';
 import firebase from 'firebase';
 import uuid from 'uuid/v4';
 import moment from 'moment';
-
+import DatePicker from 'react-native-datepicker';
+import { destinations } from '../constants';
+import { Destination } from '../interfaces';
 
 export const CreatePostScreen: React.FC = () => {
 
-    const dateIndex = useNavigationParam('dateIndex');
+    const destinationIndex = useNavigationParam('destinationIndex');
     const { goBack } = useNavigation();
 
-    const [ title, setTitle ] = useState<string>('');
+    const [ date, setDate ] = useState<moment.Moment>(undefined);
+    const [ destination, setDestination ] = useState<Destination>(undefined);
     const [ text, setText ] = useState<string>('');
     const [ imageUri, setImageUri ] = useState<string>('');
     const [ isUploading, setIsUploading ] = useState<boolean>(false);
 
     const database = firebase.database();
+
+    useEffect(() => {
+        // Set default date
+        const now = moment();
+        const dest = destinations[destinationIndex];
+        setDestination(dest);
+        if (now.diff(moment(dest.endTime)) > 0)  {
+            setDate(moment(dest.endTime));
+        } else {
+            setDate(now);
+        }
+    }, []);
 
     const onCreatePress = async () => {
         setIsUploading(true);
@@ -52,9 +67,9 @@ export const CreatePostScreen: React.FC = () => {
             }, async () => {
                 const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
                 database.ref(`posts/${postUid}`).set({
-                    title,
                     text,
-                    date: dateIndex,
+                    destination: destination.name,
+                    date: date.toISOString(true),
                     imageUrl: downloadURL,
                     userName,
                     userUid: firebase.auth().currentUser.uid,
@@ -65,9 +80,9 @@ export const CreatePostScreen: React.FC = () => {
             });
         } else {
             database.ref(`posts/${postUid}`).set({
-                title,
                 text,
-                date: dateIndex,
+                destination: destination.name,
+                date: date.toISOString(true),
                 userUid: firebase.auth().currentUser.uid,
                 createdAt: moment().toISOString(true),
                 uid: postUid,
@@ -89,12 +104,43 @@ export const CreatePostScreen: React.FC = () => {
         <View>
             {isUploading
                 ? <Text>Creating post...</Text>
-                : <View>
-                    <Text>{`Create post for Day ${dateIndex}`}</Text>
-                    <TextInput placeholder='Title' value={title} onChangeText={(text) => setTitle(text)} />
-                    <TextInput placeholder='Text' value={text} onChangeText={(text) => setText(text)} multiline={true} numberOfLines={6}/>
+                : destination && <View>
+                    <Text>{destination.name}</Text>
+                    <DatePicker
+                        style={styles.datePicker}
+                        date={date}
+                        mode='date'
+                        placeholder='Valitse päivä'
+                        format='YYYY-MM-DD'
+                        minDate={destination.startTime}
+                        maxDate={destination.endTime}
+                        confirmBtnText='Valitse'
+                        cancelBtnText='Peruuta'
+                        customStyles={{
+                            dateIcon: {
+                                position: 'absolute',
+                                left: 0,
+                                top: 4,
+                                marginLeft: 0
+                            },
+                            dateInput: {
+                                marginLeft: 36,
+                                borderRadius: 5,
+                            }
+                        }}
+                        onDateChange={(date) => setDate(moment(date))}
+                    />
+                    <TextInput
+                        style={styles.textInput}
+                        placeholder='Kirjoita tähän...'
+                        value={text}
+                        onChangeText={(text) => setText(text)}
+                        multiline={true}
+                        numberOfLines={6}
+                        textAlignVertical='top'
+                    />
                     <View style={styles.button}>
-                        <Button title='Pick image' onPress={onPickImagePress} />
+                        <Button title='Lisää kuva' onPress={onPickImagePress} />
                     </View>
                     {imageUri.length > 0 &&
                         <View>
@@ -102,7 +148,7 @@ export const CreatePostScreen: React.FC = () => {
                         </View>
                     }
                     <View style={styles.button}>
-                        <Button title='Create' onPress={onCreatePress} />
+                        <Button title='Luo' onPress={onCreatePress} />
                     </View>
                 </View>
             }
@@ -111,6 +157,10 @@ export const CreatePostScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
+    view: {
+        flex: 1,
+        alignItems: 'center',
+    },
     button: {
         marginTop: 10,
         marginBottom: 10,
@@ -120,5 +170,15 @@ const styles = StyleSheet.create({
     },
     image: {
         height: 300,
+    },
+    textInput: {
+        borderColor: 'gray',
+        borderRadius: 5,
+        borderWidth: 1,
+        padding: 10,
+    },
+    datePicker: {
+        marginTop: 10,
+        marginBottom: 10,
     }
 });
