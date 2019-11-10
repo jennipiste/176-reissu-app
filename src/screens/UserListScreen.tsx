@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Image, StyleSheet, ScrollView, Button, Modal, TextInput, TouchableNativeFeedback, Alert } from 'react-native';
+import { Text, View, Image, StyleSheet, ScrollView, Button, Modal, TextInput, TouchableNativeFeedback, Alert, FlatList } from 'react-native';
 import firebase from 'firebase';
 import { User } from '../interfaces';
 import * as ImagePicker from 'expo-image-picker';
@@ -155,21 +155,22 @@ export const UserListScreen: React.FC = () => {
                             <Text style={styles.text}>{currentUser.description}</Text>
                         </View>
                     }
-                    {currentUser && users.map(user => {
-                        if (user.uid === currentUser.uid) {
-                            return;
-                        }
-                        return <View key={user.uid} style={styles.user}>
-                            {user.avatarUrl
-                                ? <Image source={{ uri: user.avatarUrl }} style={styles.image} />
-                                : <Image source={require('../../assets/no_avatar.png')} style={styles.image} />
-                            }
-                            <View style={styles.usersText}>
-                                <Text>{user.username}</Text>
-                                <Text>{user.description}</Text>
-                            </View>
-                        </View>;
-                    })}
+                    <FlatList
+                        data={users.filter(user => user.uid !== currentUser.uid)}
+                        renderItem={({ item }) => {
+                            return <View key={item.uid} style={styles.user}>
+                                {item.avatarUrl
+                                    ? <Image source={{ uri: item.avatarUrl }} style={styles.image} />
+                                    : <Image source={require('../../assets/no_avatar.png')} style={styles.image} />
+                                }
+                                <View style={styles.usersText}>
+                                    <Text>{item.username}</Text>
+                                    <Text>{item.description}</Text>
+                                </View>
+                            </View>;
+                        }}
+                        keyExtractor={(_, index) => index.toString()}
+                    />
                 </>
             }
         </ScrollView>

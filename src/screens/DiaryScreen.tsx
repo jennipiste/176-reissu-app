@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, Image, StyleSheet, TouchableNativeFeedback } from 'react-native';
+import { Text, View, Image, StyleSheet, TouchableNativeFeedback, FlatList } from 'react-native';
 import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
 import firebase from 'firebase';
 import { Post } from '../interfaces';
@@ -49,21 +49,24 @@ export const DiaryScreen: React.FC = () => {
                 <FontAwesome name='plus' size={25} color='white' />
             </TouchableNativeFeedback>
             </View>
-            {(posts && posts.length > 0) && posts.map((post, index) =>
-                <View style={styles.postContainer} key={index}>
-                    <Image source={require('../../assets/no_avatar.png')} style={styles.image} />
-                    <TouchableNativeFeedback
-                        background={TouchableNativeFeedback.SelectableBackground()}
-                        onPress={() => onPostPress(post.uid)}
-                        key={index}
-                    >
-                        <View style={styles.post}>
-                            {post.imageUrl && <Image source={{ uri: post.imageUrl }} style={styles.postImage} />}
-                            <Text>{post.text}</Text>
-                        </View>
-                    </TouchableNativeFeedback>
-                </View>
-            )}
+            <FlatList
+                data={posts}
+                renderItem={({ item }) => {
+                    return <View style={styles.postContainer}>
+                        <Image source={require('../../assets/no_avatar.png')} style={styles.image} />
+                        <TouchableNativeFeedback
+                            background={TouchableNativeFeedback.SelectableBackground()}
+                            onPress={() => onPostPress(item.uid)}
+                        >
+                            <View style={styles.post}>
+                                {item.imageUrl && <Image source={{ uri: item.imageUrl }} style={styles.postImage} />}
+                                <Text>{item.text}</Text>
+                            </View>
+                        </TouchableNativeFeedback>
+                    </View>;
+                }}
+                keyExtractor={(_, index) => index.toString()}
+            />
         </View>
     );
 };
