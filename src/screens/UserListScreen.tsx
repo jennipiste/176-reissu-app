@@ -133,6 +133,7 @@ export const UserListScreen: React.FC = () => {
                                     <TextInput style={styles.textInput} placeholder="Username" value={username} onChangeText={(text) => setUsername(text)}/>
                                     <TextInput style={styles.textInput} placeholder="Description" value={description} onChangeText={(text) => setDescription(text)} multiline={true} numberOfLines={2}/>
                                     <Button title='Tallenna' onPress={() => onSaveUserPress()} />
+                                    <Button title='Sulje' onPress={() => setIsModalVisible(false)} />
                                 </View>
                             }
                         </View>
