@@ -60,14 +60,14 @@ export const TodoScreen: React.FC = () => {
     };
 
     return (
-        <View>
+        <View style={styles.view}>
             <Text>Pakkaa nää messiin:</Text>
             {packingItems.map(item =>
                 <TouchableWithoutFeedback
                     key={item.id}
                     onPress={() => toggleItem(item.id)}
                 >
-                    <View style={styles.view}>
+                    <View style={styles.itemView}>
                         {completedItems[item.id] ===  true
                             ? <Emoji
                                 name='heavy_check_mark'
@@ -86,6 +86,10 @@ export const TodoScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
     view: {
+        paddingVertical: 30,
+        paddingHorizontal: 20,
+    },
+    itemView: {
         display: 'flex',
         flexDirection: 'row',
         marginTop: 10,

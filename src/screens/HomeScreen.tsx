@@ -1,5 +1,5 @@
 import React, { useState,  useEffect } from 'react';
-import { StyleSheet, Text, View, Button, Image, TouchableNativeFeedback, AsyncStorage } from 'react-native';
+import { StyleSheet, Text, View, Button, Image, TouchableNativeFeedback, AsyncStorage, ImageBackground } from 'react-native';
 import { useNavigation } from 'react-navigation-hooks';
 import firebase from 'firebase';
 import moment from 'moment';
@@ -49,34 +49,40 @@ export const HomeScreen: React.FC = () => {
         <View>
             {isLoading
                 ? <View><Image source={require('../../assets/kitten.jpeg')} /></View>
-                : <View>
-                    <Text>Tervetuloa {username}</Text>
-                    {(timeUntil && timeUntil.days < 0  || timeUntil.hours < 0 || timeUntil.minutes < 0 || timeUntil.seconds < 0)
-                        ? <Text>{`Matkan alkuun ${-timeUntil.days}d ${-timeUntil.hours}h ${-timeUntil.minutes}min ${-timeUntil.seconds}sec`}</Text>
-                        : <View>
-                            {destinations.map((destination, index) =>
-                                <TouchableNativeFeedback
-                                    background={TouchableNativeFeedback.SelectableBackground()}
-                                    onPress={() => onDestinationPress(index)}
-                                    key={index}
-                                    >
-                                    <View style={styles.date}>
-                                        <Text>{`${destination.name}`}</Text>
-                                    </View>
-                                </TouchableNativeFeedback>
-                            )}
+                : <ImageBackground source={require('../../assets/vietnam_placeholder.jpg')} style={styles.backgroundImage}>
+                    <View style={styles.view}>
+                        <Text>Tervetuloa {username}</Text>
+                        {(timeUntil && timeUntil.days < 0  || timeUntil.hours < 0 || timeUntil.minutes < 0 || timeUntil.seconds < 0)
+                            ? <Text>{`Matkan alkuun ${-timeUntil.days}d ${-timeUntil.hours}h ${-timeUntil.minutes}min ${-timeUntil.seconds}sec`}</Text>
+                            : <View>
+                                {destinations.map((destination, index) =>
+                                    <TouchableNativeFeedback
+                                        background={TouchableNativeFeedback.SelectableBackground()}
+                                        onPress={() => onDestinationPress(index)}
+                                        key={index}
+                                        >
+                                        <View style={styles.date}>
+                                            <Text>{`${destination.name}`}</Text>
+                                        </View>
+                                    </TouchableNativeFeedback>
+                                )}
+                            </View>
+                        }
+                        <View style={styles.button}>
+                            <Button title="Käyttäjät" onPress={() => onUsersPress()}/>
                         </View>
-                    }
-                    <View style={styles.button}>
-                        <Button title="Käyttäjät" onPress={() => onUsersPress()}/>
                     </View>
-                </View>
+                </ImageBackground>
             }
         </View>
     );
 };
 
 const styles = StyleSheet.create({
+    view: {
+        paddingVertical: 30,
+        paddingHorizontal: 20,
+    },
     button: {
         marginTop: 10,
         marginBottom: 10,
@@ -85,5 +91,9 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         padding: 10,
         margin: 5,
+    },
+    backgroundImage: {
+        width: '100%',
+        height: '100%',
     }
 });

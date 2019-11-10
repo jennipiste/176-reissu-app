@@ -111,7 +111,7 @@ export const UserListScreen: React.FC = () => {
     };
 
     return (
-        <ScrollView>
+        <ScrollView style={styles.view}>
             {isLoading
                 ? <Text>Loading...</Text>
                 : <>
@@ -176,6 +176,10 @@ export const UserListScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
+    view: {
+        paddingVertical: 30,
+        paddingHorizontal: 20,
+    },
     user: {
         flexDirection: 'row',
         marginTop: 20,

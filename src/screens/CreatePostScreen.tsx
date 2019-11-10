@@ -101,7 +101,7 @@ export const CreatePostScreen: React.FC = () => {
     };
 
     return (
-        <View>
+        <View style={styles.view}>
             {isUploading
                 ? <Text>Creating post...</Text>
                 : destination && <View>
@@ -158,8 +158,8 @@ export const CreatePostScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
     view: {
-        flex: 1,
-        alignItems: 'center',
+        paddingVertical: 30,
+        paddingHorizontal: 20,
     },
     button: {
         marginTop: 10,

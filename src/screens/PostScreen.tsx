@@ -21,12 +21,11 @@ export const PostScreen: React.FC = () => {
     }, []);
 
     return (
-        <View>
+        <View style={styles.view}>
             {post
                 ? <View>
                     <Text>{`Day ${post.date}`}</Text>
                     <Text>{`Created by ${post.userName}`}</Text>
-                    <Text>{post.title}</Text>
                     <Text>{post.text}</Text>
                     {post.imageUrl &&
                         <View>
@@ -46,7 +45,11 @@ export const PostScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
+    view: {
+        paddingVertical: 30,
+        paddingHorizontal: 20,
+    },
     image: {
         height: 300,
-    }
+    },
 });

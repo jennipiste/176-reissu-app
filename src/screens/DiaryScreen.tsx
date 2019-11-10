@@ -37,7 +37,7 @@ export const DiaryScreen: React.FC = () => {
     }, []);
 
     return (
-        <View>
+        <View style={styles.view}>
             <Text>{destination.name}</Text>
             <View style={styles.button}>
                 <Button title='Luo uusi postaus' onPress={onCreatePress} />
@@ -63,6 +63,10 @@ export const DiaryScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
+    view: {
+        paddingVertical: 30,
+        paddingHorizontal: 20,
+    },
     button: {
         marginTop: 10,
         marginBottom: 10,
