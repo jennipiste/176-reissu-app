@@ -1,3 +1,4 @@
+import React from 'react';
 import { createAppContainer, createStackNavigator } from 'react-navigation';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 
@@ -9,27 +10,97 @@ import { PostScreen } from '../src/screens/PostScreen';
 import { UserListScreen } from '../src/screens/UserListScreen';
 import { InfoScreen } from  '../src/screens/InfoScreen';
 
+import { FontAwesome } from '@expo/vector-icons';
+
+const navigationOptions = ({ navigation }) => {
+    return {
+        headerStyle: {
+            backgroundColor: 'transparent',
+            marginTop: -24,
+            marginBottom: -24,
+        },
+        headerLeft: <FontAwesome name='chevron-left' size={20} style={{ marginLeft: 20 }} onPress={ () => { navigation.goBack(); } }  />
+    };
+};
+
 const HomeStack = createStackNavigator({
-    Home: HomeScreen,
-    Diary: DiaryScreen,
-    CreatePost: CreatePostScreen,
-    Post: PostScreen,
-    Users: UserListScreen,
-}, {
-    headerMode: 'none',
+    Home: {
+        screen: HomeScreen,
+        navigationOptions: {
+            header: null,
+        }
+    },
+    Diary: {
+        screen: DiaryScreen,
+        navigationOptions,
+    },
+    CreatePost: {
+        screen: CreatePostScreen,
+        navigationOptions,
+    },
+    Post: {
+        screen: PostScreen,
+        navigationOptions,
+    },
+    Users: {
+        screen: UserListScreen,
+        navigationOptions,
+    }
 });
 
+const HomeTabIcon = (props) => (
+    <FontAwesome
+        name='home'
+        size={24}
+        color={props.focused ? 'grey' : 'darkgrey'}
+    />
+);
+
+const InfoTabIcon = (props) => (
+    <FontAwesome
+      name='plane'
+      size={24}
+      color={props.focused ? 'grey' : 'darkgrey'}
+    />
+);
+
+const TodoTabIcon = (props) => (
+    <FontAwesome
+      name='suitcase'
+      size={24}
+      color={props.focused ? 'grey' : 'darkgrey'}
+    />
+);
+
 export default createAppContainer(createMaterialTopTabNavigator({
-    Home: HomeStack,
-    Info: InfoScreen,
-    Todo: TodoScreen,
+    Home: {
+        screen: HomeStack,
+        navigationOptions: {
+            tabBarIcon: HomeTabIcon,
+        }
+    },
+    Info: {
+        screen: InfoScreen,
+        navigationOptions: {
+            tabBarIcon: InfoTabIcon,
+        }
+    },
+    Todo: {
+        screen: TodoScreen,
+        navigationOptions: {
+            tabBarIcon: TodoTabIcon,
+        }
+    }
 }, {
     tabBarPosition: 'bottom',
     tabBarOptions: {
-        activeTintColor: '#000',
-        inactiveTintColor: 'grey',
         style: {
-        backgroundColor: '#fff',
-        }
+            backgroundColor: '#fff',
+        },
+        indicatorStyle: {
+            opacity: 0
+        },
+        showLabel: false,
+        showIcon: true,
     }
 }));
