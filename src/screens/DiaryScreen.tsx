@@ -2,17 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { Text, View, Button, StyleSheet, TouchableNativeFeedback } from 'react-native';
 import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
 import firebase from 'firebase';
-import { Post } from './PostScreen';
+import { Post } from '../interfaces';
+import { destinations } from  '../constants';
 
-export const DayScreen: React.FC = () => {
+export const DiaryScreen: React.FC = () => {
 
-    const dateIndex = useNavigationParam('dateIndex');
     const { navigate } = useNavigation();
+    const destinationIndex = useNavigationParam('destinationIndex');
+
+    const destination = destinations[destinationIndex];
 
     const [ posts, setPosts ] = useState<Post[]>(undefined);
 
+
     const onCreatePress = () => {
-        navigate('CreatePost', { dateIndex });
+        navigate('CreatePost', { destinationIndex });
     };
 
     const onPostPress = (postUid: string) => {
@@ -20,22 +24,23 @@ export const DayScreen: React.FC = () => {
     };
 
     useEffect(() => {
-        firebase.database().ref('posts').orderByChild('date').equalTo(dateIndex).on('value', (snapshot) => {
+        firebase.database().ref('posts').on('value', (snapshot) => {
             const result = snapshot.val();
             if (result) {
-                const postList = Object.keys(result).map(key => {
+                const postList: Post[] = Object.keys(result).map(key => {
                     return result[key];
                 });
-                setPosts(postList);
+                const filteredPosts = postList.filter(post => post.destination ===  destination.name);
+                setPosts(filteredPosts);
             }
         });
     }, []);
 
     return (
         <View>
-            <Text>{`Day ${dateIndex}`}</Text>
+            <Text>{destination.name}</Text>
             <View style={styles.button}>
-                <Button title='Create new post' onPress={onCreatePress} />
+                <Button title='Luo uusi postaus' onPress={onCreatePress} />
             </View>
             {(posts && posts.length > 0) &&
                 <View>
@@ -47,7 +52,7 @@ export const DayScreen: React.FC = () => {
                             key={index}
                         >
                             <View style={styles.post}>
-                                <Text>{post.title}</Text>
+                                <Text>{post.text}</Text>
                             </View>
                         </TouchableNativeFeedback>
                     )}

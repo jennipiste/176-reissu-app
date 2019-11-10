@@ -2,7 +2,7 @@ import { createAppContainer, createStackNavigator } from 'react-navigation';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 
 import { HomeScreen } from '../src/screens/HomeScreen';
-import { DayScreen } from '../src/screens/DayScreen';
+import { DiaryScreen } from '../src/screens/DiaryScreen';
 import { TodoScreen } from '../src/screens/TodoScreen';
 import { CreatePostScreen } from '../src/screens/CreatePostScreen';
 import { PostScreen } from '../src/screens/PostScreen';
@@ -11,7 +11,7 @@ import { InfoScreen } from  '../src/screens/InfoScreen';
 
 const HomeStack = createStackNavigator({
     Home: HomeScreen,
-    Day: DayScreen,
+    Diary: DiaryScreen,
     CreatePost: CreatePostScreen,
     Post: PostScreen,
     Users: UserListScreen,

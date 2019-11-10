@@ -3,25 +3,32 @@ import { StyleSheet, Text, View, Button, Image, TouchableNativeFeedback, AsyncSt
 import { useNavigation } from 'react-navigation-hooks';
 import firebase from 'firebase';
 import moment from 'moment';
+import { destinations, START_TIME } from  '../constants';
 
 
 export const HomeScreen: React.FC = () => {
 
     const [ username, setUsername ] = useState<string>('');
     const [ isLoading, setIsLoading ] = useState<boolean>(true);
-    const [ timeUntil, setTimeUntil ] =  useState<{days: number, hours: number, minutes: number}>(undefined);
-    const [ days, setDays ] = useState<{destination: string}[]>(undefined);
+    const [ timeUntil, setTimeUntil ] =  useState<{days: number, hours: number, minutes: number, seconds: number}>(undefined);
 
     const database = firebase.database();
 
     const { navigate } = useNavigation();
 
-    const onDatePress = (dateIndex: number) => {
-        navigate('Day', { dateIndex });
-    };
+    useEffect(() => {
+        const start_time: moment.Moment = moment(START_TIME);
+        const diff = moment().diff(start_time);
+        const duration = moment.duration(diff);
+        setTimeUntil({ days: duration.days(), hours: duration.hours(), minutes: duration.minutes(), seconds: duration.seconds() });
+    });
 
     const onUsersPress = () => {
         navigate('Users');
+    };
+
+    const onDestinationPress = (destinationIndex: number) => {
+        navigate('Diary', { destinationIndex });
     };
 
     useEffect(() => {
@@ -31,23 +38,11 @@ export const HomeScreen: React.FC = () => {
             setUsername(snapshot.val().username);
             try {
                 await AsyncStorage.setItem('userName', snapshot.val().username);
+                setIsLoading(false);
             } catch (error) {
                 console.log("error", error);
             }
         });
-    }, []);
-
-    useEffect(() => {
-        database.ref('trips/vietnam').once('value')
-            .then((snapshot) => {
-                const trip = snapshot.val();
-                const start_time: moment.Moment = moment(trip.start_time);
-                const diff = moment().diff(start_time);
-                const duration = moment.duration(diff);
-                setTimeUntil({ days: duration.days(), hours: duration.hours(), minutes: duration.minutes() });
-                setDays(trip.days);
-                setIsLoading(false);
-            });
     }, []);
 
     return (
@@ -56,24 +51,24 @@ export const HomeScreen: React.FC = () => {
                 ? <View><Image source={require('../../assets/kitten.jpeg')} /></View>
                 : <View>
                     <Text>Tervetuloa {username}</Text>
-                    {(timeUntil && timeUntil.days < 0  && timeUntil.hours < 0 && timeUntil.minutes < 0)
-                        ? <Text>{`Matkan alkuun ${-timeUntil.days}d ${-timeUntil.hours}h ${-timeUntil.minutes}min`}</Text>
+                    {(timeUntil && timeUntil.days < 0  || timeUntil.hours < 0 || timeUntil.minutes < 0 || timeUntil.seconds < 0)
+                        ? <Text>{`Matkan alkuun ${-timeUntil.days}d ${-timeUntil.hours}h ${-timeUntil.minutes}min ${-timeUntil.seconds}sec`}</Text>
                         : <View>
-                            {days.map((_, index) =>
+                            {destinations.map((destination, index) =>
                                 <TouchableNativeFeedback
                                     background={TouchableNativeFeedback.SelectableBackground()}
-                                    onPress={() => onDatePress(index)}
+                                    onPress={() => onDestinationPress(index)}
                                     key={index}
                                     >
                                     <View style={styles.date}>
-                                        <Text>{`Day ${index}`}</Text>
+                                        <Text>{`${destination.name}`}</Text>
                                     </View>
                                 </TouchableNativeFeedback>
                             )}
                         </View>
                     }
                     <View style={styles.button}>
-                        <Button title="Users" onPress={() => onUsersPress()}/>
+                        <Button title="Käyttäjät" onPress={() => onUsersPress()}/>
                     </View>
                 </View>
             }
