@@ -178,7 +178,7 @@ export const UserListScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
     view: {
-        paddingVertical: 30,
+        paddingVertical: 10,
         paddingHorizontal: 20,
     },
     user: {

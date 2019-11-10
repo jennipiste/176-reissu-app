@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, Button, StyleSheet, TouchableNativeFeedback } from 'react-native';
+import { Text, View, Image, StyleSheet, TouchableNativeFeedback } from 'react-native';
 import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
 import firebase from 'firebase';
 import { Post } from '../interfaces';
 import { destinations } from  '../constants';
+import { FontAwesome } from '@expo/vector-icons';
 
 export const DiaryScreen: React.FC = () => {
 
@@ -38,42 +39,82 @@ export const DiaryScreen: React.FC = () => {
 
     return (
         <View style={styles.view}>
-            <Text>{destination.name}</Text>
+            <View style={styles.location}><FontAwesome name='map-marker' size={20} /><Text>{destination.name}</Text></View>
             <View style={styles.button}>
-                <Button title='Luo uusi postaus' onPress={onCreatePress} />
+            <TouchableNativeFeedback
+                style={styles.button}
+                background={TouchableNativeFeedback.SelectableBackground()}
+                onPress={onCreatePress}
+            >
+                <FontAwesome name='plus' size={25} color='white' />
+            </TouchableNativeFeedback>
             </View>
-            {(posts && posts.length > 0) &&
-                <View>
-                    <Text>Posts:</Text>
-                    {posts.map((post, index) =>
-                        <TouchableNativeFeedback
-                            background={TouchableNativeFeedback.SelectableBackground()}
-                            onPress={() => onPostPress(post.uid)}
-                            key={index}
-                        >
-                            <View style={styles.post}>
-                                <Text>{post.text}</Text>
-                            </View>
-                        </TouchableNativeFeedback>
-                    )}
+            {(posts && posts.length > 0) && posts.map((post, index) =>
+                <View style={styles.postContainer} key={index}>
+                    <Image source={require('../../assets/no_avatar.png')} style={styles.image} />
+                    <TouchableNativeFeedback
+                        background={TouchableNativeFeedback.SelectableBackground()}
+                        onPress={() => onPostPress(post.uid)}
+                        key={index}
+                    >
+                        <View style={styles.post}>
+                            {post.imageUrl && <Image source={{ uri: post.imageUrl }} style={styles.postImage} />}
+                            <Text>{post.text}</Text>
+                        </View>
+                    </TouchableNativeFeedback>
                 </View>
-            }
+            )}
         </View>
     );
 };
 
 const styles = StyleSheet.create({
     view: {
-        paddingVertical: 30,
+        paddingVertical: 10,
         paddingHorizontal: 20,
+        flex: 1,
+    },
+    location: {
+        flexDirection: 'row',
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 10,
     },
     button: {
-        marginTop: 10,
-        marginBottom: 10,
+        position: 'absolute',
+        right: 20,
+        bottom: 20,
+        width: 46,
+        height: 46,
+        borderRadius: 23,
+        zIndex: 1,
+        backgroundColor: 'grey',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    postContainer: {
+        flexDirection: 'row',
+        alignItems: 'flex-start',
     },
     post: {
         borderWidth: 1,
+        borderColor: 'grey',
         padding: 10,
-        margin: 5,
-    }
+        marginBottom: 10,
+        borderRadius: 5,
+    },
+    postImage: {
+        width: 300,
+        height: 200,
+    },
+    image: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: 'grey',
+        overflow: 'hidden',
+        marginRight: 10,
+    },
 });

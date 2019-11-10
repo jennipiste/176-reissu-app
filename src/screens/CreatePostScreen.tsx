@@ -8,6 +8,7 @@ import moment from 'moment';
 import DatePicker from 'react-native-datepicker';
 import { destinations } from '../constants';
 import { Destination } from '../interfaces';
+import { FontAwesome } from '@expo/vector-icons';
 
 export const CreatePostScreen: React.FC = () => {
 
@@ -105,7 +106,7 @@ export const CreatePostScreen: React.FC = () => {
             {isUploading
                 ? <Text>Creating post...</Text>
                 : destination && <View>
-                    <Text>{destination.name}</Text>
+                    <View style={styles.location}><FontAwesome name='map-marker' size={20} /><Text>{destination.name}</Text></View>
                     <DatePicker
                         style={styles.datePicker}
                         date={date}
@@ -158,8 +159,13 @@ export const CreatePostScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
     view: {
-        paddingVertical: 30,
+        paddingVertical: 10,
         paddingHorizontal: 20,
+    },
+    location: {
+        flexDirection: 'row',
+        width: '100%',
+        alignItems: 'center',
     },
     button: {
         marginTop: 10,
