@@ -4,6 +4,7 @@ import firebase from 'firebase';
 import { User } from '../interfaces';
 import * as ImagePicker from 'expo-image-picker';
 import uuid from 'uuid/v4';
+import { FontAwesome } from '@expo/vector-icons';
 
 
 export const UserListScreen: React.FC = () => {
@@ -124,6 +125,7 @@ export const UserListScreen: React.FC = () => {
                             {isSaving
                                 ? <Text>Saving...</Text>
                                 : <View style={styles.modalContent}>
+                                    <FontAwesome name='close' size={20} style={styles.closeButton} onPress={() => setIsModalVisible(false)} />
                                     <TouchableNativeFeedback onPress={onPickImagePress}>
                                         {newAvatarUrl
                                             ? <Image source={{ uri: newAvatarUrl }} style={styles.currentUserImage} />
@@ -133,7 +135,6 @@ export const UserListScreen: React.FC = () => {
                                     <TextInput style={styles.textInput} placeholder="Username" value={username} onChangeText={(text) => setUsername(text)}/>
                                     <TextInput style={styles.textInput} placeholder="Description" value={description} onChangeText={(text) => setDescription(text)} multiline={true} numberOfLines={2}/>
                                     <Button title='Tallenna' onPress={() => onSaveUserPress()} />
-                                    <Button title='Sulje' onPress={() => setIsModalVisible(false)} />
                                 </View>
                             }
                         </View>
@@ -141,10 +142,10 @@ export const UserListScreen: React.FC = () => {
                     {currentUser &&
                         <View style={styles.currentUser}>
                             <View style={styles.editButton}>
-                                <Button title='Muokkaa' onPress={() => setIsModalVisible(true)} />
+                                <FontAwesome name='pencil' size={20} onPress={() => setIsModalVisible(true)} />
                             </View>
                             <View style={styles.logoutButton}>
-                                <Button title="Logout" onPress={() => onLogoutPress()}/>
+                                <FontAwesome name='sign-out' size={20} onPress={() => onLogoutPress()}/>
                             </View>
                             {currentUser.avatarUrl
                                 ? <Image source={{ uri: currentUser.avatarUrl }} style={styles.currentUserImage} />
@@ -235,6 +236,11 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    closeButton: {
+        position: 'absolute',
+        right: 10,
+        top: 10,
     },
     text: {
         maxWidth: '70%',
