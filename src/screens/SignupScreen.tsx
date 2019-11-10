@@ -3,6 +3,7 @@ import { Text, View, TextInput, Button, StyleSheet, Alert, Image, TouchableNativ
 import { useNavigation } from 'react-navigation-hooks';
 import * as ImagePicker from 'expo-image-picker';
 import firebase from 'firebase';
+import uuid from 'uuid/v4';
 
 
 export const SignupScreen: React.FC = () => {
@@ -28,23 +29,48 @@ export const SignupScreen: React.FC = () => {
         }
     };
 
-    const onSignupPress = () => {
+    const onSignupPress = async () => {
         if (!username  || !description || !email || !password) {
             Alert.alert('Kaikki kentät on pakollisia!');
         } else if (!avatarUrl) {
             Alert.alert('Kuva on pakollinen!');
         } else {
             firebase.auth().createUserWithEmailAndPassword(email, password)
-                .then((userCredential: firebase.auth.UserCredential) => {
+                .then(async (userCredential: firebase.auth.UserCredential) => {
                     const uid = userCredential.user.uid;
-                    database.ref(`users/${userCredential.user.uid}`).set({
+                    await database.ref(`users/${userCredential.user.uid}`).set({
                         username,
                         email,
                         uid,
                         description,
-                        avatarUrl,
                     });
-                    navigate('Home');
+                    const response: Response = await fetch(avatarUrl);
+                    const blob: Blob = await response.blob();
+                    const ext = avatarUrl.split('.').pop();
+                    const filename = `${uuid()}.${ext}`;
+
+                    const uploadTask = firebase.storage().ref().child(`images/${filename}`).put(blob);
+
+                    uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, (snapshot) => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        console.log('Upload is ' + progress + '% done');
+                        switch (snapshot.state) {
+                            case firebase.storage.TaskState.PAUSED:
+                                console.log('Upload is paused');
+                                break;
+                            case firebase.storage.TaskState.RUNNING:
+                                console.log('Upload is running');
+                                break;
+                        }
+                    }, (error) => {
+                        Alert.alert(error.message);
+                    }, async () => {
+                        const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+                        await database.ref(`users/${userCredential.user.uid}`).update({
+                            avatarUrl: downloadURL,
+                        });
+                        navigate('Home');
+                    });
                 }, (error) => {
                     Alert.alert(error.message);
                 });
