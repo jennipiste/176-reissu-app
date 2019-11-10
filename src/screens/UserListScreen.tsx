@@ -139,8 +139,10 @@ export const UserListScreen: React.FC = () => {
                     </Modal>
                     {currentUser &&
                         <View style={styles.currentUser}>
-                            <View style={styles.buttons}>
+                            <View style={styles.editButton}>
                                 <Button title='Muokkaa' onPress={() => setIsModalVisible(true)} />
+                            </View>
+                            <View style={styles.logoutButton}>
                                 <Button title="Logout" onPress={() => onLogoutPress()}/>
                             </View>
                             {currentUser.avatarUrl
@@ -197,7 +199,12 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         marginRight: 20,
     },
-    buttons: {
+    editButton: {
+        position: 'absolute',
+        left: 0,
+        top: 10,
+    },
+    logoutButton: {
         position: 'absolute',
         right: 0,
         top: 10,
