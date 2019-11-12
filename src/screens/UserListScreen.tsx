@@ -139,20 +139,20 @@ export const UserListScreen: React.FC = () => {
                             }
                         </View>
                     </Modal>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between', flexGrow: 1}} color='#FF0000'>
+                        <Button title='Edit' onPress={() => setIsModalVisible(true)}/>
+                        <Button title='Log Out' onPress={onLogoutPress} />
+                    </View>
                     {currentUser &&
-                        <View style={styles.currentUser}>
-                            <View style={styles.editButton}>
-                                <FontAwesome name='pencil' size={20} onPress={() => setIsModalVisible(true)} />
-                            </View>
-                            <View style={styles.logoutButton}>
-                                <FontAwesome name='sign-out' size={20} onPress={() => onLogoutPress()}/>
-                            </View>
+                        <View style={styles.user}>
                             {currentUser.avatarUrl
                                 ? <Image source={{ uri: currentUser.avatarUrl }} style={styles.currentUserImage} />
                                 : <Image source={require('../../assets/no_avatar.png')} style={styles.currentUserImage} />
                             }
-                            <Text style={styles.userNameHeader}>{currentUser.username}</Text>
-                            <Text style={styles.text}>{currentUser.description}</Text>
+                            <View>
+                                <Text style={styles.userNameHeader}>{currentUser.username}</Text>
+                                <Text style={styles.text}>{currentUser.description}</Text>
+                            </View>
                         </View>
                     }
                     <FlatList
@@ -187,19 +187,19 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     currentUser: {
-        alignItems: 'center',
-        marginBottom: 20,
+        // alignItems: 'center',
+        // marginBottom: 20,
     },
     userNameHeader: {
         fontWeight: 'bold'
     },
     currentUserImage: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
+        width: 80,
+        height: 80,
+        borderRadius: 40,
         borderWidth: 1,
         overflow: 'hidden',
-        margin: 10,
+        marginRight: 10,
     },
     image: {
         width: 60,
@@ -207,17 +207,17 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         borderWidth: 1,
         overflow: 'hidden',
-        marginRight: 20,
+        marginRight: 30,
     },
     editButton: {
-        position: 'absolute',
-        left: 0,
-        top: 10,
+        // position: 'absolute',
+        // left: 0,
+        // top: 10,
     },
     logoutButton: {
-        position: 'absolute',
-        right: 0,
-        top: 10,
+        // position: 'absolute',
+        // right: 0,
+        // top: 10,
     },
     textInput: {
         borderColor: 'gray',
