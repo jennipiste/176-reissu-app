@@ -151,7 +151,7 @@ export const UserListScreen: React.FC = () => {
                                 ? <Image source={{ uri: currentUser.avatarUrl }} style={styles.currentUserImage} />
                                 : <Image source={require('../../assets/no_avatar.png')} style={styles.currentUserImage} />
                             }
-                            <Text>{currentUser.username}</Text>
+                            <Text style={styles.userNameHeader}>{currentUser.username}</Text>
                             <Text style={styles.text}>{currentUser.description}</Text>
                         </View>
                     }
@@ -164,7 +164,7 @@ export const UserListScreen: React.FC = () => {
                                     : <Image source={require('../../assets/no_avatar.png')} style={styles.image} />
                                 }
                                 <View style={styles.usersText}>
-                                    <Text>{item.username}</Text>
+                                    <Text style={styles.userNameHeader}>{item.username}</Text>
                                     <Text>{item.description}</Text>
                                 </View>
                             </View>;
@@ -189,6 +189,9 @@ const styles = StyleSheet.create({
     currentUser: {
         alignItems: 'center',
         marginBottom: 20,
+    },
+    userNameHeader: {
+        fontWeight: 'bold'
     },
     currentUserImage: {
         width: 100,
