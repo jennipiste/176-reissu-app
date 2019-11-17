@@ -3,7 +3,7 @@ import AppNavigator from './navigation/AppNavigator';
 import MainTabNavigator from './navigation/MainTabNavigator';
 import firebase from 'firebase';
 import { firebaseConfig } from './src/config';
-import { View, StyleSheet, Image } from 'react-native';
+import { View, Image } from 'react-native';
 
 
 const App: React.FC = () => {
@@ -21,22 +21,9 @@ const App: React.FC = () => {
     }
     firebase.auth().onAuthStateChanged(onAuthStateChanged);
 
-    return (
-        <View style={styles.container}>
-            {isLoading
-                ? <View><Image source={require('./assets/kitten.jpeg')} /></View>
-                : <>{isAuthenticated ? <MainTabNavigator /> : <AppNavigator />}</>
-            }
-        </View>
-    );
+    return isLoading
+        ? <View><Image source={require('./assets/kitten.jpeg')} /></View>
+        : <>{isAuthenticated ? <MainTabNavigator /> : <AppNavigator />}</>
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        marginTop: 30,
-    }
-});
 
 export default App;
