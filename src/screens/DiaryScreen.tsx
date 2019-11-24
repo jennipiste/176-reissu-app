@@ -54,17 +54,24 @@ export const DiaryScreen: React.FC = () => {
                 renderItem={({ item }) => {
                     return <View style={styles.postContainer}>
                         {item.userAvatarUrl
-                            ? <Image source={{ uri: item.userAvatarUrl }} style={styles.image} />
-                            : <Image source={require('../../assets/no_avatar.png')} style={styles.image} />
+                            ? <Image source={{ uri: item.userAvatarUrl }} style={styles.avatar} />
+                            : <Image source={require('../../assets/no_avatar.png')} style={styles.avatar} />
                         }
                         <TouchableNativeFeedback
                             background={TouchableNativeFeedback.SelectableBackground()}
                             onPress={() => onPostPress(item.uid)}
                         >
                             <View style={styles.post}>
-                                {item.imageUrls && item.imageUrls.map((imageUrl, index) =>
-                                    <Image key={index} source={{ uri: imageUrl }} style={styles.postImage} />
-                                )}
+                                <FlatList
+                                    data={item.imageUrls}
+                                    renderItem={({ item }) => (
+                                        <View style={{ flex: 1, flexDirection: 'column', margin: 1 }}>
+                                            <Image source={{ uri: item }} style={styles.postImage} />
+                                        </View>
+                                    )}
+                                    numColumns={3}
+                                    keyExtractor={(_, index) => index.toString()}
+                                />
                                 <Text>{item.text}</Text>
                             </View>
                         </TouchableNativeFeedback>
@@ -111,12 +118,18 @@ const styles = StyleSheet.create({
         padding: 10,
         marginBottom: 10,
         borderRadius: 5,
+        flex: 1,
     },
     postImage: {
-        width: 300,
-        height: 200,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 100,
     },
-    image: {
+    images: {
+        display: 'flex',
+        flexDirection: 'row',
+    },
+    avatar: {
         width: 40,
         height: 40,
         borderRadius: 20,

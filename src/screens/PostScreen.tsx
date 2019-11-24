@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, Image, StyleSheet, ScrollView } from 'react-native';
+import { Text, View, Image, StyleSheet, ScrollView, FlatList } from 'react-native';
 import { useNavigationParam } from 'react-navigation-hooks';
 import firebase from 'firebase';
 import { Post } from '../interfaces';
@@ -9,7 +9,6 @@ export const PostScreen: React.FC = () => {
     const postUid = useNavigationParam('postUid');
 
     const [ post, setPost ] = useState<Post>(undefined);
-    const [ isLoadingImage, setIsLoadingImage ] = useState<boolean>(true);
 
     const database = firebase.database();
 
@@ -27,16 +26,16 @@ export const PostScreen: React.FC = () => {
                     <Text>{`Day ${post.date}`}</Text>
                     <Text>{`Created by ${post.userName}`}</Text>
                     <Text>{post.text}</Text>
-                    {post.imageUrls && post.imageUrls.map((imageUrl, index) =>
-                        <View key={index}>
-                            {isLoadingImage && <Text>Loading image...</Text>}
-                            <Image
-                                source={{ uri: imageUrl}}
-                                style={styles.image}
-                                onLoadEnd={() => setIsLoadingImage(false)}
-                            />
-                        </View>
-                    )}
+                    <FlatList
+                        data={post.imageUrls}
+                        renderItem={({ item }) => (
+                            <View style={{ flex: 1, flexDirection: 'column', margin: 1 }}>
+                                <Image source={{ uri: item }} style={styles.postImage} />
+                            </View>
+                        )}
+                        numColumns={2}
+                        keyExtractor={(_, index) => index.toString()}
+                    />
                 </View>
                 : <Text>Loading...</Text>
             }
@@ -49,7 +48,9 @@ const styles = StyleSheet.create({
         paddingVertical: 30,
         paddingHorizontal: 20,
     },
-    image: {
-        height: 300,
+    postImage: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 200,
     },
 });
