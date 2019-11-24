@@ -4,6 +4,7 @@ import { useNavigation } from 'react-navigation-hooks';
 import * as ImagePicker from 'expo-image-picker';
 import firebase from 'firebase';
 import uuid from 'uuid/v4';
+import { packings } from '../constants';
 
 
 export const SignupScreen: React.FC = () => {
@@ -16,8 +17,6 @@ export const SignupScreen: React.FC = () => {
 
     const { navigate } = useNavigation();
 
-    const database = firebase.database();
-
     const onPickImagePress = async () => {
         const result: ImagePicker.ImagePickerResult = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -29,6 +28,12 @@ export const SignupScreen: React.FC = () => {
         }
     };
 
+    const initializePackings = async (userUid: string) => {
+        for (let index = 0; index < packings.length; index++) {
+            await firebase.database().ref(`packings/${userUid}/${packings[index].id}`).set(packings[index]);
+        }
+    };
+
     const onSignupPress = async () => {
         if (!username  || !description || !email || !password) {
             Alert.alert('Kaikki kentät on pakollisia!');
@@ -37,11 +42,11 @@ export const SignupScreen: React.FC = () => {
         } else {
             firebase.auth().createUserWithEmailAndPassword(email, password)
                 .then(async (userCredential: firebase.auth.UserCredential) => {
-                    const uid = userCredential.user.uid;
-                    await database.ref(`users/${userCredential.user.uid}`).set({
+                    const userUid = userCredential.user.uid;
+                    await firebase.database().ref(`users/${userUid}`).set({
                         username,
                         email,
-                        uid,
+                        userUid,
                         description,
                     });
 
@@ -73,13 +78,15 @@ export const SignupScreen: React.FC = () => {
                         Alert.alert(error.message);
                     }, async () => {
                         const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
-                        await database.ref(`users/${userCredential.user.uid}`).update({
+                        await firebase.database().ref(`users/${userUid}`).update({
                             avatarUrl: downloadURL,
                         });
-                        navigate('Home');
+                        await initializePackings(userUid);
                     });
                 }, (error) => {
                     Alert.alert(error.message);
+                }).finally(() => {
+                    navigate('Home');
                 });
         }
     };

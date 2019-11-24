@@ -22,3 +22,20 @@ export interface Destination {
     startTime: string;
     endTime: string;
 }
+
+export interface Packing {
+    id: number;
+    name: string;
+    category: Category;
+    completed: boolean;
+}
+
+export enum Category {
+    important = 'Tärkeät',
+    clothes = 'Vaatteet ja kengät',
+    accessories = 'Asusteet',
+    hygiene = 'Toilettilaukkuun',
+    firstaid = 'Ensiapulaukkuun',
+    phone = 'Puhelimeen',
+    other = 'Muuta',
+}

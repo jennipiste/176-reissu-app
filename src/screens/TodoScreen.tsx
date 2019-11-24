@@ -1,86 +1,60 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, TouchableWithoutFeedback, AsyncStorage, StyleSheet } from 'react-native';
-import Emoji from 'react-native-emoji';
-
-const packingItems = [{
-    id: 0,
-    label: 'Passi',
-    completed: false,
-}, {
-    id: 1,
-    label: 'Hammasharja',
-    completed: false,
-}, {
-    id: 2,
-    label: 'Uikkarit',
-    completed: false,
-}];
-
-interface Items {
-    [key: string]: boolean;
-}
+import { Text, View, TouchableWithoutFeedback, StyleSheet, ScrollView } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
+import { Packing, Category } from '../interfaces';
+import firebase from 'firebase';
 
 export const TodoScreen: React.FC = () => {
 
-    const [ completedItems, setCompletedItems ] = useState<Items>({});
+    const [ packings, setPackings ] = useState<Packing[]>([]);
+
+    const userUid = firebase.auth().currentUser.uid;
+
+    const updatePackings = async () => {
+        firebase.database().ref(`packings/${userUid}`).on('value', (snapshot) => {
+            const result = snapshot.val();
+            if (result) {
+                const packingList = Object.keys(result).map(key => {
+                    return result[key];
+                });
+                setPackings(packingList);
+            }
+        });
+    };
 
     useEffect(() => {
-        console.log("fetchCompleted");
-        fetchCompleted()
-            .then(result => {
-                console.log("items", result);
-                setCompletedItems(result || {});
-            });
+        updatePackings();
     }, []);
 
-    const storeCompleted = async (completedItems: Items) => {
-        try {
-            await AsyncStorage.setItem('completedItems', JSON.stringify(completedItems));
-        } catch (error) {
-            // Error saving data
-        }
-    };
-
-    const fetchCompleted = async () => {
-        try {
-            return JSON.parse(await AsyncStorage.getItem('completedItems'));
-        } catch (error) {
-            // Error retrieving data
-        }
-    };
-
-    const toggleItem = async (id: number) => {
-        console.log("toggleItem");
-        const completed = completedItems;
-        console.log("completed", completedItems);
-        completed[id] = !completed[id];
-        console.log("new", completed);
-        setCompletedItems(completed);
-        await storeCompleted(completed);
+    const toggleItem = (id: number) => {
+        firebase.database().ref(`packings/${userUid}/${id}`).update({
+            completed: !packings.find(packing => packing.id === id).completed,
+        }).then(() => {
+            updatePackings();
+        });
     };
 
     return (
-        <View style={styles.view}>
-            <Text>Pakkaa nää messiin:</Text>
-            {packingItems.map(item =>
-                <TouchableWithoutFeedback
-                    key={item.id}
-                    onPress={() => toggleItem(item.id)}
-                >
-                    <View style={styles.itemView}>
-                        {completedItems[item.id] ===  true
-                            ? <Emoji
-                                name='heavy_check_mark'
-                            />
-                            : <Emoji
-                                name='black_square_button'
-                            />
-                        }
-                        <Text>{item.label}</Text>
-                    </View>
-                </TouchableWithoutFeedback>
-            )}
-        </View>
+        <ScrollView style={styles.view}>
+            <Text style={styles.title}>Ota mukaan</Text>
+            {Object.values(Category).map((category, index) => {
+                const filteredPackings = packings.filter(packing => packing.category === category);
+                return <React.Fragment key={index}>
+                    <Text style={styles.category}>{category}</Text>
+                    {filteredPackings.map(item => {
+                        return <TouchableWithoutFeedback
+                            key={item.id}
+                            onPress={() => toggleItem(item.id)}
+                        >
+                            <View style={styles.itemView}>
+                                <FontAwesome style={styles.icon} name={item.completed ===  true ? 'check-square-o' : 'square-o'} />
+                                <Text>{item.name}</Text>
+                            </View>
+                        </TouchableWithoutFeedback>;
+                    })}
+                </React.Fragment>;
+            })}
+        </ScrollView>
     );
 };
 
@@ -92,7 +66,23 @@ const styles = StyleSheet.create({
     itemView: {
         display: 'flex',
         flexDirection: 'row',
+        alignItems: 'center',
         marginTop: 10,
         marginBottom: 10,
+        marginLeft: 20,
+    },
+    title: {
+        textAlign: 'center',
+        marginTop: 10,
+        fontSize: 18,
+    },
+    category: {
+        fontSize: 18,
+        textTransform: 'uppercase',
+        marginTop: 10,
+    },
+    icon: {
+        marginRight: 20,
+        fontSize: 20,
     }
 });
