@@ -53,7 +53,10 @@ export const DiaryScreen: React.FC = () => {
                 data={posts}
                 renderItem={({ item }) => {
                     return <View style={styles.postContainer}>
-                        <Image source={require('../../assets/no_avatar.png')} style={styles.image} />
+                        {item.userAvatarUrl
+                            ? <Image source={{ uri: item.userAvatarUrl }} style={styles.image} />
+                            : <Image source={require('../../assets/no_avatar.png')} style={styles.image} />
+                        }
                         <TouchableNativeFeedback
                             background={TouchableNativeFeedback.SelectableBackground()}
                             onPress={() => onPostPress(item.uid)}
