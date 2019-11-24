@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Button, TextInput, StyleSheet, Image, Alert, AsyncStorage } from 'react-native';
+import { Text, View, Button, TextInput, StyleSheet, Image, ScrollView } from 'react-native';
 import { useNavigationParam, useNavigation } from 'react-navigation-hooks';
 import * as ImagePicker from 'expo-image-picker';
 import firebase from 'firebase';
@@ -7,7 +7,7 @@ import uuid from 'uuid/v4';
 import moment from 'moment';
 import DatePicker from 'react-native-datepicker';
 import { destinations } from '../constants';
-import { Destination } from '../interfaces';
+import { Destination, User } from '../interfaces';
 import { FontAwesome } from '@expo/vector-icons';
 
 export const CreatePostScreen: React.FC = () => {
@@ -18,8 +18,9 @@ export const CreatePostScreen: React.FC = () => {
     const [ date, setDate ] = useState<moment.Moment>(undefined);
     const [ destination, setDestination ] = useState<Destination>(undefined);
     const [ text, setText ] = useState<string>('');
-    const [ imageUri, setImageUri ] = useState<string>('');
+    const [ imageUris, setImageUris ] = useState<string[]>([]);
     const [ isUploading, setIsUploading ] = useState<boolean>(false);
+    const [ currentUser, setCurrentUser ] = useState<User>(undefined);
 
     const database = firebase.database();
 
@@ -33,58 +34,49 @@ export const CreatePostScreen: React.FC = () => {
         } else {
             setDate(now);
         }
+        const userId = firebase.auth().currentUser.uid;
+        firebase.database().ref(`users/${userId}`).once('value')
+            .then(async (snapshot) => {
+                setCurrentUser(snapshot.val());
+            });
     }, []);
 
     const onCreatePress = async () => {
         setIsUploading(true);
         const postUid = uuid();
-        let userName: string;
-        try {
-            userName = await AsyncStorage.getItem('userName');
-        } catch (error) {
-            console.log(error);
-        }
-        if (imageUri) {
-            const response: Response = await fetch(imageUri);
-            const blob: Blob = await response.blob();
-            const ext = imageUri.split('.').pop();
-            const filename = `${uuid()}.${ext}`;
+        if (imageUris) {
+            const downloadUrls: string[] = [];
+            await Promise.all(imageUris.map(async imageUri => {
+                const uri = imageUri;
+                const response: Response = await fetch(uri);
+                const blob: Blob = await response.blob();
+                const ext = uri.split('.').pop();
+                const filename = `${uuid()}.${ext}`;
 
-            const uploadTask = firebase.storage().ref().child(`images/${filename}`).put(blob);
-
-            uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, (snapshot) => {
-                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                console.log('Upload is ' + progress + '% done');
-                switch (snapshot.state) {
-                    case firebase.storage.TaskState.PAUSED:
-                        console.log('Upload is paused');
-                        break;
-                    case firebase.storage.TaskState.RUNNING:
-                        console.log('Upload is running');
-                        break;
-                }
-            }, (error) => {
-                Alert.alert(error.message);
-            }, async () => {
-                const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
-                database.ref(`posts/${postUid}`).set({
-                    text,
-                    destination: destination.name,
-                    date: date.toISOString(true),
-                    imageUrl: downloadURL,
-                    userName,
-                    userUid: firebase.auth().currentUser.uid,
-                    createdAt: moment().toISOString(true),
-                    uid: postUid,
-                });
-                goBack();
-            });
-        } else {
-            database.ref(`posts/${postUid}`).set({
+                const uploadTask = await firebase.storage().ref().child(`images/${filename}`).put(blob);
+                const downloadUrl = await uploadTask.ref.getDownloadURL();
+                Promise.resolve(downloadUrls.push(downloadUrl));
+            }));
+            await database.ref(`posts/${postUid}`).set({
                 text,
                 destination: destination.name,
                 date: date.toISOString(true),
-                userUid: firebase.auth().currentUser.uid,
+                imageUrls: downloadUrls,
+                userName: currentUser.username,
+                userUid: currentUser.uid,
+                userAvatarUrl: currentUser.avatarUrl,
+                createdAt: moment().toISOString(true),
+                uid: postUid,
+            });
+            goBack();
+        } else {
+            await database.ref(`posts/${postUid}`).set({
+                text,
+                destination: destination.name,
+                date: date.toISOString(true),
+                userName: currentUser.username,
+                userUid: currentUser.uid,
+                userAvatarUrl: currentUser.avatarUrl,
                 createdAt: moment().toISOString(true),
                 uid: postUid,
             });
@@ -97,12 +89,12 @@ export const CreatePostScreen: React.FC = () => {
             mediaTypes: ImagePicker.MediaTypeOptions.All,
         });
         if (result.cancelled === false) {
-            setImageUri(result.uri);
+            setImageUris([...imageUris, result.uri]);
         }
     };
 
     return (
-        <View style={styles.view}>
+        <ScrollView style={styles.view}>
             {isUploading
                 ? <Text>Creating post...</Text>
                 : destination && <View>
@@ -143,17 +135,17 @@ export const CreatePostScreen: React.FC = () => {
                     <View style={styles.button}>
                         <Button title='Lisää kuva' onPress={onPickImagePress} />
                     </View>
-                    {imageUri.length > 0 &&
-                        <View>
+                    {imageUris.map((imageUri, index) =>
+                        <View key={index} >
                             <Image source={{ uri: imageUri }} style={styles.image} />
                         </View>
-                    }
+                    )}
                     <View style={styles.button}>
                         <Button title='Luo' onPress={onCreatePress} />
                     </View>
                 </View>
             }
-        </View>
+        </ScrollView>
     );
 };
 
@@ -176,6 +168,7 @@ const styles = StyleSheet.create({
     },
     image: {
         height: 300,
+        marginBottom: 10,
     },
     textInput: {
         borderColor: 'gray',

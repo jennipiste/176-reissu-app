@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, Image, StyleSheet } from 'react-native';
+import { Text, View, Image, StyleSheet, ScrollView } from 'react-native';
 import { useNavigationParam } from 'react-navigation-hooks';
 import firebase from 'firebase';
 import { Post } from '../interfaces';
@@ -21,26 +21,26 @@ export const PostScreen: React.FC = () => {
     }, []);
 
     return (
-        <View style={styles.view}>
+        <ScrollView style={styles.view}>
             {post
                 ? <View>
                     <Text>{`Day ${post.date}`}</Text>
                     <Text>{`Created by ${post.userName}`}</Text>
                     <Text>{post.text}</Text>
-                    {post.imageUrl &&
-                        <View>
+                    {post.imageUrls && post.imageUrls.map((imageUrl, index) =>
+                        <View key={index}>
                             {isLoadingImage && <Text>Loading image...</Text>}
                             <Image
-                                source={{ uri: post.imageUrl}}
+                                source={{ uri: imageUrl}}
                                 style={styles.image}
                                 onLoadEnd={() => setIsLoadingImage(false)}
                             />
                         </View>
-                    }
+                    )}
                 </View>
                 : <Text>Loading...</Text>
             }
-        </View>
+        </ScrollView>
     );
 };
 

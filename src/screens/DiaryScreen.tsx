@@ -59,7 +59,9 @@ export const DiaryScreen: React.FC = () => {
                             onPress={() => onPostPress(item.uid)}
                         >
                             <View style={styles.post}>
-                                {item.imageUrl && <Image source={{ uri: item.imageUrl }} style={styles.postImage} />}
+                                {item.imageUrls && item.imageUrls.map((imageUrl, index) =>
+                                    <Image key={index} source={{ uri: imageUrl }} style={styles.postImage} />
+                                )}
                                 <Text>{item.text}</Text>
                             </View>
                         </TouchableNativeFeedback>

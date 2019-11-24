@@ -14,7 +14,7 @@ export interface Post {
     userUid: string;
     userName: string;
     createdAt: string;
-    imageUrl?: string;
+    imageUrls?: string[];
 }
 
 export interface Destination {
