@@ -42,11 +42,11 @@ export const SignupScreen: React.FC = () => {
         } else {
             firebase.auth().createUserWithEmailAndPassword(email, password)
                 .then(async (userCredential: firebase.auth.UserCredential) => {
-                    const userUid = userCredential.user.uid;
-                    await firebase.database().ref(`users/${userUid}`).set({
+                    const uid = userCredential.user.uid;
+                    await firebase.database().ref(`users/${uid}`).set({
                         username,
                         email,
-                        userUid,
+                        uid,
                         description,
                     });
 
@@ -78,10 +78,10 @@ export const SignupScreen: React.FC = () => {
                         Alert.alert(error.message);
                     }, async () => {
                         const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
-                        await firebase.database().ref(`users/${userUid}`).update({
+                        await firebase.database().ref(`users/${uid}`).update({
                             avatarUrl: downloadURL,
                         });
-                        await initializePackings(userUid);
+                        await initializePackings(uid);
                     });
                 }, (error) => {
                     Alert.alert(error.message);
