@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Text, View, Image, StyleSheet, TouchableNativeFeedback, FlatList } from 'react-native';
 import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
 import firebase from 'firebase';
-import { Post } from '../interfaces';
+import { Post, User } from '../interfaces';
 import { destinations } from  '../constants';
 import { FontAwesome } from '@expo/vector-icons';
 
@@ -13,8 +13,8 @@ export const DiaryScreen: React.FC = () => {
 
     const destination = destinations[destinationIndex];
 
-    const [ posts, setPosts ] = useState<Post[]>(undefined);
-
+    const [ posts, setPosts ] = useState<Post[]>([]);
+    const [ users, setUsers ] = useState<User[]>([]);
 
     const onCreatePress = () => {
         navigate('CreatePost', { destinationIndex });
@@ -37,6 +37,18 @@ export const DiaryScreen: React.FC = () => {
         });
     }, []);
 
+    useEffect(() => {
+        firebase.database().ref('users').on('value', (snapshot) => {
+            const result = snapshot.val();
+            if (result) {
+                const usersList = Object.keys(result).map(key => {
+                    return result[key];
+                });
+                setUsers(usersList);
+            }
+        });
+    }, []);
+
     return (
         <View style={styles.view}>
             <View style={styles.location}><FontAwesome name='map-marker' size={20} /><Text>{destination.name}</Text></View>
@@ -52,9 +64,11 @@ export const DiaryScreen: React.FC = () => {
             <FlatList
                 data={posts}
                 renderItem={({ item }) => {
+                    const user = users.find(user => user.uid === item.userUid);
+                    const userAvatarUrl =  user ? user.avatarUrl : null;
                     return <View style={styles.postContainer}>
-                        {item.userAvatarUrl
-                            ? <Image source={{ uri: item.userAvatarUrl }} style={styles.avatar} />
+                        {userAvatarUrl
+                            ? <Image source={{ uri: userAvatarUrl }} style={styles.avatar} />
                             : <Image source={require('../../assets/no_avatar.png')} style={styles.avatar} />
                         }
                         <TouchableNativeFeedback

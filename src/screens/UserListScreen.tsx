@@ -23,11 +23,9 @@ export const UserListScreen: React.FC = () => {
     }, []);
 
     const updateUser = () => {
-        console.log("updateUser");
         const userId = firebase.auth().currentUser.uid;
         firebase.database().ref(`users/${userId}`).once('value')
             .then(async (snapshot) => {
-                console.log("user", snapshot.val());
                 const user: User = snapshot.val();
                 setCurrentUser(user);
                 setUsername(user.username);
@@ -43,7 +41,6 @@ export const UserListScreen: React.FC = () => {
                 const usersList = Object.keys(result).map(key => {
                     return result[key];
                 });
-                console.log("users", usersList);
                 setUsers(usersList);
             }
         });

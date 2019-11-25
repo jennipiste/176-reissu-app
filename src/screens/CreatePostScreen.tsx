@@ -62,9 +62,7 @@ export const CreatePostScreen: React.FC = () => {
                 destination: destination.name,
                 date: date.toISOString(true),
                 imageUrls: downloadUrls,
-                userName: currentUser.username,
                 userUid: currentUser.uid,
-                userAvatarUrl: currentUser.avatarUrl,
                 createdAt: moment().toISOString(true),
                 uid: postUid,
             });
@@ -74,9 +72,7 @@ export const CreatePostScreen: React.FC = () => {
                 text,
                 destination: destination.name,
                 date: date.toISOString(true),
-                userName: currentUser.username,
                 userUid: currentUser.uid,
-                userAvatarUrl: currentUser.avatarUrl,
                 createdAt: moment().toISOString(true),
                 uid: postUid,
             });

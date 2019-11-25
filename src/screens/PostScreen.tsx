@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Text, View, Image, StyleSheet, ScrollView, FlatList } from 'react-native';
 import { useNavigationParam } from 'react-navigation-hooks';
 import firebase from 'firebase';
-import { Post } from '../interfaces';
+import { Post, User } from '../interfaces';
 
 export const PostScreen: React.FC = () => {
 
     const postUid = useNavigationParam('postUid');
 
     const [ post, setPost ] = useState<Post>(undefined);
+    const [ user, setUser ] = useState<User>(undefined);
 
     const database = firebase.database();
 
@@ -16,6 +17,11 @@ export const PostScreen: React.FC = () => {
         database.ref(`posts/${postUid}`).once('value')
             .then((snapshot) => {
                 setPost(snapshot.val());
+                const userUid = snapshot.val().userUid;
+                firebase.database().ref(`users/${userUid}`).once('value')
+                    .then(async (snapshot) => {
+                        setUser(snapshot.val());
+                    });
             });
     }, []);
 
@@ -24,7 +30,7 @@ export const PostScreen: React.FC = () => {
             {post
                 ? <View>
                     <Text>{`Day ${post.date}`}</Text>
-                    <Text>{`Created by ${post.userName}`}</Text>
+                    {user && <Text>{`Created by ${user.username}`}</Text>}
                     <Text>{post.text}</Text>
                     <FlatList
                         data={post.imageUrls}
