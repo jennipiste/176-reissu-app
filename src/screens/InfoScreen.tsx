@@ -8,7 +8,7 @@ const listItems = [
   {
     type: 'non-flight',
     header: 'Helsinki',
-    icon: 'map-marker-alt',
+    icon: 'map-marker',
     date: '25-12-2019',
     previewText: 'Tavataan Helsinki Vantaa lentokenltällä. Etkot Oak Barrelissa tai finnair longuessa klo 14.00'
   },
@@ -125,7 +125,7 @@ const listItems = [
   {
     type: 'non-flight',
     header: 'Pikapysähdys Hanoissa',
-    icon: 'bus-alt',
+    icon: 'bus',
     date: '07-01-2020',
     previewText:
       'Välipysähdys Hanoissa. Jatkamme matkaa bussikuljetuksella seuraavaan kohteeseen.'
