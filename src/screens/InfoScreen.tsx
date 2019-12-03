@@ -1,7 +1,7 @@
 import React from 'react';
-import {Text, View, StyleSheet, FlatList, TouchableWithoutFeedback, TouchableNativeFeedback} from 'react-native';
+import {Text, View, StyleSheet, FlatList, TouchableNativeFeedback, Modal, Image, TextInput, Button} from 'react-native';
+import {Linking} from 'expo';
 import {FontAwesome} from "@expo/vector-icons";
-import TouchableItem from "react-navigation-stack/lib/typescript/views/TouchableItem";
 
 
 const listItems = [
@@ -39,7 +39,7 @@ const listItems = [
     previewText:
       'Ho Chi Mhin city (Tunnettiin aijemmin Saigon:na) on Vietnamin siirun kaupunki 8.4 miljoonalla asukkaallaan. ' +
       'Kyseessä on matkamme ensimmäinen kohde, joka sijaitsee eteläisessä vietnamissa. ' +
-      'Tärkeimpiin nähtävyyksiin sisältyvät Cu Chui tunnelit ja Ben Than Market.'
+      'Tärkeimpiin nähtävyyksiin sisältyvät Cu Chui tunnelit ja Ben Than Market.',
   },
   // Ho chi imhn phu quoc
   {
@@ -66,7 +66,8 @@ const listItems = [
     icon: 'home',
     date: '26-12-2019',
     previewText:
-      'Matkamme toinen kohde on Phu Quoc paratiisisaari.'
+      'Matkamme toinen kohde on Phu Quoc paratiisisaari.',
+    mapLink: 'https://www.google.fi/maps/place/Nadine+Phu+Quoc+Resort/@10.1909191,103.9682541,17z/data=!3m1!4b1!4m8!3m7!1s0x31a78c51b884ed1f:0x49a7e895212f444a!5m2!4m1!1i2!8m2!3d10.1909191!4d103.9704428'
   },
   // Phu quoc da nang
   {
@@ -101,7 +102,8 @@ const listItems = [
     icon: 'home',
     date: '26-12-2019',
     previewText:
-      'Hoi An on maailmanperintökohde'
+      'Hoi An on maailmanperintökohde',
+    mapLink: 'https://www.google.fi/maps/place/Gem+Hoi+An+Villa/@15.8868775,108.3318211,17z/data=!3m1!4b1!4m8!3m7!1s0x31420dd869e6f2ef:0xc12909a0a877b0b7!5m2!4m1!1i2!8m2!3d15.8868775!4d108.3340151'
   },
   // da nang hanoi
   {
@@ -194,28 +196,95 @@ const listItems = [
     header: '',
     icon: 'plane'
   },
+  {
+    type: 'non-flight',
+    header: 'Helsinki',
+    icon: 'map-marker-alt',
+    date: '12-01-2019',
+    previewText: 'Paluu harmaaseen arkeen'
+  },
 ]
+
+
+const InfoModal: React.FC = ({isVisible, item, setVisible}) => {
+  return <Modal
+    animationType="fade"
+    transparent={false}
+    visible={isVisible}
+    onRequestClose={() => {
+      setVisible(false)
+    }}
+  >
+    <View style={modalStyles.wrapper}>
+      <Button title={'Close'} onPress={() => {
+        setVisible(false)
+      }}/>
+      <Text>Jee modaali!!</Text>
+      {item.mapLink &&
+      <Button title={'Majoitus kartta sijainti'} onPress={() => {
+        Linking.openURL(item.mapLink)
+      }}/>
+      }
+    </View>
+    {/*<View style={styles.modal}>*/}
+    {/*  {isSaving*/}
+    {/*    ? <Text>Saving...</Text>*/}
+    {/*    : <View style={styles.modalContent}>*/}
+    {/*      <FontAwesome name='close' size={20} style={styles.closeButton} onPress={() => setIsModalVisible(false)} />*/}
+    {/*      <TouchableNativeFeedback onPress={onPickImagePress}>*/}
+    {/*        {newAvatarUrl*/}
+    {/*          ? <Image source={{ uri: newAvatarUrl }} style={styles.currentUserImage} />*/}
+    {/*          : <Image source={{ uri: currentUser.avatarUrl }} style={styles.currentUserImage} />*/}
+    {/*        }*/}
+    {/*      </TouchableNativeFeedback>*/}
+    {/*      <TextInput style={styles.textInput} placeholder="Username" value={username} onChangeText={(text) => setUsername(text)}/>*/}
+    {/*      <TextInput style={styles.textInput} placeholder="Description" value={description} onChangeText={(text) => setDescription(text)} multiline={true} numberOfLines={2}/>*/}
+    {/*      <Button title='Tallenna' onPress={() => onSaveUserPress()} />*/}
+    {/*    </View>*/}
+    {/*  }*/}
+    {/*</View>*/}
+  </Modal>
+}
+
+
+const modalStyles = StyleSheet.create({
+  wrapper: {
+    margin: 10
+  }
+})
 
 
 const FlightInfo: React.FC = ({flightInfo}) => {
   return <View style={flightInfoStyles.wrapper}>
-    <View style={flightInfoStyles.cityContainer}>
-      <Text style={flightInfoStyles.city}>{flightInfo.from.name}</Text>
-      <Text style={flightInfoStyles.cityTime}>{flightInfo.from.time}</Text>
+    <View style={flightInfoStyles.innerWrapper}>
+      <View style={flightInfoStyles.cityContainer}>
+        <Text style={flightInfoStyles.city}>{flightInfo.from.name}</Text>
+        <Text style={flightInfoStyles.cityTime}>{flightInfo.from.time}</Text>
+      </View>
+      <FontAwesome style={flightInfoStyles.arrow} name={'arrow-right'} size={20} color={'#8f8f8f'}/>
+      <View style={flightInfoStyles.cityContainer}>
+        <Text style={flightInfoStyles.city}>{flightInfo.to.name}</Text>
+        <Text style={flightInfoStyles.cityTime}>{flightInfo.to.time}</Text>
+      </View>
     </View>
-    <FontAwesome style={flightInfoStyles.arrow} name={'arrow-right'} size={20} color={'#8f8f8f'}/>
-    <View style={flightInfoStyles.cityContainer}>
-      <Text style={flightInfoStyles.city}>{flightInfo.to.name}</Text>
-      <Text style={flightInfoStyles.cityTime}>{flightInfo.to.time}</Text>
-    </View>
+    <Text style={flightInfoStyles.durationText}>{flightInfo.duration}</Text>
   </View>
 }
 
 
 const flightInfoStyles = StyleSheet.create({
-  wrapper: {
+  innerWrapper: {
     flexDirection: 'row',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginBottom: 30,
+  },
+  wrapper: {
+    alignItems: 'center'
+  },
+  durationText: {
+    marginTop: -30,
+    fontSize: 10,
+    color: '#bababa'
   },
   arrow: {
     alignSelf: 'center',
@@ -240,54 +309,81 @@ const flightInfoStyles = StyleSheet.create({
 
 
 export const InfoScreen: React.FC = () => {
+  const [modalVisible, setModalVisible] = React.useState(false)
+  const [selectedItem, setSelectedItem] = React.useState(undefined)
+
   return (
-    <FlatList
-      style={styles.topView}
-      data={listItems}
-      renderItem={({item}) => {
-        return <TouchableNativeFeedback
-          onPress={() => {
-            alert('asdf')
-          }}
-        >
-          <View
-            style={styles.listItem}
+    <React.Fragment>
+      {modalVisible &&
+      <InfoModal isVisible={modalVisible} item={selectedItem} setVisible={setModalVisible}/>
+      }
+      <FlatList
+        style={styles.topView}
+        data={listItems}
+        renderItem={({item}) => {
+          return <TouchableNativeFeedback
+            onPress={() => {
+              setModalVisible(true)
+              setSelectedItem(item)
+            }}
           >
-            <FontAwesome
-              name={item.icon}
-              size={24}
-              color={'#5caf8b'}
-              style={styles.listItemIcon}
-            />
-            <View style={styles.listItemContent}>
-              <View style={styles.headerBlock}>
-                <Text style={styles.infoHeader}>{item.header}</Text>
-                <Text style={styles.dateInfo}>{item.date}</Text>
+            <View
+              style={styles.listItem}
+            >
+              <View>
+                <FontAwesome
+                  name={item.icon}
+                  size={24}
+                  color={'#5caf8b'}
+                  style={styles.listItemIcon}
+                />
+                <View style={styles.circleThing}></View>
               </View>
-              {item.type === 'flight' && <FlightInfo flightInfo={item.flightInfo}/>}
-              {item.type !== 'flight' &&
-              <React.Fragment>
-                  <Text>
-                    {item.previewText ? item.previewText :
-                      'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been ' +
-                      'the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type' +
-                      'and scrambled it to make a type specimen book. It has survived not only five centuries, but ' +
-                      'also'
-                    }
-                  </Text>
-              </React.Fragment>
-              }
+              <View style={styles.listItemContent}>
+                <View style={styles.headerBlock}>
+                  <Text style={styles.infoHeader}>{item.header}</Text>
+                  <Text style={styles.dateInfo}>{item.date}</Text>
+                </View>
+                {item.type === 'flight' && <FlightInfo flightInfo={item.flightInfo}/>}
+                {item.type !== 'flight' &&
+                <React.Fragment>
+                    <Text>
+                      {item.previewText ? item.previewText :
+                        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been ' +
+                        'the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type' +
+                        'and scrambled it to make a type specimen book. It has survived not only five centuries, but ' +
+                        'also'
+                      }
+                    </Text>
+                </React.Fragment>
+                }
+              </View>
             </View>
-          </View>
-        </TouchableNativeFeedback>
-      }}
-    />
+          </TouchableNativeFeedback>
+        }}
+      />
+    </React.Fragment>
   );
 };
 
+
 const styles = StyleSheet.create({
   topView: {
-    paddingVertical: 30,
+    paddingTop: 50,
+    // paddingBottom: 500,
+    // paddingVertical: 100,
+    // marginVertical: 100,
+  },
+  circleThing: {
+    height: 0,
+    width: 15,
+    // borderRadius: 11,
+    borderTopWidth: 5,
+    borderColor: '#459095',
+    position: 'absolute',
+    top: 0,
+    right: -10,
+    backgroundColor: '#FFFFFF'
   },
   bordered: {
     borderColor: '#000000',
@@ -302,8 +398,8 @@ const styles = StyleSheet.create({
   },
   listItemContent: {
     padding: 20,
-    borderLeftWidth: 3,
-    borderColor: '#702f3d',
+    borderLeftWidth: 5,
+    borderColor: '#459095',
     flex: 1
   },
   dateInfo: {
