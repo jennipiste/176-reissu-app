@@ -1,4 +1,5 @@
 import React, { useState,  useEffect } from 'react';
+import {useSafeArea} from 'react-native-safe-area-context';
 import { StyleSheet, Text, View, Button, Image, TouchableNativeFeedback, ScrollView, LayoutChangeEvent, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import { useNavigation } from 'react-navigation-hooks';
 
@@ -72,8 +73,14 @@ export const HomeScreen: React.FC = () => {
         navigate('Diary', { destinationIndex });
     };
 
+    const insets = useSafeArea();
+
     return (
-        <View onLayout={(event) => onLayout(event)} style={styles.view}>
+        <View onLayout={(event) => onLayout(event)} style={{
+            ...styles.view,
+            marginTop: insets.top,
+            marginBottom: insets.bottom
+        }}>
             {isLoading
                 ? <View><Image source={require('../../assets/kitten.jpeg')} /></View>
                 : <>

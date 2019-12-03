@@ -1,3 +1,4 @@
+import {useSafeArea} from 'react-native-safe-area-context';
 import React from 'react';
 import {Text, View, StyleSheet, FlatList, TouchableNativeFeedback, Modal, Image, TextInput, Button} from 'react-native';
 import {Linking} from 'expo';
@@ -312,64 +313,71 @@ export const InfoScreen: React.FC = () => {
   const [modalVisible, setModalVisible] = React.useState(false)
   const [selectedItem, setSelectedItem] = React.useState(undefined)
 
+  const insets = useSafeArea();
+
   return (
-    <React.Fragment>
-      {modalVisible &&
-      <InfoModal isVisible={modalVisible} item={selectedItem} setVisible={setModalVisible}/>
-      }
-      <FlatList
-        style={styles.topView}
-        data={listItems}
-        renderItem={({item}) => {
-          return <TouchableNativeFeedback
-            onPress={() => {
-              setModalVisible(true)
-              setSelectedItem(item)
-            }}
-          >
-            <View
-              style={styles.listItem}
+    <View style={{
+      marginTop: insets.top,
+      marginBottom: insets.bottom
+    }}>
+      <React.Fragment>
+        {modalVisible &&
+        <InfoModal isVisible={modalVisible} item={selectedItem} setVisible={setModalVisible}/>
+        }
+        <FlatList
+          style={styles.topView}
+          data={listItems}
+          renderItem={({item}) => {
+            return <TouchableNativeFeedback
+              onPress={() => {
+                setModalVisible(true)
+                setSelectedItem(item)
+              }}
             >
-              <View>
-                <FontAwesome
-                  name={item.icon}
-                  size={24}
-                  color={'#5caf8b'}
-                  style={styles.listItemIcon}
-                />
-                <View style={styles.circleThing}></View>
-              </View>
-              <View style={styles.listItemContent}>
-                <View style={styles.headerBlock}>
-                  <Text style={styles.infoHeader}>{item.header}</Text>
-                  <Text style={styles.dateInfo}>{item.date}</Text>
+              <View
+                style={styles.listItem}
+              >
+                <View>
+                  <FontAwesome
+                    name={item.icon}
+                    size={24}
+                    color={'#5caf8b'}
+                    style={styles.listItemIcon}
+                  />
+                  <View style={styles.circleThing}></View>
                 </View>
-                {item.type === 'flight' && <FlightInfo flightInfo={item.flightInfo}/>}
-                {item.type !== 'flight' &&
-                <React.Fragment>
-                    <Text>
-                      {item.previewText ? item.previewText :
-                        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been ' +
-                        'the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type' +
-                        'and scrambled it to make a type specimen book. It has survived not only five centuries, but ' +
-                        'also'
-                      }
-                    </Text>
-                </React.Fragment>
-                }
+                <View style={styles.listItemContent}>
+                  <View style={styles.headerBlock}>
+                    <Text style={styles.infoHeader}>{item.header}</Text>
+                    <Text style={styles.dateInfo}>{item.date}</Text>
+                  </View>
+                  {item.type === 'flight' && <FlightInfo flightInfo={item.flightInfo}/>}
+                  {item.type !== 'flight' &&
+                  <React.Fragment>
+                      <Text>
+                        {item.previewText ? item.previewText :
+                          'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been ' +
+                          'the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type' +
+                          'and scrambled it to make a type specimen book. It has survived not only five centuries, but ' +
+                          'also'
+                        }
+                      </Text>
+                  </React.Fragment>
+                  }
+                </View>
               </View>
-            </View>
-          </TouchableNativeFeedback>
-        }}
-      />
-    </React.Fragment>
+            </TouchableNativeFeedback>
+          }}
+        />
+      </React.Fragment>
+    </View>
   );
 };
 
 
 const styles = StyleSheet.create({
   topView: {
-    paddingTop: 50,
+    // paddingTop: 50,
     // paddingBottom: 500,
     // paddingVertical: 100,
     // marginVertical: 100,
