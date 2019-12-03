@@ -75,11 +75,13 @@ export const SignupScreen: React.FC = () => {
                             avatarUrl: downloadURL,
                         });
                         await initializePackings(uid);
+
+
+                        navigate('Home');
                     });
                 }, (error) => {
                     Alert.alert(error.message);
                 }).finally(() => {
-                    navigate('Home');
                 });
         }
     };
