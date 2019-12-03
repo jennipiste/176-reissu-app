@@ -117,6 +117,9 @@ export const UserListScreen: React.FC = () => {
                         animationType="slide"
                         transparent={true}
                         visible={isModalVisible}
+                        onRequestClose={() => {
+                            setIsModalVisible(false)
+                        }}
                     >
                         <View style={styles.modal}>
                             {isSaving
