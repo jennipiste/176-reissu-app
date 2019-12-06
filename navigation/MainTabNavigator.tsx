@@ -41,17 +41,13 @@ const HomeStack = createStackNavigator({
         screen: PostScreen,
         navigationOptions,
     },
-    Users: {
-        screen: UserListScreen,
-        navigationOptions,
-    }
 });
 
 const HomeTabIcon = (props) => (
     <FontAwesome
         name='home'
         size={24}
-        color={props.focused ? 'grey' : 'darkgrey'}
+        color={props.focused ? '#7800F9' : 'darkgrey'}
     />
 );
 
@@ -59,7 +55,7 @@ const InfoTabIcon = (props) => (
     <FontAwesome
       name='plane'
       size={24}
-      color={props.focused ? 'grey' : 'darkgrey'}
+      color={props.focused ? '#7800F9' : 'darkgrey'}
     />
 );
 
@@ -67,7 +63,15 @@ const TodoTabIcon = (props) => (
     <FontAwesome
       name='suitcase'
       size={24}
-      color={props.focused ? 'grey' : 'darkgrey'}
+      color={props.focused ? '#7800F9' : 'darkgrey'}
+    />
+);
+
+const UsersIcon = (props) => (
+    <FontAwesome
+      name='user'
+      size={24}
+      color={props.focused ? '#7800F9' : 'darkgrey'}
     />
 );
 
@@ -89,12 +93,22 @@ export default createAppContainer(createMaterialTopTabNavigator({
         navigationOptions: {
             tabBarIcon: TodoTabIcon,
         }
+    },
+    Users: {
+        screen: UserListScreen,
+        navigationOptions: {
+            tabBarIcon: UsersIcon,
+        },
     }
 }, {
     tabBarPosition: 'bottom',
     tabBarOptions: {
         style: {
             backgroundColor: '#fff',
+            borderTopLeftRadius: 20,
+            borderTopRightRadius: 20,
+            elevation: 10,
+            boxShadow: '0px -2px 10px 6px rgba(0,0,0,0.75)',
         },
         indicatorStyle: {
             opacity: 0
