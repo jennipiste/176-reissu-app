@@ -12,7 +12,6 @@ import {
   TextInput,
   TouchableNativeFeedback,
   Alert,
-  FlatList
 } from 'react-native';
 import firebase from 'firebase';
 import {User} from '../interfaces';
@@ -141,101 +140,132 @@ export const UserListScreen: React.FC = () => {
     firebase.auth().signOut();
   };
 
+  const insets = useSafeArea();
+
   return (
-    <ScrollView style={styles.view}>
-      {isLoading
-        ? <Text>Loading...</Text>
-        : <>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={isModalVisible}
-            onRequestClose={() => {
-              setIsModalVisible(false)
-            }}
-          >
-            <View style={styles.modal}>
-              {isSaving
-                ? <Text>Saving...</Text>
-                : <View style={styles.modalContent}>
-                  <FontAwesome name='close' size={20} style={styles.closeButton}
-                               onPress={() => setIsModalVisible(false)}/>
-                  <TouchableNativeFeedback onPress={onPickImagePress}>
-                    {newAvatarUrl
-                      ? <Image source={{uri: newAvatarUrl}} style={styles.currentUserImage}/>
-                      : <Image source={{uri: currentUser.avatarUrl}} style={styles.currentUserImage}/>
-                    }
-                  </TouchableNativeFeedback>
-                  <TextInput style={styles.textInput} placeholder="Username" value={username}
-                             onChangeText={(text) => setUsername(text)}/>
-                  <TextInput style={styles.textInput} placeholder="Description" value={description}
-                             onChangeText={(text) => setDescription(text)} multiline={true} numberOfLines={2}/>
-                  <Button title='Tallenna' onPress={() => onSaveUserPress()}/>
-                </View>
-              }
+    <View style={{
+        flex: 1,
+        marginTop: insets.top,
+        marginBottom: insets.bottom,
+        backgroundColor: '#F1F3FD',
+    }}>
+      <View style={styles.header}>
+        {currentUser && <>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between', flexGrow: 1}}>
+            <Text style={styles.title}>Profiili</Text>
+            <View style={{flexDirection: 'row'}}>
+              <FontAwesome style={{ marginRight: 20 }} name='pencil' onPress={() => setIsModalVisible(true)} size={20}/>
+              <FontAwesome name='sign-out' onPress={onLogoutPress} size={20}/>
             </View>
-          </Modal>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between', flexGrow: 1}} color='#FF0000'>
-            <Button title='Edit' onPress={() => setIsModalVisible(true)}/>
-            <Button title='Log Out' onPress={onLogoutPress}/>
           </View>
-          {currentUser &&
-          <View style={styles.user}>
+          <View style={styles.currentUser}>
             {currentUser.avatarUrl
               ? <Image source={{uri: currentUser.avatarUrl}} style={styles.currentUserImage}/>
               : <Image source={require('../../assets/no_avatar.png')} style={styles.currentUserImage}/>
             }
-              <View>
-                  <Text style={styles.userNameHeader}>{currentUser.username}</Text>
-                  <Text style={styles.text}>{currentUser.description}</Text>
-              </View>
+              <Text style={[styles.userNameHeader, styles.currentUserNameHeader]}>{currentUser.username}</Text>
+              <Text style={styles.currentUserText}>{currentUser.description}</Text>
           </View>
-          }
-          <FlatList
-            data={users.filter(user => user.uid !== currentUser.uid)}
-            renderItem={({item}) => {
-              return <View key={item.uid} style={styles.user}>
-                {item.avatarUrl
-                  ? <Image source={{uri: item.avatarUrl}} style={styles.image}/>
-                  : <Image source={require('../../assets/no_avatar.png')} style={styles.image}/>
+        </>}
+      </View>
+      <View style={styles.view}>
+        {isLoading
+          ? <Text>Loading...</Text>
+          : <>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={isModalVisible}
+              onRequestClose={() => {
+                setIsModalVisible(false);
+              }}
+            >
+              <View style={styles.modal}>
+                {isSaving
+                  ? <Text>Saving...</Text>
+                  : <View style={styles.modalContent}>
+                    <FontAwesome
+                      name='close' size={20} style={styles.closeButton}
+                      onPress={() => setIsModalVisible(false)}
+                    />
+                    <TouchableNativeFeedback onPress={onPickImagePress}>
+                      {newAvatarUrl
+                        ? <Image source={{uri: newAvatarUrl}} style={styles.currentUserImage}/>
+                        : <Image source={{uri: currentUser.avatarUrl}} style={styles.currentUserImage}/>
+                      }
+                    </TouchableNativeFeedback>
+                    <TextInput style={styles.textInput} placeholder="Username" value={username}
+                                onChangeText={(text) => setUsername(text)}/>
+                    <TextInput style={styles.textInput} placeholder="Description" value={description}
+                                onChangeText={(text) => setDescription(text)} multiline={true} numberOfLines={2}/>
+                    <Button title='Tallenna' onPress={() => onSaveUserPress()}/>
+                  </View>
                 }
-                <View style={styles.usersText}>
-                  <Text style={styles.userNameHeader}>{item.username}</Text>
-                  <Text>{item.description}</Text>
-                </View>
-              </View>;
-            }}
-            keyExtractor={(_, index) => index.toString()}
-          />
-        </>
-      }
-    </ScrollView>
+              </View>
+            </Modal>
+            <ScrollView>
+              {users.filter(user => user.uid !== currentUser.uid).map(user => {
+                return <View key={user.uid} style={styles.user}>
+                  {user.avatarUrl
+                    ? <Image source={{uri: user.avatarUrl}} style={styles.image}/>
+                    : <Image source={require('../../assets/no_avatar.png')} style={styles.image}/>
+                  }
+                  <View style={styles.usersText}>
+                    <Text style={styles.userNameHeader}>{user.username}</Text>
+                    <Text>{user.description}</Text>
+                  </View>
+                </View>;
+              })}
+            </ScrollView>
+          </>
+        }
+      </View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  header: {
+    padding: 30,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
   view: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    flex: 1,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    elevation: 5,
+    paddingHorizontal: 30,
+    paddingTop: 30,
+    backgroundColor: '#FFF',
   },
   user: {
     flexDirection: 'row',
-    marginTop: 20,
+    marginBottom: 20,
   },
   currentUser: {
-    // alignItems: 'center',
-    // marginBottom: 20,
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  currentUserText: {
+    maxWidth: '70%',
+    textAlign: 'center',
+  },
+  currentUserNameHeader: {
+    fontSize: 18,
+    marginVertical: 10,
   },
   userNameHeader: {
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   currentUserImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
     borderWidth: 1,
     overflow: 'hidden',
-    marginRight: 10,
   },
   image: {
     width: 60,
@@ -244,16 +274,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     overflow: 'hidden',
     marginRight: 30,
-  },
-  editButton: {
-    // position: 'absolute',
-    // left: 0,
-    // top: 10,
-  },
-  logoutButton: {
-    // position: 'absolute',
-    // right: 0,
-    // top: 10,
   },
   textInput: {
     borderColor: 'gray',
@@ -281,9 +301,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 10,
     top: 10,
-  },
-  text: {
-    maxWidth: '70%',
   },
   usersText: {
     flex: 1,
