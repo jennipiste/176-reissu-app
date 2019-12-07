@@ -16,8 +16,6 @@ const navigationOptions = ({ navigation }) => {
     return {
         headerStyle: {
             backgroundColor: 'transparent',
-            marginTop: -24,
-            marginBottom: -24,
         },
     };
 };
