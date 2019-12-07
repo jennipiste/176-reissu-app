@@ -200,7 +200,7 @@ const listItems = [
   {
     type: 'non-flight',
     header: 'Helsinki',
-    icon: 'map-marker-alt',
+    icon: 'map-marker',
     date: '12-01-2019',
     previewText: 'Paluu harmaaseen arkeen'
   },
