@@ -248,6 +248,7 @@ const styles = StyleSheet.create({
   currentUser: {
     alignItems: 'center',
     marginBottom: 20,
+    marginTop: 40,
   },
   currentUserText: {
     maxWidth: '70%',
@@ -264,7 +265,8 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
-    borderWidth: 1,
+    borderWidth: 3,
+    borderColor: '#E100CC',
     overflow: 'hidden',
   },
   image: {
