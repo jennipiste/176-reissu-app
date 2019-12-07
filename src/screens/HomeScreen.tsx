@@ -1,6 +1,6 @@
 import React, { useState,  useEffect } from 'react';
-import {useSafeArea} from 'react-native-safe-area-context';
-import { StyleSheet, Text, View, Button, Image, TouchableNativeFeedback, ScrollView, LayoutChangeEvent, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
+import { useSafeArea } from 'react-native-safe-area-context';
+import { StyleSheet, Text, View, Image, TouchableNativeFeedback, ScrollView, LayoutChangeEvent, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import { useNavigation } from 'react-navigation-hooks';
 
 import moment from 'moment';
@@ -65,10 +65,6 @@ export const HomeScreen: React.FC = () => {
         setProgress(progress);
     };
 
-    const onUsersPress = () => {
-        navigate('Users');
-    };
-
     const onDestinationPress = (destinationIndex: number) => {
         navigate('Diary', { destinationIndex });
     };
@@ -91,23 +87,23 @@ export const HomeScreen: React.FC = () => {
                     {(timeUntil && timeUntil.days < 0  || timeUntil.hours < 0 || timeUntil.minutes < 0 || timeUntil.seconds < 0)
                         ? <View style={styles.timeUntilBackground}>
                             <View style={styles.timeUntilContainer}>
-                                <Text style={styles.text}>Aikaa matkan alkuun</Text>
+                                <Text style={styles.timeUntilTitle}>Aikaa matkan alkuun</Text>
                                 <View style={styles.timeUntilItems}>
                                     <View style={styles.timeUntilItemContainer}>
                                         <View style={styles.timeUntilItem}><Text style={styles.timeUntilText}>{-timeUntil.days}</Text></View>
-                                        <Text>Päivää</Text>
+                                        <Text style={styles.timeUntilUnitText}>Päivää</Text>
                                     </View>
                                      <View style={styles.timeUntilItemContainer}>
                                         <View style={styles.timeUntilItem}><Text style={styles.timeUntilText}>{-timeUntil.hours}</Text></View>
-                                        <Text>Tuntia</Text>
+                                        <Text style={styles.timeUntilUnitText}>Tuntia</Text>
                                     </View>
                                      <View style={styles.timeUntilItemContainer}>
                                         <View style={styles.timeUntilItem}><Text style={styles.timeUntilText}>{-timeUntil.minutes}</Text></View>
-                                        <Text>Minuuttia</Text>
+                                        <Text style={styles.timeUntilUnitText}>Minuuttia</Text>
                                     </View>
                                      <View style={styles.timeUntilItemContainer}>
                                         <View style={styles.timeUntilItem}><Text style={styles.timeUntilText}>{-timeUntil.seconds}</Text></View>
-                                        <Text>Sekuntia</Text>
+                                        <Text style={styles.timeUntilUnitText}>Sekuntia</Text>
                                     </View>
                                 </View>
                             </View>
@@ -128,9 +124,6 @@ export const HomeScreen: React.FC = () => {
                                         </View>
                                     </TouchableNativeFeedback>
                                 )}
-                                <View style={styles.button}>
-                                    <Button title="Käyttäjät" onPress={() => onUsersPress()}/>
-                                </View>
                             </View>
                         </ScrollView>
                     }
@@ -143,7 +136,7 @@ export const HomeScreen: React.FC = () => {
 const styles = StyleSheet.create({
     view: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#F1F3FD',
     },
     scrollView: {
         flex: 1,
@@ -151,10 +144,6 @@ const styles = StyleSheet.create({
     background: {
         position: 'absolute',
         zIndex: -1,
-    },
-    button: {
-        marginTop: 30,
-        marginBottom: 10,
     },
     date: {
         borderWidth: 1,
@@ -168,17 +157,19 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     timeUntilContainer: {
-        width: '80%',
-        borderRadius: 5,
-        backgroundColor: 'lightgray',
-        paddingVertical: 30,
+        width: '85%',
+        borderRadius: 20,
+        backgroundColor: '#F1F3FD',
+        paddingVertical: 40,
         paddingHorizontal: 20,
         justifyContent: 'center',
         alignItems: 'center',
+        elevation: 10,
     },
-    text: {
+    timeUntilTitle: {
         fontSize: 20,
-        marginBottom: 20,
+        marginBottom: 30,
+        fontWeight: 'bold',
     },
     timeUntilItems: {
         flexDirection: 'row',
@@ -191,12 +182,18 @@ const styles = StyleSheet.create({
     timeUntilItem: {
         alignItems: 'center',
         backgroundColor: 'white',
-        borderRadius: 5,
-        width: 60,
-        height: 60,
+        borderRadius: 10,
+        elevation: 10,
+        justifyContent: 'center',
+        width: 70,
+        height: 70,
+        marginBottom: 10,
     },
     timeUntilText: {
-        fontSize: 40,
+        fontSize: 38,
+        fontWeight: 'bold',
+    },
+    timeUntilUnitText: {
         fontWeight: 'bold',
     }
 });
