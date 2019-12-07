@@ -6,7 +6,7 @@ import { useNavigation } from 'react-navigation-hooks';
 import moment from 'moment';
 import { destinations, START_TIME } from  '../constants';
 
-const SCROLLABLE_CONTENT_HEIGHT = 3000;
+const SCROLLABLE_CONTENT_HEIGHT = 2350;
 
 export const HomeScreen: React.FC = () => {
 
@@ -81,7 +81,7 @@ export const HomeScreen: React.FC = () => {
                 ? <View><Image source={require('../../assets/kitten.jpeg')} /></View>
                 : <>
                     <Image
-                        source={require('../../assets/vietnam.jpeg')}
+                        source={require('../../assets/home_bg.png')}
                         style={[styles.background, bgPos]}
                     />
                     {(timeUntil && timeUntil.days < 0  || timeUntil.hours < 0 || timeUntil.minutes < 0 || timeUntil.seconds < 0)
@@ -112,15 +112,20 @@ export const HomeScreen: React.FC = () => {
                             style={styles.scrollView}
                             onScroll={(event) => onScroll(event)}
                         >
-                            <View style={{height: SCROLLABLE_CONTENT_HEIGHT}}>
+                            <View style={{flex: 1, height: SCROLLABLE_CONTENT_HEIGHT}}>
                                 {destinations.map((destination, index) =>
                                     <TouchableNativeFeedback
                                         background={TouchableNativeFeedback.SelectableBackground()}
                                         onPress={() => onDestinationPress(index)}
                                         key={index}
                                     >
-                                        <View style={[styles.date, { position: 'absolute', top: (index + 1) * 550}]}>
-                                            <Text>{`${destination.name}`}</Text>
+                                        <View style={{
+                                            ...styles.date,
+                                            position: 'absolute',
+                                            top: destination.position.y,
+                                            left: destination.position.x,
+                                        }}>
+                                            <Text style={styles.dateText}>{`${index + 1}`}</Text>
                                         </View>
                                     </TouchableNativeFeedback>
                                 )}
@@ -146,9 +151,17 @@ const styles = StyleSheet.create({
         zIndex: -1,
     },
     date: {
-        borderWidth: 1,
-        padding: 10,
-        margin: 5,
+        backgroundColor: '#fff',
+        width: 50,
+        height: 50,
+        borderRadius: 30,
+        elevation: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    dateText: {
+        fontWeight: 'bold',
+        fontSize: 20,
     },
     timeUntilBackground: {
         alignItems: 'center',

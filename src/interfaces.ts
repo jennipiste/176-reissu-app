@@ -20,6 +20,10 @@ export interface Destination {
     name: string;
     startTime: string;
     endTime: string;
+    position: {
+        x: number;
+        y: number;
+    };
 }
 
 export interface Packing {
