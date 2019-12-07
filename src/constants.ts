@@ -1,28 +1,32 @@
 import { Destination, Packing, Category } from "./interfaces";
 
-export const START_TIME = '2019-10-28T12:55:12.766+02:00';
-export const END_TIME = '2019-10-28T12:55:12.766+02:00';
+export const START_TIME = '2019-12-25T14:00:00.000+02:00';
+export const END_TIME = '2019-01-13T05:25:00.000+02:00';
 
 export const destinations: Destination[] = [{
+    name: 'Helsinki',
+    startTime: '2019-12-25T14:00:00.000+02:00',
+    endTime: '2019-12-26T07:54:59.999+07:00'
+}, {
     name: 'Ho Chi Minh City',
-    startTime: '2019-10-28T12:55:12.766+02:00',
-    endTime: '2019-10-30T12:55:12.766+02:00',
+    startTime: '2019-12-26T07:55:00.000+07:00',
+    endTime: '2019-12-29T16:34:59.999+07:00',
 }, {
     name: 'Phu Quoc',
-    startTime: '2019-11-01T12:55:12.766+02:00',
-    endTime: '2019-11-03T12:55:12.766+02:00',
+    startTime: '2019-12-29T16:35:00.000+07:00',
+    endTime: '2019-01-03T20:49:59.999+07:00',
 }, {
     name: 'Hoi An',
-    startTime: '2019-11-04T12:55:12.766+02:00',
-    endTime: '2019-11-06T12:55:12.766+02:00',
+    startTime: '2019-01-03T20:50:00.000+07:00',
+    endTime: '2019-01-07T08:19:59.999+07:00',
 }, {
     name: 'Halong Bay',
-    startTime: '2019-11-07T12:55:12.766+02:00',
-    endTime: '2019-11-09T12:55:12.766+02:00',
+    startTime: '2019-01-07T08:20:00.000+07:00',
+    endTime: '2019-01-08T13:59:59.999+07:00', // TODO: fix time
 }, {
     name: 'Hanoi',
-    startTime: '2019-11-10T12:55:12.766+02:00',
-    endTime: '2019-11-12T12:55:12.766+02:00',
+    startTime: '2019-01-08T14:00:00.000+07:00', // TODO: fix time
+    endTime: '2019-01-13T05:25:00.000+02:00',
 }];
 
 export const packings: Packing[] = [{
