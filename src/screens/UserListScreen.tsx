@@ -204,8 +204,8 @@ export const UserListScreen: React.FC = () => {
               </View>
             </Modal>
             <ScrollView>
-              {users.filter(user => user.uid !== currentUser.uid).map(user => {
-                return <View key={user.uid} style={styles.user}>
+              {users.filter(user => user.uid !== currentUser.uid).map((user, index) => {
+                return <View key={index} style={styles.user}>
                   {user.avatarUrl
                     ? <Image source={{uri: user.avatarUrl}} style={styles.image}/>
                     : <Image source={require('../../assets/no_avatar.png')} style={styles.image}/>
