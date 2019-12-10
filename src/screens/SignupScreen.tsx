@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Text, View, TextInput, Button, StyleSheet, Alert, Image, TouchableNativeFeedback } from 'react-native';
+import { Text, View, TextInput, StyleSheet, Alert, Image, TouchableNativeFeedback, KeyboardAvoidingView } from 'react-native';
 import { useNavigation } from 'react-navigation-hooks';
 import * as ImagePicker from 'expo-image-picker';
 import firebase from 'firebase';
 import uuid from 'uuid/v4';
 import { packings } from '../constants';
+import { commonStyles, grayDark, secondaryColor } from '../styles';
+import { Button } from 'react-native-elements';
 
 
 export const SignupScreen: React.FC = () => {
@@ -14,6 +16,7 @@ export const SignupScreen: React.FC = () => {
     const [ description, setDescription ] = useState<string>('');
     const [ email, setEmail ] = useState<string>('');
     const [ password, setPassword ] = useState<string>('');
+    const [ inputFocus, setInputFocus ] = useState<string>('');
 
     const { navigate } = useNavigation();
 
@@ -87,26 +90,57 @@ export const SignupScreen: React.FC = () => {
     };
 
     return (
-        <View style={styles.view}>
-            <Text style={styles.text}>Rekisteröidy reissuun!</Text>
+        <KeyboardAvoidingView style={styles.view} behavior='padding'>
+            <Text style={styles.signUpTitle}>Luo profiili</Text>
             <TouchableNativeFeedback onPress={onPickImagePress}>
                 {avatarUrl.length > 0
-                    ? <Image source={{ uri: avatarUrl }} style={styles.image} />
+                    ? <Image source={{ uri: avatarUrl }} style={{...styles.image, borderColor: secondaryColor, borderWidth: 3}} />
                     : <Image source={require('../../assets/no_avatar.png')} style={styles.image} />
                 }
             </TouchableNativeFeedback>
-            <TextInput style={styles.textInput} placeholder="Username" value={username} onChangeText={(text) => setUsername(text)}/>
-            <TextInput style={styles.textInput} placeholder="Description" value={description} onChangeText={(text) => setDescription(text)} multiline={true} numberOfLines={2}/>
-            <TextInput style={styles.textInput} placeholder="Email" keyboardType='email-address' autoCapitalize='none' value={email} onChangeText={(text) => setEmail(text)}/>
-            <TextInput style={styles.textInput} secureTextEntry={true} placeholder="Password" value={password} onChangeText={(text) => setPassword(text)}/>
-            <View style={styles.button}>
-                <Button title="OK" onPress={() => onSignupPress()}/>
+            <TextInput
+                style={inputFocus === 'username' ? [commonStyles.textInput, commonStyles.textInputActive] : commonStyles.textInput}
+                placeholder="Käyttäjänimi"
+                placeholderTextColor={grayDark}
+                value={username}
+                onChangeText={(text) => setUsername(text)}
+                onFocus={() => setInputFocus('username')}
+            />
+            <TextInput
+                style={inputFocus === 'email' ? [commonStyles.textInput, commonStyles.textInputActive] : commonStyles.textInput}
+                placeholder="Sähköposti"
+                placeholderTextColor={grayDark}
+                keyboardType='email-address'
+                autoCapitalize='none'
+                value={email}
+                onChangeText={(text) => setEmail(text)}
+                onFocus={() => setInputFocus('email')}
+            />
+            <TextInput
+                style={inputFocus === 'password' ? [commonStyles.textInput, commonStyles.textInputActive] : commonStyles.textInput}
+                secureTextEntry={true}
+                placeholder="Salasana"
+                placeholderTextColor={grayDark}
+                value={password}
+                onChangeText={(text) => setPassword(text)}
+                onFocus={() => setInputFocus('password')}
+            />
+            <TextInput
+                style={inputFocus === 'description' ? [commonStyles.textInput, commonStyles.textInputActive] : commonStyles.textInput}
+                placeholder="Kuvaus"
+                placeholderTextColor={grayDark}
+                value={description}
+                multiline={true}
+                numberOfLines={4}
+                textAlignVertical='top'
+                onChangeText={(text) => setDescription(text)}
+                onFocus={() => setInputFocus('description')}
+            />
+            <View style={commonStyles.buttonView}>
+                <Button title="Rekisteröidy" onPress={() => onSignupPress()} buttonStyle={commonStyles.button} />
             </View>
-            <Text style={styles.text}>TAI</Text>
-            <View>
-                <Button title="Kirjaudu sisään" onPress={() => navigate('Login')}></Button>
-            </View>
-        </View>
+            <Text style={commonStyles.bottomText}>Onko sinulla jo profiili?<Text style={commonStyles.linkText} onPress={() => navigate('Login')}> Kirjaudu sisään</Text></Text>
+        </KeyboardAvoidingView>
     );
 };
 
@@ -116,29 +150,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    button: {
-        marginTop: 10,
-        marginBottom: 10,
-        borderRadius: 5,
-    },
-    text: {
-        margin: 20,
-    },
-    textInput: {
-        borderColor: 'gray',
-        borderRadius: 5,
-        borderWidth: 1,
-        width: '80%',
-        padding: 10,
-        margin: 10,
-    },
     image: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
-        borderWidth: 1,
-        borderColor: 'gray',
+        width: 120,
+        height: 120,
+        borderRadius: 60,
         overflow: 'hidden',
-        margin: 10,
+        marginBottom: 40,
+    },
+    signUpTitle: {
+        ...commonStyles.title,
+        marginBottom: 50,
     }
 });
