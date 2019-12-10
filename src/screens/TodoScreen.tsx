@@ -105,6 +105,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
+        height: 20,
         marginTop: 10,
         marginBottom: 10,
     },
@@ -118,6 +119,6 @@ const styles = StyleSheet.create({
         marginVertical: 20,
     },
     icon: {
-        marginRight: 20,
+        width: 40,
     }
 });
