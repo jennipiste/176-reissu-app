@@ -4,6 +4,7 @@ import { Text, View, TouchableWithoutFeedback, StyleSheet, ScrollView } from 're
 import { Ionicons } from '@expo/vector-icons';
 import { Packing, Category } from '../interfaces';
 import firebase from 'firebase';
+import { commonStyles, backgroundColor, primaryColor } from '../styles';
 
 export const TodoScreen: React.FC = () => {
 
@@ -46,11 +47,11 @@ export const TodoScreen: React.FC = () => {
             flex: 1,
             marginTop: insets.top,
             marginBottom: insets.bottom,
-            backgroundColor: '#F1F3FD',
+            backgroundColor: backgroundColor,
         }}>
             <View style={styles.header}>
-                <Text style={styles.title}>Pakkaa mukaan</Text>
-                <Text style={styles.title}>{`${checkedItems}/${totalItems}`}</Text>
+                <Text style={commonStyles.title}>Pakkaa mukaan</Text>
+                <Text style={commonStyles.title}>{`${checkedItems}/${totalItems}`}</Text>
             </View>
             <View style={styles.view}>
                 <ScrollView style={styles.scrollView}>
@@ -66,7 +67,7 @@ export const TodoScreen: React.FC = () => {
                                     <View style={styles.itemView}>
                                         <Ionicons style={{
                                             ...styles.icon,
-                                            color: item.completed ===  true ? '#7800F9' : 'lightgray',
+                                            color: item.completed ===  true ? primaryColor : 'lightgray',
                                             fontSize: item.completed ===  true ? 24 : 28,
                                         }}
                                             name={item.completed ===  true ? 'ios-checkbox' : 'ios-square-outline'}
@@ -109,13 +110,8 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginBottom: 10,
     },
-    title: {
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
     category: {
-        fontSize: 18,
-        fontWeight: 'bold',
+        ...commonStyles.title,
         marginVertical: 20,
     },
     icon: {

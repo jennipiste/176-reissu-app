@@ -18,6 +18,7 @@ import {User} from '../interfaces';
 import * as ImagePicker from 'expo-image-picker';
 import uuid from 'uuid/v4';
 import {FontAwesome} from '@expo/vector-icons';
+import { backgroundColor, secondaryColor } from '../styles';
 
 
 export const UserListTopPanel = (props) => {
@@ -147,7 +148,7 @@ export const UserListScreen: React.FC = () => {
         flex: 1,
         marginTop: insets.top,
         marginBottom: insets.bottom,
-        backgroundColor: '#F1F3FD',
+        backgroundColor: backgroundColor,
     }}>
       <View style={styles.header}>
         {currentUser && <>
@@ -268,7 +269,7 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 50,
     borderWidth: 3,
-    borderColor: '#E100CC',
+    borderColor: secondaryColor,
     overflow: 'hidden',
   },
   image: {
