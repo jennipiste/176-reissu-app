@@ -54,7 +54,7 @@ export const TodoScreen: React.FC = () => {
                 <Text style={commonStyles.title}>{`${checkedItems}/${totalItems}`}</Text>
             </View>
             <View style={styles.view}>
-                <ScrollView style={styles.scrollView}>
+                <ScrollView contentContainerStyle={styles.scrollView}>
                     {Object.values(Category).map((category, index) => {
                         const filteredPackings = packings.filter(packing => packing.category === category);
                         return <React.Fragment key={index}>
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
         flex: 1,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
-        elevation: 5,
+        elevation: 10,
         backgroundColor: '#FFF',
     },
     scrollView: {
