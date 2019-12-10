@@ -203,7 +203,7 @@ export const UserListScreen: React.FC = () => {
                 }
               </View>
             </Modal>
-            <ScrollView>
+            <ScrollView style={styles.scrollView}>
               {users.filter(user => user.uid !== currentUser.uid).map((user, index) => {
                 return <View key={index} style={styles.user}>
                   {user.avatarUrl
@@ -237,9 +237,11 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     elevation: 5,
-    paddingHorizontal: 30,
-    paddingTop: 30,
     backgroundColor: '#FFF',
+  },
+  scrollView: {
+    paddingTop: 20,
+    paddingHorizontal: 30,
   },
   user: {
     flexDirection: 'row',
