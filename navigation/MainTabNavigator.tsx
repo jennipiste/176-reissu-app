@@ -11,6 +11,7 @@ import { UserListScreen } from '../src/screens/UserListScreen';
 import { InfoScreen } from  '../src/screens/InfoScreen';
 
 import { FontAwesome } from '@expo/vector-icons';
+import { primaryColor, grayDark } from '../src/styles';
 
 const navigationOptions = ({ navigation }) => {
     return {
@@ -44,32 +45,32 @@ const HomeStack = createStackNavigator({
 const HomeTabIcon = (props) => (
     <FontAwesome
         name='home'
-        size={24}
-        color={props.focused ? '#7800F9' : 'darkgrey'}
+        size={28}
+        color={props.focused ? primaryColor : grayDark}
     />
 );
 
 const InfoTabIcon = (props) => (
     <FontAwesome
       name='plane'
-      size={24}
-      color={props.focused ? '#7800F9' : 'darkgrey'}
+      size={28}
+      color={props.focused ? primaryColor : grayDark}
     />
 );
 
 const TodoTabIcon = (props) => (
     <FontAwesome
       name='suitcase'
-      size={24}
-      color={props.focused ? '#7800F9' : 'darkgrey'}
+      size={28}
+      color={props.focused ? primaryColor : grayDark}
     />
 );
 
 const UsersIcon = (props) => (
     <FontAwesome
       name='user'
-      size={24}
-      color={props.focused ? '#7800F9' : 'darkgrey'}
+      size={28}
+      color={props.focused ? primaryColor : grayDark}
     />
 );
 
@@ -105,8 +106,14 @@ export default createAppContainer(createMaterialTopTabNavigator({
             backgroundColor: '#fff',
             borderTopLeftRadius: 20,
             borderTopRightRadius: 20,
+            height: 60,
+            justifyContent: 'center',
             elevation: 10,
-            boxShadow: '0px -2px 10px 6px rgba(0,0,0,0.75)',
+            boxShadow: '0px -1px 8px 3px rgba(0,0,0,0.75)',
+        },
+        iconStyle: {
+            width: 28,
+            height: 28,
         },
         indicatorStyle: {
             opacity: 0
