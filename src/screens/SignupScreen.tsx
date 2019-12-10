@@ -5,7 +5,7 @@ import * as ImagePicker from 'expo-image-picker';
 import firebase from 'firebase';
 import uuid from 'uuid/v4';
 import { packings } from '../constants';
-import { commonStyles, grayDark, secondaryColor } from '../styles';
+import { commonStyles, grayDark } from '../styles';
 import { Button } from 'react-native-elements';
 
 
@@ -94,8 +94,8 @@ export const SignupScreen: React.FC = () => {
             <Text style={styles.signUpTitle}>Luo profiili</Text>
             <TouchableNativeFeedback onPress={onPickImagePress}>
                 {avatarUrl.length > 0
-                    ? <Image source={{ uri: avatarUrl }} style={{...styles.image, borderColor: secondaryColor, borderWidth: 3}} />
-                    : <Image source={require('../../assets/no_avatar.png')} style={styles.image} />
+                    ? <Image source={{ uri: avatarUrl }} style={styles.profileImage} />
+                    : <Image source={require('../../assets/no_avatar.png')} style={styles.noAvatarImage} />
                 }
             </TouchableNativeFeedback>
             <TextInput
@@ -150,15 +150,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    image: {
-        width: 120,
-        height: 120,
-        borderRadius: 60,
-        overflow: 'hidden',
-        marginBottom: 40,
-    },
     signUpTitle: {
         ...commonStyles.title,
         marginBottom: 50,
+    },
+    profileImage: {
+        ...commonStyles.profileImage,
+        marginBottom: 40,
+    },
+    noAvatarImage: {
+        ...commonStyles.noAvatarImage,
+        marginBottom: 40,
     }
 });

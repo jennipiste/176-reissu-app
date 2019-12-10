@@ -41,5 +41,21 @@ export const commonStyles = StyleSheet.create({
     bottomText: {
         position: 'absolute',
         bottom: 30,
+    },
+    profileImage: {
+        width: 120,
+        height: 120,
+        borderRadius: 60,
+        overflow: 'hidden',
+        marginBottom: 20,
+        borderColor: secondaryColor,
+        borderWidth: 3,
+    },
+    noAvatarImage: {
+        width: 120,
+        height: 120,
+        borderRadius: 60,
+        overflow: 'hidden',
+        marginBottom: 20,
     }
 });

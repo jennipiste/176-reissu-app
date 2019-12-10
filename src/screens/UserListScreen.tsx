@@ -16,8 +16,9 @@ import {User} from '../interfaces';
 import * as ImagePicker from 'expo-image-picker';
 import uuid from 'uuid/v4';
 import {FontAwesome} from '@expo/vector-icons';
-import { backgroundColor, secondaryColor, commonStyles } from '../styles';
+import { backgroundColor, commonStyles } from '../styles';
 import { Button } from 'react-native-elements';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 export const UserListScreen: React.FC = () => {
@@ -30,6 +31,8 @@ export const UserListScreen: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [inputFocus, setInputFocus] = useState<string>(undefined);
+  const [modalUser, setModalUser] = useState<User>(undefined);
 
   useEffect(() => {
     updateUser();
@@ -132,17 +135,15 @@ export const UserListScreen: React.FC = () => {
     }}>
       <View style={styles.header}>
         {currentUser && <>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between', flexGrow: 1}}>
             <Text style={styles.title}>Profiili</Text>
-            <View style={{flexDirection: 'row'}}>
-              <FontAwesome style={{ marginRight: 20 }} name='pencil' onPress={() => setIsModalVisible(true)} size={20}/>
-              <FontAwesome name='sign-out' onPress={onLogoutPress} size={20}/>
+            <View style={styles.topIcons}>
+              <FontAwesome style={styles.topIcon} name='pencil' onPress={() => setIsModalVisible(true)} size={20}/>
+              <FontAwesome style={styles.topIcon} name='sign-out' onPress={onLogoutPress} size={20}/>
             </View>
-          </View>
           <View style={styles.currentUser}>
             {currentUser.avatarUrl
-              ? <Image source={{uri: currentUser.avatarUrl}} style={styles.currentUserImage}/>
-              : <Image source={require('../../assets/no_avatar.png')} style={styles.currentUserImage}/>
+              ? <Image source={{uri: currentUser.avatarUrl}} style={commonStyles.profileImage}/>
+              : <Image source={require('../../assets/no_avatar.png')} style={commonStyles.noAvatarImage}/>
             }
               <Text style={[styles.userNameHeader, styles.currentUserNameHeader]}>{currentUser.username}</Text>
               <Text style={styles.currentUserText}>{currentUser.description}</Text>
@@ -168,32 +169,37 @@ export const UserListScreen: React.FC = () => {
                     : <View style={styles.modalContent}>
                       <FontAwesome
                         name='close' size={20} style={styles.closeButton}
-                        onPress={() => setIsModalVisible(false)}
+                        onPress={() => {
+                          setIsModalVisible(false);
+                          setInputFocus(undefined);
+                        }}
                       />
                       <Text style={styles.modalTitle}>Muokkaa profiilia</Text>
                       <TouchableNativeFeedback onPress={onPickImagePress}>
                         <View>
                           {newAvatarUrl
-                            ? <Image source={{uri: newAvatarUrl}} style={styles.currentUserImage}/>
-                            : <Image source={{uri: currentUser.avatarUrl}} style={styles.currentUserImage}/>
+                            ? <Image source={{uri: newAvatarUrl}} style={commonStyles.profileImage}/>
+                            : <Image source={{uri: currentUser.avatarUrl}} style={commonStyles.profileImage}/>
                           }
                           <FontAwesome name='pencil' style={styles.editImageIcon} />
                         </View>
                       </TouchableNativeFeedback>
                       <TextInput
-                        style={commonStyles.textInput}
+                        style={inputFocus === 'username' ? [commonStyles.textInput, commonStyles.textInputActive] : commonStyles.textInput}
                         placeholder="Käyttäjänimi"
                         value={username}
                         onChangeText={(text) => setUsername(text)}
+                        onFocus={() => setInputFocus('username')}
                       />
                       <TextInput
-                        style={commonStyles.textInput}
+                        style={inputFocus === 'description' ? [commonStyles.textInput, commonStyles.textInputActive] : commonStyles.textInput}
                         placeholder="Kuvaus"
                         value={description}
                         multiline={true}
                         numberOfLines={4}
                         textAlignVertical='top'
                         onChangeText={(text) => setDescription(text)}
+                        onFocus={() => setInputFocus('description')}
                       />
                       <View style={styles.buttonView}>
                         <Button buttonStyle={commonStyles.button} title='Tallenna' onPress={() => onSaveUserPress()}/>
@@ -203,9 +209,35 @@ export const UserListScreen: React.FC = () => {
                 </View>
               </View>
             </Modal>
+            {modalUser &&
+              <Modal
+                animationType='fade'
+                transparent={true}
+                visible={!!modalUser}
+                onRequestClose={() => {
+                  setModalUser(undefined);
+                }}
+              >
+                <View style={styles.modalBackground}>
+                  <View style={styles.modal}>
+                    <View style={styles.modalContent}>
+                      <FontAwesome
+                        name='close' size={20} style={styles.closeButton}
+                        onPress={() => {
+                          setModalUser(undefined);
+                        }}
+                      />
+                      <Image source={{uri: modalUser.avatarUrl}} style={commonStyles.profileImage}/>
+                      <Text>{modalUser.username}</Text>
+                      <Text>{modalUser.description}</Text>
+                    </View>
+                  </View>
+                </View>
+              </Modal>
+            }
             <ScrollView contentContainerStyle={styles.scrollView}>
               {users.filter(user => user.uid !== currentUser.uid).map((user, index) => {
-                return <View key={index} style={styles.user}>
+                return <TouchableOpacity key={index} style={styles.user} onPress={() => setModalUser(user)}>
                   {user.avatarUrl
                     ? <Image source={{uri: user.avatarUrl}} style={styles.image}/>
                     : <Image source={require('../../assets/no_avatar.png')} style={styles.image}/>
@@ -214,7 +246,7 @@ export const UserListScreen: React.FC = () => {
                     <Text style={styles.userNameHeader}>{user.username}</Text>
                     <Text>{user.description}</Text>
                   </View>
-                </View>;
+                </TouchableOpacity>;
               })}
             </ScrollView>
           </>
@@ -231,6 +263,16 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  topIcons: {
+    position: 'absolute',
+    right: 0,
+    top: 30,
+    flexDirection: 'row',
+  },
+  topIcon: {
+    width: 40,
+    height: 40,
   },
   view: {
     flex: 1,
@@ -263,15 +305,6 @@ const styles = StyleSheet.create({
   userNameHeader: {
     fontWeight: 'bold',
   },
-  currentUserImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    borderWidth: 3,
-    borderColor: secondaryColor,
-    overflow: 'hidden',
-    marginBottom: 20,
-  },
   image: {
     width: 60,
     height: 60,
@@ -296,7 +329,7 @@ const styles = StyleSheet.create({
   },
   modal: {
     width: '80%',
-    height: 480,
+    height: 500,
     alignSelf: 'center',
     borderRadius: 20,
     backgroundColor: '#fff',
