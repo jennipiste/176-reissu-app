@@ -1,5 +1,4 @@
 import {useSafeArea} from 'react-native-safe-area-context';
-// import { SafeAreaView } from 'react-native'
 import React, {useState, useEffect} from 'react';
 import {
   Text,
@@ -7,7 +6,6 @@ import {
   Image,
   StyleSheet,
   ScrollView,
-  Button,
   Modal,
   TextInput,
   TouchableNativeFeedback,
@@ -18,26 +16,8 @@ import {User} from '../interfaces';
 import * as ImagePicker from 'expo-image-picker';
 import uuid from 'uuid/v4';
 import {FontAwesome} from '@expo/vector-icons';
-import { backgroundColor, secondaryColor } from '../styles';
-
-
-export const UserListTopPanel = (props) => {
-  // const [topMargin, setTopMargin] = useState(0)
-  // SafeArea.getSafeAreaInsetsForRootView().then(result => {setTopMargin(result.top)})
-  const insets = useSafeArea();
-
-  return <View
-    style={{
-      marginTop: insets.top
-    }}
-  >
-    <Button title={'Log out'} onPress={() => {
-    }}/>
-    <Button title={'Edit'} onPress={() => {
-    }}/>
-    {/*<Button title={'WTF'} onPress={() => alert('WTF')}></Button>*/}
-  </View>
-}
+import { backgroundColor, secondaryColor, commonStyles } from '../styles';
+import { Button } from 'react-native-elements';
 
 
 export const UserListScreen: React.FC = () => {
@@ -174,34 +154,53 @@ export const UserListScreen: React.FC = () => {
           ? <Text>Loading...</Text>
           : <>
             <Modal
-              animationType="slide"
+              animationType='fade'
               transparent={true}
               visible={isModalVisible}
               onRequestClose={() => {
                 setIsModalVisible(false);
               }}
             >
-              <View style={styles.modal}>
-                {isSaving
-                  ? <Text>Saving...</Text>
-                  : <View style={styles.modalContent}>
-                    <FontAwesome
-                      name='close' size={20} style={styles.closeButton}
-                      onPress={() => setIsModalVisible(false)}
-                    />
-                    <TouchableNativeFeedback onPress={onPickImagePress}>
-                      {newAvatarUrl
-                        ? <Image source={{uri: newAvatarUrl}} style={styles.currentUserImage}/>
-                        : <Image source={{uri: currentUser.avatarUrl}} style={styles.currentUserImage}/>
-                      }
-                    </TouchableNativeFeedback>
-                    <TextInput style={styles.textInput} placeholder="Username" value={username}
-                                onChangeText={(text) => setUsername(text)}/>
-                    <TextInput style={styles.textInput} placeholder="Description" value={description}
-                                onChangeText={(text) => setDescription(text)} multiline={true} numberOfLines={2}/>
-                    <Button title='Tallenna' onPress={() => onSaveUserPress()}/>
-                  </View>
-                }
+              <View style={styles.modalBackground}>
+                <View style={styles.modal}>
+                  {isSaving
+                    ? <Text>Saving...</Text>
+                    : <View style={styles.modalContent}>
+                      <FontAwesome
+                        name='close' size={20} style={styles.closeButton}
+                        onPress={() => setIsModalVisible(false)}
+                      />
+                      <Text style={styles.modalTitle}>Muokkaa profiilia</Text>
+                      <TouchableNativeFeedback onPress={onPickImagePress}>
+                        <View>
+                          {newAvatarUrl
+                            ? <Image source={{uri: newAvatarUrl}} style={styles.currentUserImage}/>
+                            : <Image source={{uri: currentUser.avatarUrl}} style={styles.currentUserImage}/>
+                          }
+                          <FontAwesome name='pencil' style={styles.editImageIcon} />
+                        </View>
+                      </TouchableNativeFeedback>
+                      <TextInput
+                        style={commonStyles.textInput}
+                        placeholder="Käyttäjänimi"
+                        value={username}
+                        onChangeText={(text) => setUsername(text)}
+                      />
+                      <TextInput
+                        style={commonStyles.textInput}
+                        placeholder="Kuvaus"
+                        value={description}
+                        multiline={true}
+                        numberOfLines={4}
+                        textAlignVertical='top'
+                        onChangeText={(text) => setDescription(text)}
+                      />
+                      <View style={styles.buttonView}>
+                        <Button buttonStyle={commonStyles.button} title='Tallenna' onPress={() => onSaveUserPress()}/>
+                      </View>
+                    </View>
+                  }
+                </View>
               </View>
             </Modal>
             <ScrollView contentContainerStyle={styles.scrollView}>
@@ -271,6 +270,7 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: secondaryColor,
     overflow: 'hidden',
+    marginBottom: 20,
   },
   image: {
     width: 60,
@@ -288,24 +288,44 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 10,
   },
+  modalBackground: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    flex: 1,
+  },
   modal: {
     width: '80%',
-    height: 400,
+    height: 480,
     alignSelf: 'center',
-    borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 20,
     backgroundColor: '#fff',
-    marginTop: 100,
+    elevation: 10,
   },
   modalContent: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  modalTitle: {
+    ...commonStyles.title,
+    marginBottom: 30,
+  },
+  editImageIcon: {
+    position: 'absolute',
+    right: 0,
+    bottom: 20,
+  },
+  buttonView: {
+    ...commonStyles.buttonView,
+    marginTop: 20,
+  },
   closeButton: {
     position: 'absolute',
     right: 10,
-    top: 10,
+    top: 24,
+    width: 30,
+    height: 30,
   },
   usersText: {
     flex: 1,
