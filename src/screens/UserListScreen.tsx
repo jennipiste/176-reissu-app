@@ -8,8 +8,8 @@ import {
   ScrollView,
   Modal,
   TextInput,
-  TouchableNativeFeedback,
   Alert,
+  TouchableOpacity
 } from 'react-native';
 import firebase from 'firebase';
 import {User} from '../interfaces';
@@ -18,7 +18,6 @@ import uuid from 'uuid/v4';
 import {FontAwesome} from '@expo/vector-icons';
 import { backgroundColor, commonStyles } from '../styles';
 import { Button } from 'react-native-elements';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 export const UserListScreen: React.FC = () => {
@@ -137,8 +136,12 @@ export const UserListScreen: React.FC = () => {
         {currentUser && <>
             <Text style={styles.title}>Profiili</Text>
             <View style={styles.topIcons}>
-              <FontAwesome style={styles.topIcon} name='pencil' onPress={() => setIsModalVisible(true)} size={20}/>
-              <FontAwesome style={styles.topIcon} name='sign-out' onPress={onLogoutPress} size={20}/>
+              <TouchableOpacity style={styles.topIcon} onPress={() => setIsModalVisible(true)}>
+                <FontAwesome name='pencil' size={20}/>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.topIcon} onPress={onLogoutPress}>
+                <FontAwesome name='sign-out' size={20}/>
+              </TouchableOpacity>
             </View>
           <View style={styles.currentUser}>
             {currentUser.avatarUrl
@@ -167,15 +170,17 @@ export const UserListScreen: React.FC = () => {
                   {isSaving
                     ? <Text>Saving...</Text>
                     : <View style={styles.modalContent}>
-                      <FontAwesome
-                        name='close' size={20} style={styles.closeButton}
+                      <TouchableOpacity
+                        style={styles.closeButton}
                         onPress={() => {
                           setIsModalVisible(false);
                           setInputFocus(undefined);
                         }}
-                      />
+                      >
+                        <FontAwesome name='close' size={20} />
+                      </TouchableOpacity>
                       <Text style={styles.modalTitle}>Muokkaa profiilia</Text>
-                      <TouchableNativeFeedback onPress={onPickImagePress}>
+                      <TouchableOpacity onPress={onPickImagePress}>
                         <View>
                           {newAvatarUrl
                             ? <Image source={{uri: newAvatarUrl}} style={commonStyles.profileImage}/>
@@ -183,7 +188,7 @@ export const UserListScreen: React.FC = () => {
                           }
                           <FontAwesome name='pencil' style={styles.editImageIcon} />
                         </View>
-                      </TouchableNativeFeedback>
+                      </TouchableOpacity>
                       <TextInput
                         style={inputFocus === 'username' ? [commonStyles.textInput, commonStyles.textInputActive] : commonStyles.textInput}
                         placeholder="Käyttäjänimi"
@@ -221,12 +226,14 @@ export const UserListScreen: React.FC = () => {
                 <View style={styles.modalBackground}>
                   <View style={styles.modal}>
                     <View style={styles.modalContent}>
-                      <FontAwesome
-                        name='close' size={20} style={styles.closeButton}
+                      <TouchableOpacity
+                        style={styles.closeButton}
                         onPress={() => {
                           setModalUser(undefined);
                         }}
-                      />
+                      >
+                        <FontAwesome name='close' size={20} />
+                      </TouchableOpacity>
                       <Image source={{uri: modalUser.avatarUrl}} style={commonStyles.profileImage}/>
                       <Text>{modalUser.username}</Text>
                       <Text>{modalUser.description}</Text>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, TextInput, StyleSheet, Alert, Image, TouchableNativeFeedback, KeyboardAvoidingView } from 'react-native';
+import { Text, View, TextInput, StyleSheet, Alert, Image, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import { useNavigation } from 'react-navigation-hooks';
 import * as ImagePicker from 'expo-image-picker';
 import firebase from 'firebase';
@@ -92,12 +92,12 @@ export const SignupScreen: React.FC = () => {
     return (
         <KeyboardAvoidingView style={styles.view} behavior='padding'>
             <Text style={styles.signUpTitle}>Luo profiili</Text>
-            <TouchableNativeFeedback onPress={onPickImagePress}>
+            <TouchableOpacity onPress={onPickImagePress}>
                 {avatarUrl.length > 0
                     ? <Image source={{ uri: avatarUrl }} style={styles.profileImage} />
                     : <Image source={require('../../assets/no_avatar.png')} style={styles.noAvatarImage} />
                 }
-            </TouchableNativeFeedback>
+            </TouchableOpacity>
             <TextInput
                 style={inputFocus === 'username' ? [commonStyles.textInput, commonStyles.textInputActive] : commonStyles.textInput}
                 placeholder="Käyttäjänimi"

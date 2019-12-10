@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        height: 20,
+        height: 24,
         marginTop: 10,
         marginBottom: 10,
     },

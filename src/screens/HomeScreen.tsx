@@ -1,6 +1,6 @@
 import React, { useState,  useEffect } from 'react';
 import { useSafeArea } from 'react-native-safe-area-context';
-import { StyleSheet, Text, View, Image, TouchableNativeFeedback, ScrollView, LayoutChangeEvent, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, LayoutChangeEvent, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import { useNavigation } from 'react-navigation-hooks';
 
 import moment from 'moment';
@@ -114,20 +114,20 @@ export const HomeScreen: React.FC = () => {
                         >
                             <View style={{flex: 1, height: SCROLLABLE_CONTENT_HEIGHT}}>
                                 {destinations.map((destination, index) =>
-                                    <TouchableNativeFeedback
-                                        background={TouchableNativeFeedback.SelectableBackground()}
+                                    <TouchableOpacity
                                         onPress={() => onDestinationPress(index)}
                                         key={index}
-                                    >
-                                        <View style={{
+                                        style={{
                                             ...styles.date,
                                             position: 'absolute',
                                             top: destination.position.y,
                                             left: destination.position.x,
-                                        }}>
+                                        }}
+                                    >
+                                        <View>
                                             <Text style={styles.dateText}>{`${index + 1}`}</Text>
                                         </View>
-                                    </TouchableNativeFeedback>
+                                    </TouchableOpacity>
                                 )}
                             </View>
                         </ScrollView>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, Image, StyleSheet, TouchableNativeFeedback, FlatList } from 'react-native';
+import { Text, View, Image, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
 import firebase from 'firebase';
 import { Post, User } from '../interfaces';
@@ -52,15 +52,12 @@ export const DiaryScreen: React.FC = () => {
     return (
         <View style={styles.view}>
             <View style={styles.location}><FontAwesome name='map-marker' size={20} /><Text>{destination.name}</Text></View>
-            <View style={styles.button}>
-            <TouchableNativeFeedback
+            <TouchableOpacity
                 style={styles.button}
-                background={TouchableNativeFeedback.SelectableBackground()}
                 onPress={onCreatePress}
             >
                 <FontAwesome name='plus' size={25} color='white' />
-            </TouchableNativeFeedback>
-            </View>
+            </TouchableOpacity>
             <FlatList
                 data={posts}
                 renderItem={({ item }) => {
@@ -71,24 +68,25 @@ export const DiaryScreen: React.FC = () => {
                             ? <Image source={{ uri: userAvatarUrl }} style={styles.avatar} />
                             : <Image source={require('../../assets/no_avatar.png')} style={styles.avatar} />
                         }
-                        <TouchableNativeFeedback
-                            background={TouchableNativeFeedback.SelectableBackground()}
+                        <TouchableOpacity
                             onPress={() => onPostPress(item.uid)}
+                            style={styles.post}
                         >
-                            <View style={styles.post}>
+                            <View>
                                 <FlatList
                                     data={item.imageUrls}
                                     renderItem={({ item }) => (
                                         <View style={{ flex: 1, flexDirection: 'column', margin: 1 }}>
-                                            <Image source={{ uri: item }} style={styles.postImage} />
+                                            <Image source={{ uri: item, cache: 'force-cache' }} style={styles.postImage} />
                                         </View>
                                     )}
                                     numColumns={3}
                                     keyExtractor={(_, index) => index.toString()}
+                                    removeClippedSubviews={false}
                                 />
                                 <Text>{item.text}</Text>
                             </View>
-                        </TouchableNativeFeedback>
+                        </TouchableOpacity>
                     </View>;
                 }}
                 keyExtractor={(_, index) => index.toString()}
@@ -118,7 +116,7 @@ const styles = StyleSheet.create({
         height: 46,
         borderRadius: 23,
         zIndex: 1,
-        backgroundColor: 'grey',
+        backgroundColor: '#7800F9',
         justifyContent: 'center',
         alignItems: 'center',
     },
