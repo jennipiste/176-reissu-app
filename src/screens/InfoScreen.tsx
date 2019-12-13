@@ -1,16 +1,56 @@
 import {useSafeArea} from 'react-native-safe-area-context';
 import React from 'react';
-import {Text, View, StyleSheet, FlatList, TouchableNativeFeedback, Modal, Image, TextInput, Button} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Modal,
+  Button,
+  ScrollView, TouchableNativeFeedback
+} from 'react-native';
 import {Linking} from 'expo';
 import {FontAwesome} from "@expo/vector-icons";
+import {commonStyles} from "../styles";
 
 
-const listItems = [
+interface IFlightInfoDest {
+  name: string
+  time: string
+}
+
+
+interface IFlightInfo {
+  from: IFlightInfoDest
+  to: IFlightInfoDest
+  duration: string
+  flightNumber: string
+}
+
+
+interface IStayInfo {
+  name: string
+  street: string
+  mapUri: string
+}
+
+
+interface IListItem {
+  type: string
+  header: string
+  sortableDate: string
+  date: string
+  previewText?: string
+  flightInfo?: IFlightInfo
+  stayInfo?: IStayInfo
+}
+
+
+const listItems: IListItem[] = [
   {
     type: 'non-flight',
     header: 'Helsinki',
-    icon: 'map-marker',
-    date: '25-12-2019',
+    sortableDate: '25-12-2019',
+    date: '25.12.',
     previewText: 'Tavataan Helsinki Vantaa lentokenltällä. Etkot Oak Barrelissa tai finnair longuessa klo 14.00'
   },
   // Helsinki Hanoi
@@ -28,19 +68,24 @@ const listItems = [
       duration: '10h 40min',
       flightNumber: 'AY161'
     },
-    date: '25-12-2019',
+    sortableDate: '25-12-2019',
+    date: '25.12.',
     header: '',
-    icon: 'plane'
   },
   {
     type: 'non-flight',
     header: 'Ho Chi Mihn City',
-    icon: 'home',
-    date: '26-12-2019',
+    sortableDate: '26-12-2019',
+    date: '26.12.',
     previewText:
       'Ho Chi Mhin city (Tunnettiin aijemmin Saigon:na) on Vietnamin siirun kaupunki 8.4 miljoonalla asukkaallaan. ' +
       'Kyseessä on matkamme ensimmäinen kohde, joka sijaitsee eteläisessä vietnamissa. ' +
       'Tärkeimpiin nähtävyyksiin sisältyvät Cu Chui tunnelit ja Ben Than Market.',
+    stayInfo: {
+      street: '132 Bến Vân Đồn, Phường 6, Quận 4, Hồ Chí Minh, Vietnam',
+      name: 'Thai Anh Millennium Celtran',
+      mapUri: 'https://www.google.fi/maps/place/Thai+Anh+Millennium+Celtran/@10.7635078,106.6988989,19z/data=!4m8!3m7!1s0x31752f683c98dcf7:0xa4c6f8b241c69247!5m2!4m1!1i2!8m2!3d10.7635078!4d106.6994461?shorturl=1'
+    }
   },
   // Ho chi imhn phu quoc
   {
@@ -57,18 +102,22 @@ const listItems = [
       duration: '55min',
       flightNumber: 'VJ327'
     },
-    date: '29-12-2019',
+    sortableDate: '29-12-2019',
+    date: '29.12.',
     header: '',
-    icon: 'plane'
   },
   {
     type: 'non-flight',
     header: 'Phu Quoc',
-    icon: 'home',
-    date: '26-12-2019',
+    sortableDate: '26-12-2019',
+    date: '26.12.',
     previewText:
       'Matkamme toinen kohde on Phu Quoc paratiisisaari.',
-    mapLink: 'https://www.google.fi/maps/place/Nadine+Phu+Quoc+Resort/@10.1909191,103.9682541,17z/data=!3m1!4b1!4m8!3m7!1s0x31a78c51b884ed1f:0x49a7e895212f444a!5m2!4m1!1i2!8m2!3d10.1909191!4d103.9704428'
+    stayInfo: {
+      street: 'Group 4, Cửa Lấp, tỉnh Kiên Giang, Vietnam',
+      name: 'Nadine Phu Quoc Resort',
+      mapUri: 'https://www.google.fi/maps/place/Nadine+Phu+Quoc+Resort/@10.1909191,103.9682541,17z/data=!3m1!4b1!4m8!3m7!1s0x31a78c51b884ed1f:0x49a7e895212f444a!5m2!4m1!1i2!8m2!3d10.1909191!4d103.9704428'
+    }
   },
   // Phu quoc da nang
   {
@@ -85,26 +134,31 @@ const listItems = [
       duration: '1h 50min',
       flightNumber: 'BL840'
     },
-    date: '03-01-2020',
+    sortableDate: '03-01-2020',
+    date: '3.1.',
     header: '',
-    icon: 'plane'
   },
   {
     type: 'non-flight',
     header: 'Da Nang',
-    icon: 'home',
-    date: '26-12-2019',
+    sortableDate: '26-12-2019',
+    date: '26.12.',
     previewText:
-      'Lentomme saapuu Da Nang suurkaupunkiin, josta kuljetukset Hoi An:iin'
+      'Lentomme saapuu Da Nang suurkaupunkiin, josta kuljetukset Hoi An:iin',
   },
   {
     type: 'non-flight',
     header: 'Hoi An',
-    icon: 'home',
-    date: '26-12-2019',
+    sortableDate: '26-12-2019',
+    date: '26.12.',
     previewText:
       'Hoi An on maailmanperintökohde',
-    mapLink: 'https://www.google.fi/maps/place/Gem+Hoi+An+Villa/@15.8868775,108.3318211,17z/data=!3m1!4b1!4m8!3m7!1s0x31420dd869e6f2ef:0xc12909a0a877b0b7!5m2!4m1!1i2!8m2!3d15.8868775!4d108.3340151'
+    mapLink: 'https://www.google.fi/maps/place/Gem+Hoi+An+Villa/@15.8868775,108.3318211,17z/data=!3m1!4b1!4m8!3m7!1s0x31420dd869e6f2ef:0xc12909a0a877b0b7!5m2!4m1!1i2!8m2!3d15.8868775!4d108.3340151',
+    stayInfo: {
+      street: 'Sơn Phong, Hội An, Quang Nam Province, Vietnam',
+      name: 'Gem Hoi An Villa',
+      mapUri: 'https://www.google.fi/maps/place/Gem+Hoi+An+Villa/@15.8863012,108.333255,18.47z/data=!4m8!3m7!1s0x0:0xc12909a0a877b0b7!5m2!4m1!1i2!8m2!3d15.8868775!4d108.3340151'
+    }
   },
   // da nang hanoi
   {
@@ -121,34 +175,45 @@ const listItems = [
       duration: '1h 20min',
       flightNumber: 'VJ534'
     },
-    date: '07-01-2020',
+    sortableDate: '07-01-2020',
+    date: '7.1.',
     header: '',
-    icon: 'plane'
   },
   {
     type: 'non-flight',
     header: 'Pikapysähdys Hanoissa',
-    icon: 'bus',
-    date: '07-01-2020',
+    sortableDate: '07-01-2020',
+    date: '7.1.',
     previewText:
       'Välipysähdys Hanoissa. Jatkamme matkaa bussikuljetuksella seuraavaan kohteeseen.'
   },
   {
     type: 'non-flight',
     header: 'Ha Long Bay',
-    icon: 'home',
-    date: '07-01-2020',
+    sortableDate: '07-01-2020',
+    date: '7.1.',
     previewText:
-      'Ha Long Bay on kaunis paikka täynnä saaria. Vietämme yhden yön näillä saarilla.'
+      'Ha Long Bay on kaunis paikka täynnä saaria. Vietämme yhden yön näillä saarilla.',
+    stayInfo: {
+      street: 'xxxx',
+      name: 'xxxxx',
+      mapUri: 'https://www.google.fi/maps/place/51+H%C3%A0ng+B%C3%A8,+H%C3%A0ng+B%E1%BA%A1c,+Ho%C3%A0n+Ki%E1%BA%BFm,+H%C3%A0+N%E1%BB%99i,+Vietnam/@21.0324095,105.8518956,1117m/data=!3m1!1e3!4m13!1m7!3m6!1s0x3135abc067c50781:0x3fa66f024d5a018d!2zNTEgSMOgbmcgQsOoLCBIw6BuZyBC4bqhYywgSG_DoG4gS2nhur9tLCBIw6AgTuG7mWksIFZpZXRuYW0!3b1!8m2!3d21.032545!4d105.853855!3m4!1s0x3135abc067c50781:0x3fa66f024d5a018d!8m2!3d21.032545!4d105.853855'
+    }
+
   },
   {
     type: 'non-flight',
     header: 'Hanoi',
-    icon: 'home',
-    date: '08-01-2020',
+    sortableDate: '08-01-2020',
+    date: '8.1.',
     previewText:
       'Hanoi on matkamme viimenen kohde ja Vietnamin pääkaupunki.' +
-      'Hanoissa asustaa 7.7 miljoonaa ihmistä '
+      'Hanoissa asustaa 7.7 miljoonaa ihmistä ',
+    stayInfo: {
+      street: '51 Hàng Bè',
+      name: 'xxxxx',
+      mapUri: 'https://www.google.fi/maps/place/51+H%C3%A0ng+B%C3%A8,+H%C3%A0ng+B%E1%BA%A1c,+Ho%C3%A0n+Ki%E1%BA%BFm,+H%C3%A0+N%E1%BB%99i,+Vietnam/@21.0324095,105.8518956,1117m/data=!3m1!1e3!4m13!1m7!3m6!1s0x3135abc067c50781:0x3fa66f024d5a018d!2zNTEgSMOgbmcgQsOoLCBIw6BuZyBC4bqhYywgSG_DoG4gS2nhur9tLCBIw6AgTuG7mWksIFZpZXRuYW0!3b1!8m2!3d21.032545!4d105.853855!3m4!1s0x3135abc067c50781:0x3fa66f024d5a018d!8m2!3d21.032545!4d105.853855'
+    }
   },
   // Takas Helsinkiin
   {
@@ -165,15 +230,15 @@ const listItems = [
       duration: '1h 50min',
       flightNumber: 'HX529'
     },
-    date: '11-01-2020',
+    sortableDate: '11-01-2020',
+    date: '11.1.',
     header: '',
-    icon: 'plane'
   },
   {
     type: 'non-flight',
     header: 'Hong Kong',
-    icon: 'home',
-    date: '11-01-2020',
+    sortableDate: '11-01-2020',
+    date: '11.1.',
     previewText:
       'Välipys mielenosoituksistaan tunnetussa Hong Kong:ssa. ' +
       'Hong Kong itsehallintoalue Kiinassa. ' +
@@ -193,15 +258,15 @@ const listItems = [
       duration: '10h 40min',
       flightNumber: 'AY100'
     },
-    date: '12-01-2020',
+    sortableDate: '12-01-2020',
+    date: '12.1.',
     header: '',
-    icon: 'plane'
   },
   {
     type: 'non-flight',
     header: 'Helsinki',
-    icon: 'map-marker',
-    date: '12-01-2019',
+    sortableDate: '12-01-2020',
+    date: '12.1.',
     previewText: 'Paluu harmaaseen arkeen'
   },
 ]
@@ -255,7 +320,7 @@ const modalStyles = StyleSheet.create({
 })
 
 
-const FlightInfo: React.FC = ({flightInfo}) => {
+const FlightInfo: React.FC = ({flightInfo}: { flightInfo: IFlightInfo }) => {
   return <View style={flightInfoStyles.wrapper}>
     <View style={flightInfoStyles.innerWrapper}>
       <View style={flightInfoStyles.cityContainer}>
@@ -263,6 +328,7 @@ const FlightInfo: React.FC = ({flightInfo}) => {
         <Text style={flightInfoStyles.cityTime}>{flightInfo.from.time}</Text>
       </View>
       <FontAwesome style={flightInfoStyles.arrow} name={'arrow-right'} size={20} color={'#8f8f8f'}/>
+      {/*<FontAwesome style={flightInfoStyles.arrow} name={'airplane'} size={20} color={'#8f8f8f'}/>*/}
       <View style={flightInfoStyles.cityContainer}>
         <Text style={flightInfoStyles.city}>{flightInfo.to.name}</Text>
         <Text style={flightInfoStyles.cityTime}>{flightInfo.to.time}</Text>
@@ -309,95 +375,195 @@ const flightInfoStyles = StyleSheet.create({
 })
 
 
+const pastColor = '#c8c8c8'
+const hilightColor = '#7d28fa'
+
+
 export const InfoScreen: React.FC = () => {
   const [modalVisible, setModalVisible] = React.useState(false)
   const [selectedItem, setSelectedItem] = React.useState(undefined)
 
   const insets = useSafeArea();
 
+  const currentIndex = 2;
+
   return (
-    <View style={{
+    <ScrollView style={{
       marginTop: insets.top,
-      marginBottom: insets.bottom
+      marginBottom: insets.bottom,
+      backgroundColor: '#f4f6fd'
     }}>
       <React.Fragment>
-        {modalVisible &&
-        <InfoModal isVisible={modalVisible} item={selectedItem} setVisible={setModalVisible}/>
-        }
-        <FlatList
-          style={styles.topView}
-          data={listItems}
-          renderItem={({item}) => {
-            return <TouchableNativeFeedback
-              onPress={() => {
-                setModalVisible(true)
-                setSelectedItem(item)
-              }}
+        {/*{modalVisible &&*/}
+        {/*<InfoModal isVisible={modalVisible} item={selectedItem} setVisible={setModalVisible}/>*/}
+        {/*}*/}
+        <View style={styles.header}>
+          <Text style={{...commonStyles.title, width: 100}}>Info</Text>
+        </View>
+        <View
+          style={{paddingTop: 10}}
+        >
+          {/*<FlatList*/}
+          {/*  style={styles.topView}*/}
+          {/*  data={listItems}*/}
+          {listItems.map((item: IListItem, index) => {
+            // }
+            // })}
+            // renderItem={({item}) => {
+            //   return <
+            //     // onPress={() => {
+            //     //   setModalVisible(true)
+            //     //   setSelectedItem(item)
+            //     // }}
+            //   >
+
+            const thisColor = index === currentIndex ? hilightColor : (index < currentIndex ? pastColor : '#000000')
+
+            return <View
+              style={styles.listItem}
             >
-              <View
-                style={styles.listItem}
-              >
-                <View>
-                  <FontAwesome
-                    name={item.icon}
-                    size={24}
-                    color={'#5caf8b'}
-                    style={styles.listItemIcon}
-                  />
-                  <View style={styles.circleThing}></View>
-                </View>
-                <View style={styles.listItemContent}>
-                  <View style={styles.headerBlock}>
-                    <Text style={styles.infoHeader}>{item.header}</Text>
-                    <Text style={styles.dateInfo}>{item.date}</Text>
-                  </View>
-                  {item.type === 'flight' && <FlightInfo flightInfo={item.flightInfo}/>}
-                  {item.type !== 'flight' &&
-                  <React.Fragment>
-                      <Text>
-                        {item.previewText ? item.previewText :
-                          'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been ' +
-                          'the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type' +
-                          'and scrambled it to make a type specimen book. It has survived not only five centuries, but ' +
-                          'also'
-                        }
-                      </Text>
-                  </React.Fragment>
-                  }
-                </View>
+              <View style={index !== listItems.length - 1 ? styles.dateTextContainer : {}}>
+                <Text
+                  style={{...styles.dateText, color: thisColor}}
+                >{item.date}</Text>
+                {currentIndex === index && <View
+                    style={styles.circleThing}
+                />}
+                <View
+                  style={{...styles.circleThingInner, backgroundColor: thisColor}}
+                />
               </View>
-            </TouchableNativeFeedback>
-          }}
-        />
+              <View
+                style={{...styles.listItemContent, ...(index === currentIndex ? {backgroundColor: '#FFFFFF'} : {})}}>
+                <View style={{...styles.arrowThing, ...(index === currentIndex ? {borderRightColor: '#FFFFFF'} : {})}}/>
+                {/*<View style={styles.headerBlock}>*/}
+                {/*  /!*<Text style={styles.dateInfo}>{item.date}</Text>*!/*/}
+                {/*</View>*/}
+                {item.type === 'flight' && <FlightInfo flightInfo={item.flightInfo}/>}
+                {item.type !== 'flight' &&
+                <React.Fragment>
+                    <Text style={{...styles.infoHeader, color: thisColor}}>{item.header}</Text>
+                  {
+                    item.stayInfo && <TouchableNativeFeedback
+                      onPress={() => {
+                        Linking.openURL(item.stayInfo.mapUri)
+                      }}
+                    >
+                        <View style={styles.homeIconContainer}>
+                            <FontAwesome name={'home'} size={24} color={thisColor}/>
+                            <View style={styles.homeIconInfoContainer}>
+                                <Text style={{...styles.homeIconHeader, color: thisColor}}>{item.stayInfo.name}</Text>
+                                <Text style={{...styles.homeIconAddress}}>{item.stayInfo.street}</Text>
+                            </View>
+                        </View>
+                    </TouchableNativeFeedback>
+                  }
+                    <Text style={styles.infoText}>
+                      {item.previewText}
+                    </Text>
+                </React.Fragment>
+                }
+              </View>
+            </View>
+            // </TouchableNativeFeedback>
+          })}
+          {/*/>*/}
+        </View>
       </React.Fragment>
-    </View>
+    </ScrollView>
   );
 };
 
 
 const styles = StyleSheet.create({
+  infoText: {
+    color: '#b4b4b4'
+  },
+  homeIconHeader: {
+    fontSize: 14,
+  },
+  homeIconAddress: {
+    fontSize: 10,
+    color: '#b4b4b4'
+  },
+  homeIconInfoContainer: {
+    paddingLeft: 5
+  },
+  homeIconContainer: {
+    flexDirection: 'row',
+    paddingTop: 5,
+    paddingBottom: 5
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 30,
+  },
+  arrowThing: {
+    position: 'absolute',
+    left: -10,
+    top: 15,
+    width: 0,
+    height: 0,
+    borderRightColor: '#f0f0f0',
+    borderRightWidth: 10,
+    borderTopColor: 'transparent',
+    borderTopWidth: 10,
+    borderBottomColor: 'transparent',
+    borderBottomWidth: 10,
+    // elevation: 5,
+  },
+  dateTextContainer: {
+    borderRightColor: 'black',
+    borderRightWidth: StyleSheet.hairlineWidth,
+    // backgroundColor: 'red'
+  },
+  dateText: {
+    padding: 15,
+    fontSize: 14,
+    fontWeight: 'bold',
+    // marginLeft: 20,
+    width: 80,
+    textAlign: 'right',
+    marginTop: -7 - 15 + 2
+  },
   topView: {
     // paddingTop: 50,
+
     // paddingBottom: 500,
     // paddingVertical: 100,
     // marginVertical: 100,
+    // backgroundColor: 'lightgray'
+
+  },
+  circleThingInner: {
+    height: 10,
+    width: 10,
+    margin: 5,
+    borderRadius: 5,
+    position: 'absolute',
+    top: -5,
+    right: -10,
+    backgroundColor: hilightColor,
   },
   circleThing: {
-    height: 0,
-    width: 15,
-    // borderRadius: 11,
-    borderTopWidth: 5,
-    borderColor: '#459095',
+    height: 20,
+    width: 20,
+    borderRadius: 10,
     position: 'absolute',
-    top: 0,
+    top: -5,
     right: -10,
-    backgroundColor: '#FFFFFF'
+    backgroundColor: hilightColor,
+    opacity: 0.3
   },
   bordered: {
     borderColor: '#000000',
   },
   listItem: {
     flexDirection: 'row',
+    // backgroundColor: 'red',
+    marginBottom: -1
   },
   listItemIcon: {
     margin: 20,
@@ -405,10 +571,21 @@ const styles = StyleSheet.create({
     flex: 0,
   },
   listItemContent: {
-    padding: 20,
-    borderLeftWidth: 5,
-    borderColor: '#459095',
-    flex: 1
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 10,
+    paddingBottom: 10,
+    // borderLeftWidth: 5,
+    flex: 1,
+    // borderColor: 'black',
+    borderRadius: 10,
+    // borderWidth: 1,
+    marginRight: 20,
+    marginLeft: 30,
+    marginTop: -20,
+    marginBottom: 40,
+    backgroundColor: '#f0f0f0',
+    elevation: 5,
   },
   dateInfo: {
     fontSize: 14,
@@ -417,8 +594,8 @@ const styles = StyleSheet.create({
     // alignSelf: 'center'
   },
   infoHeader: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 22,
+    fontWeight: '400',
     flex: 1
   },
   headerBlock: {
