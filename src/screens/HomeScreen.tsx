@@ -1,6 +1,14 @@
 import React, { useState,  useEffect } from 'react';
 import { useSafeArea } from 'react-native-safe-area-context';
-import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, LayoutChangeEvent, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
+import {
+    StyleSheet,
+    Text,
+    View,
+    Image,
+    TouchableOpacity,
+    ScrollView,
+    ImageBackground
+} from 'react-native';
 import { useNavigation } from 'react-navigation-hooks';
 
 import moment from 'moment';
@@ -13,12 +21,6 @@ export const HomeScreen: React.FC = () => {
     const [ isLoading, setIsLoading ] = useState<boolean>(true);
     const [ timeUntil, setTimeUntil ] =  useState<{days: number, hours: number, minutes: number, seconds: number}>(undefined);
 
-    // States for background position
-    const [ scrollViewWidth, setScrollViewWidth ] = useState<number>(undefined);
-    const [ scrollViewHeight, setScrollViewHeight ] = useState<number>(undefined);
-    const [ progress, setProgress ] = useState<number>(undefined);
-    const [ bgPos, setBgPos ] = useState(undefined);
-
     const { navigate } = useNavigation();
 
     useEffect(() => {
@@ -29,42 +31,6 @@ export const HomeScreen: React.FC = () => {
         setIsLoading(false);
     });
 
-    useEffect(() => {
-        if (scrollViewWidth && scrollViewHeight) {
-            updatePositions();
-        }
-    }, [progress]);
-
-    const updatePositions = () => {
-        const bgWidth = scrollViewWidth;
-        const bgHeight = bgWidth * 5.8;
-        const bgTop = (progress * (bgHeight - scrollViewHeight)) + scrollViewHeight - bgHeight;
-        const bgPos = {width: bgWidth, height: bgHeight, bottom: bgTop, left: 0};
-        setBgPos(bgPos);
-        console.log("scrollViewHeight", scrollViewHeight);
-        console.log("bgHeight", bgHeight);
-        console.log("updatedBgPos", bgPos);
-    };
-
-    const onLayout = (event: LayoutChangeEvent) => {
-        const { x, y, width, height } = event.nativeEvent.layout;
-        console.log("onLayout", x, y, width, height);
-
-        setScrollViewWidth(width);
-        setScrollViewHeight(height);
-        setProgress(0);
-    };
-
-    const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) =>  {
-        const scrollY = event.nativeEvent.contentOffset.y;
-        const contentHeight = event.nativeEvent.contentSize.height;
-        const viewHeight = event.nativeEvent.layoutMeasurement.height;
-        const maxY = contentHeight - viewHeight;
-        const progress = Math.max(Math.min(scrollY / maxY, 1), 0);
-        console.log("progress", progress);
-        setProgress(progress);
-    };
-
     const onDestinationPress = (destinationIndex: number) => {
         navigate('Diary', { destinationIndex });
     };
@@ -72,7 +38,7 @@ export const HomeScreen: React.FC = () => {
     const insets = useSafeArea();
 
     return (
-        <View onLayout={(event) => onLayout(event)} style={{
+        <View style={{
             ...styles.view,
             marginTop: insets.top,
             marginBottom: insets.bottom
@@ -80,10 +46,10 @@ export const HomeScreen: React.FC = () => {
             {isLoading
                 ? <View><Image source={require('../../assets/kitten.jpeg')} /></View>
                 : <>
-                    <Image
-                        source={require('../../assets/home_bg.png')}
-                        style={[styles.background, bgPos]}
-                    />
+                    {/*<Image*/}
+                    {/*    source={require('../../assets/home_bg.png')}*/}
+                    {/*    style={[styles.background, bgPos]}*/}
+                    {/*/>*/}
                     {(timeUntil && timeUntil.days < 0  || timeUntil.hours < 0 || timeUntil.minutes < 0 || timeUntil.seconds < 0)
                         ? <View style={styles.timeUntilBackground}>
                             <View style={styles.timeUntilContainer}>
@@ -110,8 +76,8 @@ export const HomeScreen: React.FC = () => {
                         </View>
                         : <ScrollView
                             style={styles.scrollView}
-                            onScroll={(event) => onScroll(event)}
                         >
+                           <ImageBackground source={require('../../assets/home_bg.png')} style={{width: '100%', height: '100%'}}>
                             <View style={{flex: 1, height: SCROLLABLE_CONTENT_HEIGHT}}>
                                 {destinations.map((destination, index) =>
                                     <TouchableOpacity
@@ -130,6 +96,7 @@ export const HomeScreen: React.FC = () => {
                                     </TouchableOpacity>
                                 )}
                             </View>
+                           </ImageBackground>
                         </ScrollView>
                     }
                 </>
