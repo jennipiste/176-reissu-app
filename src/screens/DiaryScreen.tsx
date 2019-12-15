@@ -5,9 +5,9 @@ import {useNavigation, useNavigationParam} from 'react-navigation-hooks';
 import firebase from 'firebase';
 import {Post, User} from '../interfaces';
 import {destinations} from '../constants';
-import {MaterialCommunityIcons} from '@expo/vector-icons';
+import {FontAwesome, MaterialCommunityIcons} from '@expo/vector-icons';
 import moment from 'moment';
-import {backgroundColor, commonStyles, grayDark, primaryColor} from "../styles";
+import {backgroundColor, commonStyles, grayDark, grayLight, primaryColor} from "../styles";
 
 export const DiaryScreen: React.FC = () => {
   const {navigate} = useNavigation();
@@ -78,9 +78,18 @@ export const DiaryScreen: React.FC = () => {
               <MaterialCommunityIcons name='plus' size={28} color='white'/>
             </TouchableOpacity>
             {
-              posts.length === 0 ? <View>
-                <Text>Ei vielä postauksia</Text>
-                <Text style={{color: primaryColor, fontWeight: 'bold'}}>Lisää uusi postaus painamalla +!</Text>
+              posts.length === 0 ? <View style={styles.noPosts}>
+                <FontAwesome
+                  name='book'
+                  size={120}
+                  color={grayLight}
+                  style={{margin: 5}}
+                />
+                <Text style={{color: grayLight, margin: 5}}>Ei vielä postauksia</Text>
+                <Text
+                  style={{color: primaryColor, fontWeight: 'bold', margin: 5, width: '100%', textAlign: 'center'}}
+                  onPress={onCreatePress}
+                >Lisää uusi postaus painamalla +</Text>
               </View> : <FlatList
                 style={styles.scrollArea}
                 data={posts}
@@ -132,6 +141,12 @@ export const DiaryScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
+  noPosts: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   view: {
     backgroundColor: backgroundColor,
 
