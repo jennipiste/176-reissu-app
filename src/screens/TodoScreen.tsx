@@ -51,7 +51,7 @@ export const TodoScreen: React.FC = () => {
         }}>
             <View style={styles.header}>
                 <Text style={commonStyles.title}>Pakkaa mukaan</Text>
-                <Text style={commonStyles.title}>{`${checkedItems}/${totalItems}`}</Text>
+                <Text style={{...commonStyles.title, textAlign: 'right'}}>{`${checkedItems}/${totalItems}`}</Text>
             </View>
             <View style={styles.view}>
                 <ScrollView contentContainerStyle={styles.scrollView}>
