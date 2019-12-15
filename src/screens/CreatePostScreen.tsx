@@ -87,7 +87,7 @@ export const CreatePostScreen: React.FC = () => {
 
   const onPickImagePress = async () => {
     const result: ImagePicker.ImagePickerResult = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
     });
     if (result.cancelled === false) {
       const resized = await ImageManipulator.manipulateAsync(
