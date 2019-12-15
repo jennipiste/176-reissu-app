@@ -13,7 +13,7 @@ const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const onAuthStateChanged = (user: firebase.User) => {
-    // setTimeout(function() { setIsLoading(false); }, 2000);
+    setTimeout(function() { setIsLoading(false); }, 2000);
     setIsAuthenticated(!!user);
   };
 
