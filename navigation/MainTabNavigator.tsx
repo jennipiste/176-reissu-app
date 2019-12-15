@@ -12,6 +12,8 @@ import { InfoScreen } from  '../src/screens/InfoScreen';
 
 import { Ionicons, FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import {primaryColor, grayLight, backgroundColor} from '../src/styles';
+import moment from 'moment';
+import { START_TIME } from '../src/constants';
 
 const diaryNavOptions = ({ navigation }) => {
     return {
@@ -86,13 +88,22 @@ const InfoTabIcon = (props) => (
     />
 );
 
-const TodoTabIcon = (props) => (
-    <FontAwesome
+const tripStarted = moment().diff(moment(START_TIME)) > 0;
+
+const TodoTabIcon = (props) => {
+    if (tripStarted) {
+      return <Ionicons
+        name='ios-list'
+        size={30}
+        color={props.focused ? primaryColor : grayLight}
+      />;
+    }
+    return <FontAwesome
       name='suitcase'
       size={24}
       color={props.focused ? primaryColor : grayLight}
-    />
-);
+    />;
+};
 
 const UsersIcon = (props) => (
     <MaterialIcons

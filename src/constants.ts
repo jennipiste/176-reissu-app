@@ -1,4 +1,4 @@
-import { Destination, Packing, Category } from "./interfaces";
+import { Destination, Packing, Category, Todo } from "./interfaces";
 
 export const START_TIME = '2019-12-07T14:00:00.000+02:00';
 export const END_TIME = '2019-01-13T05:25:00.000+02:00';
@@ -427,5 +427,167 @@ export const packings: Packing[] = [{
     id: 75,
     name: 'Matka-akku',
     category: Category.other,
+    completed: false,
+}];
+
+export const todos: Todo[] = [{
+    id: 1,
+    name: 'Saavu Vietnamiin',
+    completed: false,
+}, {
+    id: 2,
+    name: 'Makaa rannalla',
+    completed: false,
+}, {
+    id: 25,
+    name: 'Aja mopolla',
+    completed: false,
+}, {
+    id: 13,
+    name: 'Ammu ilotulitteita',
+    completed: false,
+}, {
+    id: 4,
+    name: 'Patikoi',
+    completed: false,
+}, {
+    id: 5,
+    name: 'Käy casinolla',
+    completed: false,
+}, {
+    id: 6,
+    name: 'Biletä',
+    completed: false,
+}, {
+    id: 7,
+    name: 'Juo paikallista olutta',
+    completed: false,
+}, {
+    id: 8,
+    name: 'Syö katukeittiössä',
+    completed: false,
+}, {
+    id: 9,
+    name: 'Käy museossa',
+    completed: false,
+}, {
+    id: 10,
+    name: 'Osta riisihattu',
+    completed: false,
+}, {
+    id: 11,
+    name: 'Käytä riisihattua',
+    completed: false,
+}, {
+    id: 12,
+    name: 'Tee jotain autenttista',
+    completed: false,
+}, {
+    id: 3,
+    name: 'Käy veneretkellä',
+    completed: false,
+}, {
+    id: 14,
+    name: 'Käy saarella',
+    completed: false,
+}, {
+    id: 15,
+    name: 'Innostu kulttuurista',
+    completed: false,
+}, {
+    id: 16,
+    name: 'Opi Vietnamin historiasta',
+    completed: false,
+}, {
+    id: 17,
+    name: 'Syö koiraa',
+    completed: false,
+}, {
+    id: 18,
+    name: 'Surffaa',
+    completed: false,
+}, {
+    id: 19,
+    name: 'Sukella',
+    completed: false,
+}, {
+    id: 20,
+    name: 'Ota kuva apinasta',
+    completed: false,
+}, {
+    id: 21,
+    name: 'Puhu vietnamia',
+    completed: false,
+}, {
+    id: 22,
+    name: 'Kysy avioliittoneuvoja vanhalta parilta',
+    completed: false,
+}, {
+    id: 23,
+    name: 'Käytä afterburneria',
+    completed: false,
+}, {
+    id: 24,
+    name: 'Selviä ripulista',
+    completed: false,
+}, {
+    id: 26,
+    name: 'Tingi taksin hinnasta',
+    completed: false,
+}, {
+    id: 27,
+    name: 'Osta tuliaiset Hanoin lentokentältä',
+    completed: false,
+}, {
+    id: 28,
+    name: 'Rentoudu',
+    completed: false,
+}, {
+    id: 29,
+    name: 'Käy hieronnassa',
+    completed: false,
+}, {
+    id: 30,
+    name: 'Silitä koiraa',
+    completed: false,
+}, {
+    id: 31,
+    name: 'Ota kuva auringonnoususta',
+    completed: false,
+}, {
+    id: 32,
+    name: 'Ota kuva auringonlaskusta',
+    completed: false,
+}, {
+    id: 33,
+    name: 'Kirjoita postaus',
+    completed: false,
+}, {
+    id: 34,
+    name: 'Käy temppelissä',
+    completed: false,
+}, {
+    id: 35,
+    name: 'Istu iltanuotiolla',
+    completed: false,
+}, {
+    id: 36,
+    name: 'Eksy',
+    completed: false,
+}, {
+    id: 37,
+    name: 'Naura niin että mahaan sattuu',
+    completed: false,
+}, {
+    id: 38,
+    name: 'Juokse mereen uimaan',
+    completed: false,
+}, {
+    id: 39,
+    name: 'Tee ruokaa',
+    completed: false,
+}, {
+    id: 40,
+    name: 'Palaa Suomeen',
     completed: false,
 }];

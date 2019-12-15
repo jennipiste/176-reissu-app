@@ -4,7 +4,7 @@ import {useNavigation} from 'react-navigation-hooks';
 import * as ImagePicker from 'expo-image-picker';
 import firebase from 'firebase';
 import uuid from 'uuid/v4';
-import {packings} from '../constants';
+import {packings, todos} from '../constants';
 import {commonStyles, grayDark} from '../styles';
 import {Button} from 'react-native-elements';
 
@@ -34,6 +34,12 @@ export const SignupScreen: React.FC = () => {
   const initializePackings = async (userUid: string) => {
     for (let index = 0; index < packings.length; index++) {
       await firebase.database().ref(`packings/${userUid}/${packings[index].id}`).set(packings[index]);
+    }
+  };
+
+  const initializeTodos = async (userUid: string) => {
+    for (let index = 0; index < todos.length; index++) {
+      await firebase.database().ref(`todos/${userUid}/${todos[index].id}`).set(todos[index]);
     }
   };
 
@@ -74,7 +80,7 @@ export const SignupScreen: React.FC = () => {
               avatarUrl: downloadURL,
             });
             await initializePackings(uid);
-
+            await initializeTodos(uid);
 
             navigate('Home');
           });
