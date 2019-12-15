@@ -11,13 +11,23 @@ import { UserListScreen } from '../src/screens/UserListScreen';
 import { InfoScreen } from  '../src/screens/InfoScreen';
 
 import { FontAwesome } from '@expo/vector-icons';
-import { primaryColor, grayDark } from '../src/styles';
+import { primaryColor, grayLight } from '../src/styles';
 
-const navigationOptions = ({ navigation }) => {
+const diaryNavOptions = ({ navigation }) => {
     return {
         headerStyle: {
             backgroundColor: 'transparent',
         },
+        title: navigation.getParam('location', ''),
+    };
+};
+
+const postNavOptions = ({ navigation }) => {
+    return {
+        headerStyle: {
+            backgroundColor: 'transparent',
+        },
+        title: `${navigation.getParam('creator', '')}      ${navigation.getParam('date', '')}`,
     };
 };
 
@@ -30,15 +40,20 @@ const HomeStack = createStackNavigator({
     },
     Diary: {
         screen: DiaryScreen,
-        navigationOptions,
+        navigationOptions: diaryNavOptions,
     },
     CreatePost: {
         screen: CreatePostScreen,
-        navigationOptions,
+        navigationOptions: {
+            headerStyle: {
+                backgroundColor: 'transparent',
+            },
+            title: 'Uusi postaus'
+        },
     },
     Post: {
         screen: PostScreen,
-        navigationOptions,
+        navigationOptions: postNavOptions,
     },
 });
 
@@ -46,7 +61,7 @@ const HomeTabIcon = (props) => (
     <FontAwesome
         name='home'
         size={28}
-        color={props.focused ? primaryColor : grayDark}
+        color={props.focused ? primaryColor : grayLight}
     />
 );
 
@@ -54,7 +69,7 @@ const InfoTabIcon = (props) => (
     <FontAwesome
       name='plane'
       size={28}
-      color={props.focused ? primaryColor : grayDark}
+      color={props.focused ? primaryColor : grayLight}
     />
 );
 
@@ -62,7 +77,7 @@ const TodoTabIcon = (props) => (
     <FontAwesome
       name='suitcase'
       size={28}
-      color={props.focused ? primaryColor : grayDark}
+      color={props.focused ? primaryColor : grayLight}
     />
 );
 
@@ -70,7 +85,7 @@ const UsersIcon = (props) => (
     <FontAwesome
       name='user'
       size={28}
-      color={props.focused ? primaryColor : grayDark}
+      color={props.focused ? primaryColor : grayLight}
     />
 );
 

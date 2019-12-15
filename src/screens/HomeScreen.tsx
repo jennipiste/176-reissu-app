@@ -32,7 +32,7 @@ export const HomeScreen: React.FC = () => {
     });
 
     const onDestinationPress = (destinationIndex: number) => {
-        navigate('Diary', { destinationIndex });
+        navigate('Diary', { destinationIndex, location: destinations[destinationIndex].name });
     };
 
     const insets = useSafeArea();

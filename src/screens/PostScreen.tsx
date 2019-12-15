@@ -3,6 +3,7 @@ import { Text, View, Image, StyleSheet, ScrollView, FlatList } from 'react-nativ
 import { useNavigationParam } from 'react-navigation-hooks';
 import firebase from 'firebase';
 import { Post, User } from '../interfaces';
+import moment from 'moment';
 
 export const PostScreen: React.FC = () => {
 
@@ -29,10 +30,14 @@ export const PostScreen: React.FC = () => {
         <ScrollView style={styles.view}>
             {post
                 ? <View>
-                    <Text>{`Day ${post.date}`}</Text>
-                    {user && <Text>{`Created by ${user.username}`}</Text>}
+                    <Text>{moment(post.date).format('HH:mm')}</Text>
                     <Text>{post.text}</Text>
-                    <FlatList
+                    {post.imageUrls.map((url, index) => {
+                        return <View key={index}>
+                            <Image source={{ uri: url }} style={styles.postImage} />
+                        </View>;
+                    })}
+                    {/* <ScrollView
                         data={post.imageUrls}
                         renderItem={({ item }) => (
                             <View style={{ flex: 1, flexDirection: 'column', margin: 1 }}>
@@ -41,7 +46,8 @@ export const PostScreen: React.FC = () => {
                         )}
                         numColumns={2}
                         keyExtractor={(_, index) => index.toString()}
-                    />
+                        removeClippedSubviews={false}
+                    /> */}
                 </View>
                 : <Text>Loading...</Text>
             }
@@ -51,12 +57,14 @@ export const PostScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
     view: {
-        paddingVertical: 30,
+        paddingVertical: 10,
         paddingHorizontal: 20,
+        flex: 1,
     },
     postImage: {
         justifyContent: 'center',
         alignItems: 'center',
+        width: '50%',
         height: 200,
     },
 });

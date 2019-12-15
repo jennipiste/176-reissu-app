@@ -5,6 +5,7 @@ import firebase from 'firebase';
 import { Post, User } from '../interfaces';
 import { destinations } from  '../constants';
 import { FontAwesome } from '@expo/vector-icons';
+import moment from 'moment';
 
 export const DiaryScreen: React.FC = () => {
 
@@ -20,8 +21,8 @@ export const DiaryScreen: React.FC = () => {
         navigate('CreatePost', { destinationIndex });
     };
 
-    const onPostPress = (postUid: string) => {
-        navigate('Post', { postUid });
+    const onPostPress = (postUid: string, creator: string, date: string) => {
+        navigate('Post', { postUid, creator, date });
     };
 
     useEffect(() => {
@@ -51,7 +52,7 @@ export const DiaryScreen: React.FC = () => {
 
     return (
         <View style={styles.view}>
-            <View style={styles.location}><FontAwesome name='map-marker' size={20} /><Text>{destination.name}</Text></View>
+            {/* <View style={styles.location}><FontAwesome name='map-marker' size={20} /><Text>{destination.name}</Text></View> */}
             <TouchableOpacity
                 style={styles.button}
                 onPress={onCreatePress}
@@ -63,13 +64,14 @@ export const DiaryScreen: React.FC = () => {
                 renderItem={({ item }) => {
                     const user = users.find(user => user.uid === item.userUid);
                     const userAvatarUrl =  user ? user.avatarUrl : null;
+                    const date = moment(item.date).format('DD.MM.');
                     return <View style={styles.postContainer}>
                         {userAvatarUrl
                             ? <Image source={{ uri: userAvatarUrl }} style={styles.avatar} />
                             : <Image source={require('../../assets/no_avatar.png')} style={styles.avatar} />
                         }
                         <TouchableOpacity
-                            onPress={() => onPostPress(item.uid)}
+                            onPress={() => onPostPress(item.uid, user.username, date)}
                             style={styles.post}
                         >
                             <View>

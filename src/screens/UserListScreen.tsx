@@ -16,7 +16,7 @@ import {User} from '../interfaces';
 import * as ImagePicker from 'expo-image-picker';
 import uuid from 'uuid/v4';
 import {FontAwesome} from '@expo/vector-icons';
-import { backgroundColor, commonStyles } from '../styles';
+import { backgroundColor, commonStyles, primaryColor } from '../styles';
 import { Button } from 'react-native-elements';
 
 
@@ -137,10 +137,10 @@ export const UserListScreen: React.FC = () => {
             <Text style={styles.title}>Profiili</Text>
             <View style={styles.topIcons}>
               <TouchableOpacity style={styles.topIcon} onPress={() => setIsModalVisible(true)}>
-                <FontAwesome name='pencil' size={20}/>
+                <FontAwesome color={primaryColor} name='pencil' size={20}/>
               </TouchableOpacity>
               <TouchableOpacity style={styles.topIcon} onPress={onLogoutPress}>
-                <FontAwesome name='sign-out' size={20}/>
+                <FontAwesome color={primaryColor} name='sign-out' size={20}/>
               </TouchableOpacity>
             </View>
           <View style={styles.currentUser}>
@@ -186,7 +186,6 @@ export const UserListScreen: React.FC = () => {
                             ? <Image source={{uri: newAvatarUrl}} style={commonStyles.profileImage}/>
                             : <Image source={{uri: currentUser.avatarUrl}} style={commonStyles.profileImage}/>
                           }
-                          <FontAwesome name='pencil' style={styles.editImageIcon} />
                         </View>
                       </TouchableOpacity>
                       <TextInput
@@ -350,11 +349,6 @@ const styles = StyleSheet.create({
   modalTitle: {
     ...commonStyles.title,
     marginBottom: 30,
-  },
-  editImageIcon: {
-    position: 'absolute',
-    right: 0,
-    bottom: 20,
   },
   buttonView: {
     ...commonStyles.buttonView,

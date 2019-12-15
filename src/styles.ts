@@ -5,6 +5,7 @@ export const secondaryColor = '#E100CC';
 export const backgroundColor = '#F1F3FD';
 export const backgroundColorActive = '#FFFFEE';
 export const grayDark = '#5F626C';
+export const grayLight = '#9EADCD';
 
 export const commonStyles = StyleSheet.create({
     title: {
