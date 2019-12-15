@@ -70,8 +70,8 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   loginTitle: {
-    flexGrow: 0,
     ...commonStyles.title,
+    flex: 0,
     marginBottom: 50,
   },
 });

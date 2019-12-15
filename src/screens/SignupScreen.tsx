@@ -60,14 +60,10 @@ export const SignupScreen: React.FC = () => {
           const uploadTask = firebase.storage().ref().child(`images/${filename}`).put(blob);
 
           uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, (snapshot) => {
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log('Upload is ' + progress + '% done');
             switch (snapshot.state) {
               case firebase.storage.TaskState.PAUSED:
-                console.log('Upload is paused');
                 break;
               case firebase.storage.TaskState.RUNNING:
-                console.log('Upload is running');
                 break;
             }
           }, (error) => {
@@ -155,8 +151,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   signUpTitle: {
-    flexGrow: 0,
     ...commonStyles.title,
+    flex: 0,
     marginBottom: 50,
   },
   profileImage: {
