@@ -63,8 +63,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logo: {
-    width: 120,
-    height: 120,
+    width: 160,
+    height: 160,
     borderRadius: 70,
     marginBottom: 50,
     overflow: 'hidden',
