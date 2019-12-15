@@ -130,8 +130,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     dateText: {
-        fontWeight: 'bold',
-        fontSize: 20,
+        fontFamily: 'futuramedium',
+        fontSize: 22,
     },
     timeUntilBackground: {
         alignItems: 'center',
