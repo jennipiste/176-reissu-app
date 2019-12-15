@@ -15,7 +15,7 @@ import firebase from 'firebase';
 import {User} from '../interfaces';
 import * as ImagePicker from 'expo-image-picker';
 import uuid from 'uuid/v4';
-import {FontAwesome} from '@expo/vector-icons';
+import {FontAwesome, AntDesign} from '@expo/vector-icons';
 import { backgroundColor, commonStyles, primaryColor } from '../styles';
 import { Button } from 'react-native-elements';
 
@@ -145,7 +145,7 @@ export const UserListScreen: React.FC = () => {
             </View>
           <View style={styles.currentUser}>
             {currentUser.avatarUrl
-              ? <Image source={{uri: currentUser.avatarUrl}} style={commonStyles.profileImage}/>
+              ? <View style={commonStyles.profileImageContainer}><Image source={{uri: currentUser.avatarUrl}} style={commonStyles.profileImage}/></View>
               : <Image source={require('../../assets/user-profile-empty.png')} style={commonStyles.noAvatarImage}/>
             }
               <Text style={[styles.userNameHeader, styles.currentUserNameHeader]}>{currentUser.username}</Text>
@@ -177,16 +177,14 @@ export const UserListScreen: React.FC = () => {
                           setInputFocus(undefined);
                         }}
                       >
-                        <FontAwesome name='close' size={20} />
+                        <AntDesign name='close' size={20} />
                       </TouchableOpacity>
                       <Text style={styles.modalTitle}>Muokkaa profiilia</Text>
                       <TouchableOpacity onPress={onPickImagePress}>
-                        <View>
-                          {newAvatarUrl
-                            ? <Image source={{uri: newAvatarUrl}} style={commonStyles.profileImage}/>
-                            : <Image source={{uri: currentUser.avatarUrl}} style={commonStyles.profileImage}/>
-                          }
-                        </View>
+                        {newAvatarUrl
+                          ? <Image source={{uri: newAvatarUrl}} style={commonStyles.profileImageOld}/>
+                          : <Image source={{uri: currentUser.avatarUrl}} style={commonStyles.noAvatarImage}/>
+                        }
                       </TouchableOpacity>
                       <TextInput
                         style={inputFocus === 'username' ? [commonStyles.textInput, commonStyles.textInputActive] : commonStyles.textInput}
@@ -231,10 +229,10 @@ export const UserListScreen: React.FC = () => {
                           setModalUser(undefined);
                         }}
                       >
-                        <FontAwesome name='close' size={20} />
+                        <AntDesign name='close' size={20} />
                       </TouchableOpacity>
-                      <Image source={{uri: modalUser.avatarUrl}} style={commonStyles.profileImage}/>
-                      <Text>{modalUser.username}</Text>
+                      <Image source={{uri: modalUser.avatarUrl}} style={styles.profileImage}/>
+                      <Text style={{...styles.userNameHeader, marginBottom: 20}}>{modalUser.username}</Text>
                       <Text>{modalUser.description}</Text>
                     </View>
                   </View>
@@ -345,6 +343,14 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  profileImage: {
+    ...commonStyles.profileImage,
+    position: 'relative',
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    marginBottom: 30,
   },
   modalTitle: {
     ...commonStyles.title,

@@ -10,7 +10,7 @@ import { PostScreen } from '../src/screens/PostScreen';
 import { UserListScreen } from '../src/screens/UserListScreen';
 import { InfoScreen } from  '../src/screens/InfoScreen';
 
-import { FontAwesome } from '@expo/vector-icons';
+import { Ionicons, FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { primaryColor, grayLight } from '../src/styles';
 
 const diaryNavOptions = ({ navigation }) => {
@@ -66,9 +66,9 @@ const HomeTabIcon = (props) => (
 );
 
 const InfoTabIcon = (props) => (
-    <FontAwesome
-      name='plane'
-      size={28}
+    <Ionicons
+      name='ios-airplane'
+      size={32}
       color={props.focused ? primaryColor : grayLight}
     />
 );
@@ -76,15 +76,15 @@ const InfoTabIcon = (props) => (
 const TodoTabIcon = (props) => (
     <FontAwesome
       name='suitcase'
-      size={28}
+      size={25}
       color={props.focused ? primaryColor : grayLight}
     />
 );
 
 const UsersIcon = (props) => (
-    <FontAwesome
-      name='user'
-      size={28}
+    <MaterialIcons
+      name='person'
+      size={30}
       color={props.focused ? primaryColor : grayLight}
     />
 );
