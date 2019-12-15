@@ -23,8 +23,8 @@ export const DiaryScreen: React.FC = () => {
     navigate('CreatePost', {destinationIndex});
   };
 
-  const onPostPress = (postUid: string, creator: string, date: string) => {
-    navigate('Post', {postUid, creator, date});
+  const onPostPress = (postUid, imageUri) => {
+    navigate('Post', {postUid, imageUri})
   };
 
   useEffect(() => {
@@ -103,8 +103,7 @@ export const DiaryScreen: React.FC = () => {
                       ? <Image source={{uri: userAvatarUrl}} style={styles.avatar}/>
                       : <Image source={require('../../assets/user-profile-empty.png')} style={styles.avatar}/>
                     }
-                    <TouchableOpacity
-                      onPress={() => onPostPress(item.uid, user.username, date)}
+                    <View
                       style={styles.post}
                     >
                       <View style={styles.arrowThing}/>
@@ -115,18 +114,23 @@ export const DiaryScreen: React.FC = () => {
                         </View>
                         <FlatList
                           data={item.imageUrls}
-                          renderItem={({item}) => (
-                            <View style={{flex: 1, flexDirection: 'column', margin: 1}}>
-                              <Image source={{uri: item, cache: 'force-cache'}} style={styles.postImage}/>
+                          renderItem={(value) => {
+                            const imageUri = value.item
+                            return <View style={{flex: 1, flexDirection: 'column', margin: 1}}>
+                              <TouchableOpacity
+                                onPress={() => onPostPress(item.uid, imageUri)}
+                              >
+                                <Image source={{uri: imageUri, cache: 'force-cache'}} style={styles.postImage}/>
+                              </TouchableOpacity>
                             </View>
-                          )}
+                          }}
                           numColumns={3}
                           keyExtractor={(_, index) => index.toString()}
                           removeClippedSubviews={false}
                         />
                         <Text>{item.text}</Text>
                       </View>
-                    </TouchableOpacity>
+                    </View>
                   </View>;
                 }}
                 keyExtractor={(_, index) => index.toString()}
