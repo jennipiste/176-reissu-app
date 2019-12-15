@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useSafeArea} from 'react-native-safe-area-context';
-import {Text, View, Image, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
+import {Text, View, Image, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator} from 'react-native';
 import {useNavigation, useNavigationParam} from 'react-navigation-hooks';
 import firebase from 'firebase';
 import {Post, User} from '../interfaces';
@@ -136,8 +136,12 @@ export const DiaryScreen: React.FC = () => {
                 keyExtractor={(_, index) => index.toString()}
               />
             }
-          </> : <View>
-            <Text>Loading...</Text>
+          </> : <View style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <ActivityIndicator size={60} color={primaryColor} />
           </View>
       }
     </View>

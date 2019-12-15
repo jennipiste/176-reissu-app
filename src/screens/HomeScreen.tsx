@@ -4,15 +4,16 @@ import {
     StyleSheet,
     Text,
     View,
-    Image,
     TouchableOpacity,
     ScrollView,
-    ImageBackground
+    ImageBackground,
+    ActivityIndicator
 } from 'react-native';
 import { useNavigation } from 'react-navigation-hooks';
 
 import moment from 'moment';
 import { destinations, START_TIME } from  '../constants';
+import { primaryColor } from '../styles';
 
 const SCROLLABLE_CONTENT_HEIGHT = 2350;
 
@@ -44,12 +45,14 @@ export const HomeScreen: React.FC = () => {
             marginBottom: insets.bottom
         }}>
             {isLoading
-                ? <View><Image source={require('../../assets/kitten.jpeg')} /></View>
+                ? <View style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                    <ActivityIndicator size={60} color={primaryColor} />
+                  </View>
                 : <>
-                    {/*<Image*/}
-                    {/*    source={require('../../assets/home_bg.png')}*/}
-                    {/*    style={[styles.background, bgPos]}*/}
-                    {/*/>*/}
                     {(timeUntil && timeUntil.days < 0  || timeUntil.hours < 0 || timeUntil.minutes < 0 || timeUntil.seconds < 0)
                         ? <View style={styles.timeUntilBackground}>
                             <View style={styles.timeUntilContainer}>

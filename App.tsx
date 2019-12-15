@@ -4,7 +4,8 @@ import AppNavigator from './navigation/AppNavigator';
 import MainTabNavigator from './navigation/MainTabNavigator';
 import firebase from 'firebase';
 import {firebaseConfig} from './src/config';
-import {View, Image} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
+import { primaryColor } from './src/styles';
 
 
 const App: React.FC = () => {
@@ -23,11 +24,17 @@ const App: React.FC = () => {
   firebase.auth().onAuthStateChanged(onAuthStateChanged);
 
   if (isLoading) {
-    return <View><Image source={require('./assets/kitten.jpeg')}/></View>
+    return <View style={{
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+    }}>
+      <ActivityIndicator size={60} color={primaryColor} />
+    </View>;
   }
   return <SafeAreaProvider>
     {isAuthenticated ? <MainTabNavigator/> : <AppNavigator/>}
-  </SafeAreaProvider>
+  </SafeAreaProvider>;
 };
 
 export default App;

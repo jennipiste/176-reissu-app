@@ -9,7 +9,8 @@ import {
   Modal,
   TextInput,
   Alert,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator
 } from 'react-native';
 import firebase from 'firebase';
 import {User} from '../interfaces';
@@ -83,14 +84,10 @@ export const UserListScreen: React.FC = () => {
       const uploadTask = firebase.storage().ref().child(`images/${filename}`).put(blob);
 
       uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, (snapshot) => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log('Upload is ' + progress + '% done');
         switch (snapshot.state) {
           case firebase.storage.TaskState.PAUSED:
-            console.log('Upload is paused');
             break;
           case firebase.storage.TaskState.RUNNING:
-            console.log('Upload is running');
             break;
         }
       }, (error) => {
@@ -155,7 +152,13 @@ export const UserListScreen: React.FC = () => {
       </View>
       <View style={styles.view}>
         {isLoading
-          ? <Text>Loading...</Text>
+          ? <View style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <ActivityIndicator size={60} color={primaryColor} />
+          </View>
           : <>
             <Modal
               animationType='fade'
@@ -168,8 +171,14 @@ export const UserListScreen: React.FC = () => {
               <View style={styles.modalBackground}>
                 <View style={styles.modal}>
                   {isSaving
-                    ? <Text>Saving...</Text>
-                    : <View style={styles.modalContent}>
+                    ? <View style={{
+                      flex: 1,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}>
+                      <ActivityIndicator size={40} color={primaryColor} />
+                    </View>
+                    : <ScrollView contentContainerStyle={styles.modalContent}>
                       <TouchableOpacity
                         style={styles.closeButton}
                         onPress={() => {
@@ -200,13 +209,16 @@ export const UserListScreen: React.FC = () => {
                         multiline={true}
                         numberOfLines={4}
                         textAlignVertical='top'
+                        spellCheck={false}
+                        autoCorrect={false}
+                        maxLength={150}
                         onChangeText={(text) => setDescription(text)}
                         onFocus={() => setInputFocus('description')}
                       />
                       <View style={styles.buttonView}>
                         <Button buttonStyle={commonStyles.button} title='Tallenna' onPress={() => onSaveUserPress()}/>
                       </View>
-                    </View>
+                    </ScrollView>
                   }
                 </View>
               </View>
@@ -221,7 +233,7 @@ export const UserListScreen: React.FC = () => {
                 }}
               >
                 <View style={styles.modalBackground}>
-                  <View style={styles.modal}>
+                  <View style={{...styles.modal, height: 400}}>
                     <View style={styles.modalContent}>
                       <TouchableOpacity
                         style={styles.closeButton}
@@ -336,7 +348,7 @@ const styles = StyleSheet.create({
   },
   modal: {
     width: '80%',
-    height: 500,
+    height: 540,
     alignSelf: 'center',
     borderRadius: 20,
     backgroundColor: '#fff',
