@@ -13,7 +13,7 @@ const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const onAuthStateChanged = (user: firebase.User) => {
-    setTimeout(function() { setIsLoading(false); }, 2000);
+    // setTimeout(function() { setIsLoading(false); }, 2000);
     setIsAuthenticated(!!user);
   };
 
@@ -24,11 +24,13 @@ const App: React.FC = () => {
 
   if (isLoading) {
     return <View>
-      <ImageBackground source={require('./assets/splash_screen_bg.png')} style={{width: '100%', height: '100%'}}>
-        <Text>176 luxus matkat</Text>
-        <Text>Kaikki oikeuden pidätetään</Text>
-      </ImageBackground>
-    </View>;
+        <ImageBackground source={require('./assets/splash_screen_bg.png')} style={{width: '100%', height: '100%'}}>
+          <View style={{flex: 1, justifyContent: 'space-between', alignItems: 'center', marginTop: 60, marginBottom: 20}}>
+            <Text style={{color: '#fff', fontSize: 18}}>176 luxus matkat</Text>
+            <Text style={{color: '#fff', fontSize: 14}}>Kaikki oikeudet pidätetään</Text>
+          </View>
+        </ImageBackground>
+      </View>;
   }
   return <SafeAreaProvider>
     {isAuthenticated ? <MainTabNavigator/> : <AppNavigator/>}
