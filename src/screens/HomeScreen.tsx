@@ -54,29 +54,31 @@ export const HomeScreen: React.FC = () => {
                   </View>
                 : <>
                     {(timeUntil && timeUntil.days < 0  || timeUntil.hours < 0 || timeUntil.minutes < 0 || timeUntil.seconds < 0)
-                        ? <View style={styles.timeUntilBackground}>
-                            <View style={styles.timeUntilContainer}>
-                                <Text style={styles.timeUntilTitle}>Aikaa matkan alkuun</Text>
-                                <View style={styles.timeUntilItems}>
-                                    <View style={styles.timeUntilItemContainer}>
-                                        <View style={styles.timeUntilItem}><Text style={styles.timeUntilText}>{-timeUntil.days}</Text></View>
-                                        <Text style={styles.timeUntilUnitText}>Päivää</Text>
-                                    </View>
-                                     <View style={styles.timeUntilItemContainer}>
-                                        <View style={styles.timeUntilItem}><Text style={styles.timeUntilText}>{-timeUntil.hours}</Text></View>
-                                        <Text style={styles.timeUntilUnitText}>Tuntia</Text>
-                                    </View>
-                                     <View style={styles.timeUntilItemContainer}>
-                                        <View style={styles.timeUntilItem}><Text style={styles.timeUntilText}>{-timeUntil.minutes}</Text></View>
-                                        <Text style={styles.timeUntilUnitText}>Minuuttia</Text>
-                                    </View>
-                                     <View style={styles.timeUntilItemContainer}>
-                                        <View style={styles.timeUntilItem}><Text style={styles.timeUntilText}>{-timeUntil.seconds}</Text></View>
-                                        <Text style={styles.timeUntilUnitText}>Sekuntia</Text>
+                        ? <ImageBackground source={require('../../assets/app_background_start.png')} style={{width: '100%', height: '100%'}}>
+                            <View style={styles.timeUntilBackground}>
+                                <View style={styles.timeUntilContainer}>
+                                    <Text style={styles.timeUntilTitle}>Aikaa matkan alkuun</Text>
+                                    <View style={styles.timeUntilItems}>
+                                        <View style={styles.timeUntilItemContainer}>
+                                            <View style={styles.timeUntilItem}><Text style={styles.timeUntilText}>{-timeUntil.days}</Text></View>
+                                            <Text style={styles.timeUntilUnitText}>Päivää</Text>
+                                        </View>
+                                        <View style={styles.timeUntilItemContainer}>
+                                            <View style={styles.timeUntilItem}><Text style={styles.timeUntilText}>{-timeUntil.hours}</Text></View>
+                                            <Text style={styles.timeUntilUnitText}>Tuntia</Text>
+                                        </View>
+                                        <View style={styles.timeUntilItemContainer}>
+                                            <View style={styles.timeUntilItem}><Text style={styles.timeUntilText}>{-timeUntil.minutes}</Text></View>
+                                            <Text style={styles.timeUntilUnitText}>Minuuttia</Text>
+                                        </View>
+                                        <View style={styles.timeUntilItemContainer}>
+                                            <View style={styles.timeUntilItem}><Text style={styles.timeUntilText}>{-timeUntil.seconds}</Text></View>
+                                            <Text style={styles.timeUntilUnitText}>Sekuntia</Text>
+                                        </View>
                                     </View>
                                 </View>
                             </View>
-                        </View>
+                        </ImageBackground>
                         : <ScrollView
                             style={styles.scrollView}
                         >
