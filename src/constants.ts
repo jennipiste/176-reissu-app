@@ -265,7 +265,7 @@ export const packings: Packing[] = [{
     completed: false,
 }, {
     id: 43,
-    name: 'Suihkusaippus',
+    name: 'Suihkusaippua',
     category: Category.hygiene,
     completed: false,
 }, {
@@ -275,7 +275,7 @@ export const packings: Packing[] = [{
     completed: false,
 }, {
     id: 45,
-    name: 'Aurinkorasva ',
+    name: 'Aurinkorasva',
     category: Category.hygiene,
     completed: false,
 }, {
@@ -325,7 +325,7 @@ export const packings: Packing[] = [{
     completed: false,
 }, {
     id: 55,
-    name: 'Ripulilääke',
+    name: 'Ripulilääkkeet',
     category: Category.firstaid,
     completed: false,
 }, {
@@ -399,11 +399,6 @@ export const packings: Packing[] = [{
     category: Category.phone,
     completed: false,
 }, {
-    id: 70,
-    name: 'Laturit',
-    category: Category.other,
-    completed: false,
-}, {
     id: 71,
     name: 'Purukumia',
     category: Category.other,
@@ -415,7 +410,7 @@ export const packings: Packing[] = [{
     completed: false,
 }, {
     id: 73,
-    name: 'Virranmuunnin',
+    name: 'Adapteri',
     category: Category.other,
     completed: false,
 }, {
@@ -426,6 +421,11 @@ export const packings: Packing[] = [{
 }, {
     id: 75,
     name: 'Matka-akku',
+    category: Category.other,
+    completed: false,
+}, {
+    id: 76,
+    name: 'Pyykinpesuaine',
     category: Category.other,
     completed: false,
 }];
