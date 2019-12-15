@@ -240,7 +240,7 @@ export const UserListScreen: React.FC = () => {
                 }}
               >
                 <View style={styles.modalBackground}>
-                  <View style={{...styles.modal, height: 400}}>
+                  <View style={{...styles.modal, height: 420}}>
                     <View style={styles.modalContent}>
                       <TouchableOpacity
                         style={styles.closeButton}
@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
   },
   modal: {
     width: '80%',
-    height: 540,
+    height: 560,
     alignSelf: 'center',
     borderRadius: 20,
     backgroundColor: '#fff',
