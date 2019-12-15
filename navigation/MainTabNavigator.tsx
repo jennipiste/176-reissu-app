@@ -120,12 +120,8 @@ export default createAppContainer(createMaterialTopTabNavigator({
     tabBarOptions: {
         style: {
             backgroundColor: '#fff',
-            borderTopLeftRadius: 20,
-            borderTopRightRadius: 20,
             height: 60,
             justifyContent: 'center',
-            elevation: 10,
-            boxShadow: '0px -1px 8px 3px rgba(0,0,0,0.75)',
         },
         iconStyle: {
             width: 32,
