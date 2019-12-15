@@ -14,7 +14,7 @@ export const commonStyles = StyleSheet.create({
     },
     textInput: {
         borderRadius: 10,
-        borderWidth: 1,
+        borderWidth: 2,
         borderColor: backgroundColor,
         width: '80%',
         paddingVertical: 10,
@@ -24,7 +24,7 @@ export const commonStyles = StyleSheet.create({
     },
     textInputActive: {
         borderColor: primaryColor,
-        backgroundColor: backgroundColorActive,
+        backgroundColor: '#fff',
     },
     linkText: {
         color: primaryColor,

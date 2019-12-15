@@ -146,7 +146,7 @@ export const UserListScreen: React.FC = () => {
           <View style={styles.currentUser}>
             {currentUser.avatarUrl
               ? <Image source={{uri: currentUser.avatarUrl}} style={commonStyles.profileImage}/>
-              : <Image source={require('../../assets/no_avatar.png')} style={commonStyles.noAvatarImage}/>
+              : <Image source={require('../../assets/user-profile-empty.png')} style={commonStyles.noAvatarImage}/>
             }
               <Text style={[styles.userNameHeader, styles.currentUserNameHeader]}>{currentUser.username}</Text>
               <Text style={styles.currentUserText}>{currentUser.description}</Text>
@@ -246,7 +246,7 @@ export const UserListScreen: React.FC = () => {
                 return <TouchableOpacity key={index} style={styles.user} onPress={() => setModalUser(user)}>
                   {user.avatarUrl
                     ? <Image source={{uri: user.avatarUrl}} style={styles.image}/>
-                    : <Image source={require('../../assets/no_avatar.png')} style={styles.image}/>
+                    : <Image source={require('../../assets/user-profile-empty.png')} style={styles.image}/>
                   }
                   <View style={styles.usersText}>
                     <Text style={styles.userNameHeader}>{user.username}</Text>

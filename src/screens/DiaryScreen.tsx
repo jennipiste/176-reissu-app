@@ -68,7 +68,7 @@ export const DiaryScreen: React.FC = () => {
                     return <View style={styles.postContainer}>
                         {userAvatarUrl
                             ? <Image source={{ uri: userAvatarUrl }} style={styles.avatar} />
-                            : <Image source={require('../../assets/no_avatar.png')} style={styles.avatar} />
+                            : <Image source={require('../../assets/user-profile-empty.png')} style={styles.avatar} />
                         }
                         <TouchableOpacity
                             onPress={() => onPostPress(item.uid, user.username, date)}

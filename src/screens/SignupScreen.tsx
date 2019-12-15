@@ -95,7 +95,7 @@ export const SignupScreen: React.FC = () => {
             <TouchableOpacity onPress={onPickImagePress}>
                 {avatarUrl.length > 0
                     ? <Image source={{ uri: avatarUrl }} style={styles.profileImage} />
-                    : <Image source={require('../../assets/no_avatar.png')} style={styles.noAvatarImage} />
+                    : <Image source={require('../../assets/user-profile-empty.png')} style={styles.noAvatarImage} />
                 }
             </TouchableOpacity>
             <TextInput
