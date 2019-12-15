@@ -14,6 +14,7 @@
   "dependencies": {
     "@react-navigation/web": "^1.0.0-alpha.9",
     "expo": "^35.0.0",
+    "expo-image-manipulator": "^7.0.0",
     "expo-image-picker": "^7.0.0",
     "firebase": "^7.2.1",
     "moment": "^2.24.0",
@@ -32,8 +33,7 @@
     "react-navigation-hooks": "^1.1.0",
     "react-navigation-stack": "^1.9.1",
     "react-navigation-tabs": "^2.5.6",
-    "uuid": "^3.3.3",
-    "expo-image-manipulator": "~7.0.0"
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "@types/react-native-datepicker": "^1.7.0",

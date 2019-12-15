@@ -4,6 +4,7 @@ import {useNavigationParam} from 'react-navigation-hooks';
 import firebase from 'firebase';
 import {Post, User} from '../interfaces';
 import moment from 'moment';
+import {useSafeArea} from "react-native-safe-area-context";
 
 export const PostScreen: React.FC = () => {
 

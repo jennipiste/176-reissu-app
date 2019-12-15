@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {useSafeArea} from 'react-native-safe-area-context';
 import {Text, View, Image, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
 import {useNavigation, useNavigationParam} from 'react-navigation-hooks';
 import firebase from 'firebase';
@@ -6,9 +7,9 @@ import {Post, User} from '../interfaces';
 import {destinations} from '../constants';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import moment from 'moment';
+import {backgroundColor, commonStyles, grayDark, primaryColor} from "../styles";
 
 export const DiaryScreen: React.FC = () => {
-
   const {navigate} = useNavigation();
   const destinationIndex = useNavigationParam('destinationIndex');
 
@@ -16,6 +17,7 @@ export const DiaryScreen: React.FC = () => {
 
   const [posts, setPosts] = useState<Post[]>([]);
   const [users, setUsers] = useState<User[]>([]);
+  const [loadingCounter, setLoadingCounter] = useState<number>(2)
 
   const onCreatePress = () => {
     navigate('CreatePost', {destinationIndex});
@@ -33,7 +35,15 @@ export const DiaryScreen: React.FC = () => {
           return result[key];
         });
         const filteredPosts = postList.filter(post => post.destination === destination.name);
-        setPosts(filteredPosts);
+        const sortedPosts = filteredPosts.sort((post1, post2) => {
+          if (post1.date === post2.date) {
+            return 0
+          }
+          return post1.date < post2.date ? -1 : 1
+        })
+
+        setPosts(sortedPosts);
+        setLoadingCounter((curCounter) => curCounter - 1)
       }
     });
   }, []);
@@ -46,62 +56,118 @@ export const DiaryScreen: React.FC = () => {
           return result[key];
         });
         setUsers(usersList);
+        setLoadingCounter((curCounter) => curCounter - 1)
       }
     });
   }, []);
 
   return (
-    <View style={styles.view}>
-      {/* <View style={styles.location}><FontAwesome name='map-marker' size={20} /><Text>{destination.name}</Text></View> */}
-      <TouchableOpacity
-        style={styles.button}
-        onPress={onCreatePress}
-      >
-        <MaterialCommunityIcons name='plus' size={28} color='white'/>
-      </TouchableOpacity>
-      <FlatList
-        data={posts}
-        renderItem={({item}) => {
-          const user = users.find(user => user.uid === item.userUid);
-          const userAvatarUrl = user ? user.avatarUrl : null;
-          const date = moment(item.date).format('DD.MM.');
-          return <View style={styles.postContainer}>
-            {userAvatarUrl
-              ? <Image source={{uri: userAvatarUrl}} style={styles.avatar}/>
-              : <Image source={require('../../assets/user-profile-empty.png')} style={styles.avatar}/>
-            }
+    <View style={{
+      ...styles.view, ...{
+        // marginTop: insets.top,
+        // marginBottom: insets.bottom,
+      }
+    }}>
+      {
+        loadingCounter === 0 ?
+          <>
             <TouchableOpacity
-              onPress={() => onPostPress(item.uid, user.username, date)}
-              style={styles.post}
+              style={styles.button}
+              onPress={onCreatePress}
             >
-              <View>
-                <FlatList
-                  data={item.imageUrls}
-                  renderItem={({item}) => (
-                    <View style={{flex: 1, flexDirection: 'column', margin: 1}}>
-                      <Image source={{uri: item, cache: 'force-cache'}} style={styles.postImage}/>
-                    </View>
-                  )}
-                  numColumns={3}
-                  keyExtractor={(_, index) => index.toString()}
-                  removeClippedSubviews={false}
-                />
-                <Text>{item.text}</Text>
-              </View>
+              <MaterialCommunityIcons name='plus' size={28} color='white'/>
             </TouchableOpacity>
-          </View>;
-        }}
-        keyExtractor={(_, index) => index.toString()}
-      />
+            {
+              posts.length === 0 ? <View>
+                <Text>Ei vielä postauksia</Text>
+                <Text style={{color: primaryColor, fontWeight: 'bold'}}>Lisää uusi postaus painamalla +!</Text>
+              </View> : <FlatList
+                style={styles.scrollArea}
+                data={posts}
+                renderItem={({item, index}) => {
+                  const user = users.find(user => user.uid === item.userUid);
+                  const userAvatarUrl = user ? user.avatarUrl : null;
+                  const date = moment(item.date).format('DD.MM.');
+                  return <View
+                    style={{...styles.postContainer, ...(index === posts.length - 1 ? {marginBottom: 20} : {})}}>
+                    {userAvatarUrl
+                      ? <Image source={{uri: userAvatarUrl}} style={styles.avatar}/>
+                      : <Image source={require('../../assets/user-profile-empty.png')} style={styles.avatar}/>
+                    }
+                    <TouchableOpacity
+                      onPress={() => onPostPress(item.uid, user.username, date)}
+                      style={styles.post}
+                    >
+                      <View style={styles.arrowThing}/>
+                      <View>
+                        <View style={styles.itemHeader}>
+                          <Text style={styles.itemHeaderUserName}>{user.username}</Text>
+                          <Text style={styles.itemHeaderDate}>{moment(item.date).format('DD.MM.')}</Text>
+                        </View>
+                        <FlatList
+                          data={item.imageUrls}
+                          renderItem={({item}) => (
+                            <View style={{flex: 1, flexDirection: 'column', margin: 1}}>
+                              <Image source={{uri: item, cache: 'force-cache'}} style={styles.postImage}/>
+                            </View>
+                          )}
+                          numColumns={3}
+                          keyExtractor={(_, index) => index.toString()}
+                          removeClippedSubviews={false}
+                        />
+                        <Text>{item.text}</Text>
+                      </View>
+                    </TouchableOpacity>
+                  </View>;
+                }}
+                keyExtractor={(_, index) => index.toString()}
+              />
+            }
+          </> : <View>
+            <Text>Loading...</Text>
+          </View>
+      }
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   view: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    backgroundColor: backgroundColor,
+
+    // paddingVertical: 10,
+    // paddingHorizontal: 20,
     flex: 1,
+  },
+  scrollArea: {
+    padding: 0,
+    // marginBottom: 50,
+    // paddingBottom: 20
+  },
+  itemHeaderUserName: {
+    flexGrow: 1,
+    color: primaryColor,
+    fontWeight: 'bold'
+  },
+  itemHeaderDate: {
+    color: grayDark,
+    fontSize: 10
+  },
+  arrowThing: {
+    position: 'absolute',
+    left: -10,
+    top: 15,
+    width: 0,
+    height: 0,
+    borderRightColor: '#FFFFFF',
+    borderRightWidth: 10,
+    borderTopColor: 'transparent',
+    borderTopWidth: 10,
+    borderBottomColor: 'transparent',
+    borderBottomWidth: 10,
+  },
+  itemHeader: {
+    flexDirection: 'row',
   },
   location: {
     flexDirection: 'row',
@@ -128,12 +194,14 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   post: {
-    borderWidth: 1,
-    borderColor: 'grey',
-    padding: 10,
-    marginBottom: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    marginTop: 20,
+    marginRight: 20,
     borderRadius: 5,
     flex: 1,
+    backgroundColor: 'white',
+    elevation: 5
   },
   postImage: {
     justifyContent: 'center',
@@ -145,12 +213,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: 'grey',
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    // borderWidth: 1,
+    // borderColor: 'grey',
     overflow: 'hidden',
-    marginRight: 10,
+    margin: 20,
   },
 });

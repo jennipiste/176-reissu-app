@@ -292,23 +292,6 @@ const InfoModal: React.FC = ({isVisible, item, setVisible}) => {
       }}/>
       }
     </View>
-    {/*<View style={styles.modal}>*/}
-    {/*  {isSaving*/}
-    {/*    ? <Text>Saving...</Text>*/}
-    {/*    : <View style={styles.modalContent}>*/}
-    {/*      <FontAwesome name='close' size={20} style={styles.closeButton} onPress={() => setIsModalVisible(false)} />*/}
-    {/*      <TouchableNativeFeedback onPress={onPickImagePress}>*/}
-    {/*        {newAvatarUrl*/}
-    {/*          ? <Image source={{ uri: newAvatarUrl }} style={styles.currentUserImage} />*/}
-    {/*          : <Image source={{ uri: currentUser.avatarUrl }} style={styles.currentUserImage} />*/}
-    {/*        }*/}
-    {/*      </TouchableNativeFeedback>*/}
-    {/*      <TextInput style={styles.textInput} placeholder="Username" value={username} onChangeText={(text) => setUsername(text)}/>*/}
-    {/*      <TextInput style={styles.textInput} placeholder="Description" value={description} onChangeText={(text) => setDescription(text)} multiline={true} numberOfLines={2}/>*/}
-    {/*      <Button title='Tallenna' onPress={() => onSaveUserPress()} />*/}
-    {/*    </View>*/}
-    {/*  }*/}
-    {/*</View>*/}
   </Modal>
 }
 
@@ -394,29 +377,13 @@ export const InfoScreen: React.FC = () => {
       backgroundColor: '#f4f6fd'
     }}>
       <React.Fragment>
-        {/*{modalVisible &&*/}
-        {/*<InfoModal isVisible={modalVisible} item={selectedItem} setVisible={setModalVisible}/>*/}
-        {/*}*/}
         <View style={styles.header}>
           <Text style={{...commonStyles.title, width: 100}}>Info</Text>
         </View>
         <View
           style={{paddingTop: 10}}
         >
-          {/*<FlatList*/}
-          {/*  style={styles.topView}*/}
-          {/*  data={listItems}*/}
           {listItems.map((item: IListItem, index) => {
-            // }
-            // })}
-            // renderItem={({item}) => {
-            //   return <
-            //     // onPress={() => {
-            //     //   setModalVisible(true)
-            //     //   setSelectedItem(item)
-            //     // }}
-            //   >
-
             const thisColor = index === currentIndex ? hilightColor : (index < currentIndex ? pastColor : '#000000')
 
             return <View
@@ -436,9 +403,6 @@ export const InfoScreen: React.FC = () => {
               <View
                 style={{...styles.listItemContent, ...(index === currentIndex ? {backgroundColor: '#FFFFFF'} : {})}}>
                 <View style={{...styles.arrowThing, ...(index === currentIndex ? {borderRightColor: '#FFFFFF'} : {})}}/>
-                {/*<View style={styles.headerBlock}>*/}
-                {/*  /!*<Text style={styles.dateInfo}>{item.date}</Text>*!/*/}
-                {/*</View>*/}
                 {item.type === 'flight' && <FlightInfo flightInfo={item.flightInfo}/>}
                 {item.type !== 'flight' &&
                 <React.Fragment>
@@ -465,9 +429,7 @@ export const InfoScreen: React.FC = () => {
                 }
               </View>
             </View>
-            // </TouchableNativeFeedback>
           })}
-          {/*/>*/}
         </View>
       </React.Fragment>
     </ScrollView>
@@ -512,30 +474,20 @@ const styles = StyleSheet.create({
     borderTopWidth: 10,
     borderBottomColor: 'transparent',
     borderBottomWidth: 10,
-    // elevation: 5,
   },
   dateTextContainer: {
     borderRightColor: 'black',
     borderRightWidth: StyleSheet.hairlineWidth,
-    // backgroundColor: 'red'
   },
   dateText: {
     padding: 15,
     fontSize: 14,
     fontWeight: 'bold',
-    // marginLeft: 20,
     width: 80,
     textAlign: 'right',
     marginTop: -7 - 15 + 2
   },
   topView: {
-    // paddingTop: 50,
-
-    // paddingBottom: 500,
-    // paddingVertical: 100,
-    // marginVertical: 100,
-    // backgroundColor: 'lightgray'
-
   },
   circleThingInner: {
     height: 10,

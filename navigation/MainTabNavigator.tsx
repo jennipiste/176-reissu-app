@@ -11,12 +11,13 @@ import { UserListScreen } from '../src/screens/UserListScreen';
 import { InfoScreen } from  '../src/screens/InfoScreen';
 
 import { Ionicons, FontAwesome, MaterialIcons } from '@expo/vector-icons';
-import { primaryColor, grayLight } from '../src/styles';
+import {primaryColor, grayLight, backgroundColor} from '../src/styles';
 
 const diaryNavOptions = ({ navigation }) => {
     return {
         headerStyle: {
-            backgroundColor: 'transparent',
+            backgroundColor: backgroundColor,
+            elevation: 0,
         },
         title: navigation.getParam('location', ''),
     };
