@@ -7,6 +7,7 @@ import uuid from 'uuid/v4';
 import {packings, todos} from '../constants';
 import {commonStyles, grayDark} from '../styles';
 import {Button} from 'react-native-elements';
+import {ImageManipulator} from "expo/build/removed.web";
 
 
 export const SignupScreen: React.FC = () => {
@@ -27,7 +28,8 @@ export const SignupScreen: React.FC = () => {
       allowsEditing: true,
     });
     if (result.cancelled === false) {
-      setAvatarUrl(result.uri);
+      const resized = await ImageManipulator.manipulateAsync( result.uri, [ {resize: {width: 200}} ], {} );
+      setAvatarUrl(resized.uri);
     }
   };
 

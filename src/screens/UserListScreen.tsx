@@ -19,6 +19,7 @@ import uuid from 'uuid/v4';
 import {FontAwesome, AntDesign} from '@expo/vector-icons';
 import { backgroundColor, commonStyles, primaryColor, grayDark } from '../styles';
 import { Button } from 'react-native-elements';
+import * as ImageManipulator from "expo-image-manipulator";
 
 
 export const UserListScreen: React.FC = () => {
@@ -69,7 +70,8 @@ export const UserListScreen: React.FC = () => {
       allowsEditing: true,
     });
     if (result.cancelled === false) {
-      setNewAvatarUrl(result.uri);
+      const resized = await ImageManipulator.manipulateAsync( result.uri, [ {resize: {width: 200}} ], {} );
+      setNewAvatarUrl(resized.uri);
     }
   };
 
