@@ -80,7 +80,7 @@ export const HomeScreen: React.FC = () => {
                         : <ScrollView
                             style={styles.scrollView}
                         >
-                           <ImageBackground source={require('../../assets/home_bg.png')} style={{width: '100%', height: '100%'}}>
+                           <ImageBackground source={require('../../assets/app_background.png')} style={{width: '100%', height: '100%'}}>
                             <View style={{flex: 1, height: SCROLLABLE_CONTENT_HEIGHT}}>
                                 {destinations.map((destination, index) =>
                                     <TouchableOpacity

@@ -25,7 +25,7 @@ export const LoginScreen: React.FC = () => {
 
   return (
     <KeyboardAvoidingView style={styles.view}>
-      <Image style={styles.logo} source={require('../../assets/kitten_copy.png')}/>
+      <Image style={styles.logo} source={require('../../assets/logo_purple.png')}/>
       <Text style={styles.loginTitle}>Kirjaudu sisään</Text>
       <TextInput
         style={inputFocus === 'email' ? [commonStyles.textInput, commonStyles.textInputActive] : commonStyles.textInput}
@@ -63,10 +63,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logo: {
-    width: 140,
-    height: 140,
+    width: 120,
+    height: 120,
     borderRadius: 70,
     marginBottom: 50,
+    overflow: 'hidden',
   },
   loginTitle: {
     flexGrow: 0,
