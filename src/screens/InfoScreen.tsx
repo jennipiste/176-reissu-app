@@ -9,39 +9,39 @@ import {
   ScrollView, TouchableNativeFeedback
 } from 'react-native';
 import {Linking} from 'expo';
-import {FontAwesome} from "@expo/vector-icons";
-import {commonStyles} from "../styles";
+import {FontAwesome, Ionicons} from "@expo/vector-icons";
+import {commonStyles, backgroundColor, primaryColor, grayDark} from "../styles";
 
 
 interface IFlightInfoDest {
-  name: string
-  time: string
+  name: string;
+  time: string;
 }
 
 
 interface IFlightInfo {
-  from: IFlightInfoDest
-  to: IFlightInfoDest
-  duration: string
-  flightNumber: string
+  from: IFlightInfoDest;
+  to: IFlightInfoDest;
+  duration: string;
+  flightNumber: string;
 }
 
 
 interface IStayInfo {
-  name: string
-  street: string
-  mapUri: string
+  name: string;
+  street: string;
+  mapUri: string;
 }
 
 
 interface IListItem {
-  type: string
-  header: string
-  sortableDate: string
-  date: string
-  previewText?: string
-  flightInfo?: IFlightInfo
-  stayInfo?: IStayInfo
+  type: string;
+  header: string;
+  sortableDate: string;
+  date: string;
+  previewText?: string;
+  flightInfo?: IFlightInfo;
+  stayInfo?: IStayInfo;
 }
 
 
@@ -153,7 +153,6 @@ const listItems: IListItem[] = [
     date: '26.12.',
     previewText:
       'Hoi An on maailmanperintökohde',
-    mapLink: 'https://www.google.fi/maps/place/Gem+Hoi+An+Villa/@15.8868775,108.3318211,17z/data=!3m1!4b1!4m8!3m7!1s0x31420dd869e6f2ef:0xc12909a0a877b0b7!5m2!4m1!1i2!8m2!3d15.8868775!4d108.3340151',
     stayInfo: {
       street: 'Sơn Phong, Hội An, Quang Nam Province, Vietnam',
       name: 'Gem Hoi An Villa',
@@ -269,57 +268,56 @@ const listItems: IListItem[] = [
     date: '12.1.',
     previewText: 'Paluu harmaaseen arkeen'
   },
-]
+];
 
 
-const InfoModal: React.FC = ({isVisible, item, setVisible}) => {
+const InfoModal: React.FC<{isVisible: boolean, item: any, setVisible: (visible: boolean) => {}}> = ({isVisible, item, setVisible}) => {
   return <Modal
     animationType="fade"
     transparent={false}
     visible={isVisible}
     onRequestClose={() => {
-      setVisible(false)
+      setVisible(false);
     }}
   >
     <View style={modalStyles.wrapper}>
       <Button title={'Close'} onPress={() => {
-        setVisible(false)
+        setVisible(false);
       }}/>
       <Text>Jee modaali!!</Text>
       {item.mapLink &&
       <Button title={'Majoitus kartta sijainti'} onPress={() => {
-        Linking.openURL(item.mapLink)
+        Linking.openURL(item.mapLink);
       }}/>
       }
     </View>
-  </Modal>
-}
+  </Modal>;
+};
 
 
 const modalStyles = StyleSheet.create({
   wrapper: {
     margin: 10
   }
-})
+});
 
 
-const FlightInfo: React.FC = ({flightInfo}: { flightInfo: IFlightInfo }) => {
+const FlightInfo: React.FC<{flightInfo: IFlightInfo, past: boolean}> = ({flightInfo, past}) => {
   return <View style={flightInfoStyles.wrapper}>
     <View style={flightInfoStyles.innerWrapper}>
       <View style={flightInfoStyles.cityContainer}>
-        <Text style={flightInfoStyles.city}>{flightInfo.from.name}</Text>
+        <Text style={{...flightInfoStyles.city, color: past ? pastColor : '#000'}}>{flightInfo.from.name}</Text>
         <Text style={flightInfoStyles.cityTime}>{flightInfo.from.time}</Text>
       </View>
-      <FontAwesome style={flightInfoStyles.arrow} name={'arrow-right'} size={20} color={'#8f8f8f'}/>
-      {/*<FontAwesome style={flightInfoStyles.arrow} name={'airplane'} size={20} color={'#8f8f8f'}/>*/}
+      <Ionicons style={flightInfoStyles.arrow} name={'ios-airplane'} size={26} color={past ? pastColor : '#000'}/>
       <View style={flightInfoStyles.cityContainer}>
-        <Text style={flightInfoStyles.city}>{flightInfo.to.name}</Text>
+        <Text style={{...flightInfoStyles.city, color: past ? pastColor : '#000'}}>{flightInfo.to.name}</Text>
         <Text style={flightInfoStyles.cityTime}>{flightInfo.to.time}</Text>
       </View>
     </View>
     <Text style={flightInfoStyles.durationText}>{flightInfo.duration}</Text>
-  </View>
-}
+  </View>;
+};
 
 
 const flightInfoStyles = StyleSheet.create({
@@ -355,16 +353,16 @@ const flightInfoStyles = StyleSheet.create({
   cityContainer: {
     //   justifyContent: 'center'
   }
-})
+});
 
 
-const pastColor = '#c8c8c8'
-const hilightColor = '#7d28fa'
+const pastColor = '#c8c8c8';
+const hilightColor = primaryColor;
 
 
 export const InfoScreen: React.FC = () => {
-  const [modalVisible, setModalVisible] = React.useState(false)
-  const [selectedItem, setSelectedItem] = React.useState(undefined)
+  const [modalVisible, setModalVisible] = React.useState(false);
+  const [selectedItem, setSelectedItem] = React.useState(undefined);
 
   const insets = useSafeArea();
 
@@ -374,7 +372,7 @@ export const InfoScreen: React.FC = () => {
     <ScrollView style={{
       marginTop: insets.top,
       marginBottom: insets.bottom,
-      backgroundColor: '#f4f6fd'
+      backgroundColor: backgroundColor
     }}>
       <React.Fragment>
         <View style={styles.header}>
@@ -384,7 +382,7 @@ export const InfoScreen: React.FC = () => {
           style={{paddingTop: 10}}
         >
           {listItems.map((item: IListItem, index) => {
-            const thisColor = index === currentIndex ? hilightColor : (index < currentIndex ? pastColor : '#000000')
+            const thisColor = index === currentIndex ? hilightColor : (index < currentIndex ? pastColor : '#000000');
 
             return <View
               style={styles.listItem}
@@ -401,34 +399,34 @@ export const InfoScreen: React.FC = () => {
                 />
               </View>
               <View
-                style={{...styles.listItemContent, ...(index === currentIndex ? {backgroundColor: '#FFFFFF'} : {})}}>
-                <View style={{...styles.arrowThing, ...(index === currentIndex ? {borderRightColor: '#FFFFFF'} : {})}}/>
-                {item.type === 'flight' && <FlightInfo flightInfo={item.flightInfo}/>}
+                style={{...styles.listItemContent, ...(index === currentIndex ? {backgroundColor: '#EEE3FE'} : {})}}>
+                <View style={{...styles.arrowThing, ...(index === currentIndex ? {borderRightColor: '#EEE3FE'} : {})}}/>
+                {item.type === 'flight' && <FlightInfo flightInfo={item.flightInfo} past={index <  currentIndex}/>}
                 {item.type !== 'flight' &&
                 <React.Fragment>
                     <Text style={{...styles.infoHeader, color: thisColor}}>{item.header}</Text>
                   {
                     item.stayInfo && <TouchableNativeFeedback
                       onPress={() => {
-                        Linking.openURL(item.stayInfo.mapUri)
+                        Linking.openURL(item.stayInfo.mapUri);
                       }}
                     >
                         <View style={styles.homeIconContainer}>
                             <FontAwesome name={'home'} size={24} color={thisColor}/>
                             <View style={styles.homeIconInfoContainer}>
                                 <Text style={{...styles.homeIconHeader, color: thisColor}}>{item.stayInfo.name}</Text>
-                                <Text style={{...styles.homeIconAddress}}>{item.stayInfo.street}</Text>
+                                <Text style={{...styles.homeIconAddress, color: index <  currentIndex ? pastColor : grayDark}}>{item.stayInfo.street}</Text>
                             </View>
                         </View>
                     </TouchableNativeFeedback>
                   }
-                    <Text style={styles.infoText}>
+                    <Text style={{color: index <  currentIndex ? pastColor : grayDark}}>
                       {item.previewText}
                     </Text>
                 </React.Fragment>
                 }
               </View>
-            </View>
+            </View>;
           })}
         </View>
       </React.Fragment>
@@ -438,15 +436,13 @@ export const InfoScreen: React.FC = () => {
 
 
 const styles = StyleSheet.create({
-  infoText: {
-    color: '#b4b4b4'
-  },
   homeIconHeader: {
     fontSize: 14,
   },
   homeIconAddress: {
     fontSize: 10,
-    color: '#b4b4b4'
+    textDecorationLine: 'underline',
+    textDecorationColor: grayDark,
   },
   homeIconInfoContainer: {
     paddingLeft: 5
@@ -468,7 +464,7 @@ const styles = StyleSheet.create({
     top: 15,
     width: 0,
     height: 0,
-    borderRightColor: '#f0f0f0',
+    borderRightColor: '#fff',
     borderRightWidth: 10,
     borderTopColor: 'transparent',
     borderTopWidth: 10,
@@ -536,7 +532,7 @@ const styles = StyleSheet.create({
     marginLeft: 30,
     marginTop: -20,
     marginBottom: 40,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#fff',
     elevation: 5,
   },
   dateInfo: {
