@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import * as ImageManipulator from 'expo-image-manipulator';
-import {Text, View, Button, TextInput, StyleSheet, Image, ScrollView} from 'react-native';
+import {Text, View, TextInput, StyleSheet, Image, ScrollView} from 'react-native';
 import {useNavigationParam, useNavigation} from 'react-navigation-hooks';
 import * as ImagePicker from 'expo-image-picker';
 import firebase from 'firebase';
@@ -9,7 +9,10 @@ import moment from 'moment';
 import DatePicker from 'react-native-datepicker';
 import {destinations} from '../constants';
 import {Destination, User} from '../interfaces';
-import {FontAwesome} from '@expo/vector-icons';
+import {MaterialIcons, MaterialCommunityIcons} from '@expo/vector-icons';
+import { commonStyles, primaryColor, grayDark } from '../styles';
+import { Button } from 'react-native-elements';
+import { FlatList } from 'react-native-gesture-handler';
 
 export const CreatePostScreen: React.FC = () => {
 
@@ -22,6 +25,7 @@ export const CreatePostScreen: React.FC = () => {
   const [imageUris, setImageUris] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<User>(undefined);
+  const [isFocused, setIsFocused] = useState<boolean>(false);
 
   const database = firebase.database();
 
@@ -92,8 +96,8 @@ export const CreatePostScreen: React.FC = () => {
           {resize: {width: 600}}
         ],
         {}
-      )
-      setImageUris([...imageUris, resized.uri])
+      );
+      setImageUris([...imageUris, resized.uri]);
     }
   };
 
@@ -102,50 +106,96 @@ export const CreatePostScreen: React.FC = () => {
       {isUploading
         ? <Text>Creating post...</Text>
         : destination && <View>
-          <View style={styles.location}><FontAwesome name='map-marker' size={20}/><Text>{destination.name}</Text></View>
-          <DatePicker
+          <View style={styles.header}>
+            <View style={styles.location}>
+              <MaterialIcons name='location-on' size={20}/>
+              <Text style={styles.locationName}>{destination.name}</Text>
+            </View>
+            <DatePicker
               style={styles.datePicker}
               date={date}
-              mode='date'
+              mode='datetime'
               placeholder='Valitse päivä'
-              format='YYYY-MM-DD'
+              format='YYYY-MM-DD HH:mm'
               minDate={destination.startTime}
               maxDate={destination.endTime}
               confirmBtnText='Valitse'
               cancelBtnText='Peruuta'
-              customStyles={{
-                dateIcon: {
+              iconComponent={
+                <MaterialCommunityIcons name='clock-outline' size={20} style={{
                   position: 'absolute',
                   left: 0,
-                  top: 4,
-                  marginLeft: 0
-                },
+                  top: 10,
+                  marginLeft: 0,
+                }}/>
+              }
+              customStyles={{
                 dateInput: {
-                  marginLeft: 36,
-                  borderRadius: 5,
+                  borderWidth: 0,
+                  marginLeft: 20,
+                },
+                dateText: {
+                  color: primaryColor,
+                  fontWeight: 'bold',
+                  fontSize: 18,
                 }
               }}
               onDateChange={(date) => setDate(moment(date))}
-          />
+            />
+          </View>
           <TextInput
-              style={styles.textInput}
-              placeholder='Kirjoita tähän...'
-              value={text}
-              onChangeText={(text) => setText(text)}
-              multiline={true}
-              numberOfLines={6}
-              textAlignVertical='top'
+            style={isFocused ? [styles.textInput, commonStyles.textInputActive] : styles.textInput}
+            placeholder='Lisää postauksen teksti'
+            value={text}
+            onChangeText={(text) => setText(text)}
+            multiline={true}
+            numberOfLines={6}
+            textAlignVertical='top'
+            placeholderTextColor={grayDark}
+            spellCheck={false}
+            autoCorrect={false}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
           />
-          <View style={styles.button}>
-              <Button title='Lisää kuva' onPress={onPickImagePress}/>
+          <View style={{marginTop: 20}}>
+            <FlatList
+              data={imageUris}
+              renderItem={({item}) => (
+                <View style={{flex: 1, flexDirection: 'column', margin: 1}}>
+                  <Image source={{uri: item, cache: 'force-cache'}} style={styles.postImage}/>
+                </View>
+              )}
+              numColumns={2}
+              keyExtractor={(_, index) => index.toString()}
+              removeClippedSubviews={false}
+            />
           </View>
-        {imageUris.map((imageUri, index) =>
-          <View key={index}>
-            <Image source={{uri: imageUri}} style={styles.image}/>
+          {/* {imageUris.map((imageUri, index) =>
+            <View key={index}>
+              <Image source={{uri: imageUri}} style={styles.image}/>
+            </View>
+          )} */}
+          <View style={{...commonStyles.buttonView, width: '100%', marginBottom: 10}}>
+            <Button
+              title='Lisää kuvia'
+              onPress={onPickImagePress}
+              buttonStyle={styles.addImagesButton}
+              titleStyle={{
+                color: primaryColor
+              }}
+              type='outline'
+              icon={<MaterialIcons
+                name='camera-alt'
+                size={20}
+                style={{
+                  color: primaryColor,
+                  marginRight: 10,
+                }}
+              />}
+            />
           </View>
-        )}
-          <View style={styles.button}>
-              <Button title='Luo' onPress={onCreatePress}/>
+          <View style={{...commonStyles.buttonView, width: '100%', marginTop: 10, marginBottom: 10}}>
+            <Button title='Julkaise' onPress={onCreatePress} buttonStyle={commonStyles.button}/>
           </View>
       </View>
       }
@@ -158,10 +208,21 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flex: 1,
+    flexWrap: 'wrap',
+  },
   location: {
     flexDirection: 'row',
-    width: '100%',
     alignItems: 'center',
+  },
+  locationName: {
+    fontWeight: 'bold',
+    marginLeft: 10,
+    fontSize: 18,
   },
   button: {
     marginTop: 10,
@@ -171,17 +232,29 @@ const styles = StyleSheet.create({
     height: 100,
   },
   image: {
-    height: 300,
-    marginBottom: 10,
+    width: '40%',
+    height: 200,
+    marginVertical: 10,
   },
   textInput: {
-    borderColor: 'gray',
-    borderRadius: 5,
-    borderWidth: 1,
-    padding: 10,
+    ...commonStyles.textInput,
+    width: '100%',
+    margin: 0,
   },
   datePicker: {
     marginTop: 10,
     marginBottom: 10,
-  }
+    width: 190,
+  },
+  addImagesButton: {
+    ...commonStyles.button,
+    backgroundColor: '#fff',
+    borderColor: primaryColor,
+    borderWidth: 2,
+  },
+  postImage: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 200,
+  },
 });

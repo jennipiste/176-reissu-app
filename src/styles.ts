@@ -22,6 +22,7 @@ export const commonStyles = StyleSheet.create({
         paddingHorizontal: 20,
         margin: 10,
         backgroundColor: backgroundColor,
+        fontSize: 18,
     },
     textInputActive: {
         borderColor: primaryColor,

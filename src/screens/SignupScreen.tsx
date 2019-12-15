@@ -133,6 +133,8 @@ export const SignupScreen: React.FC = () => {
         multiline={true}
         numberOfLines={4}
         textAlignVertical='top'
+        spellCheck={false}
+        autoCorrect={false}
         onChangeText={(text) => setDescription(text)}
         onFocus={() => setInputFocus('description')}
       />
