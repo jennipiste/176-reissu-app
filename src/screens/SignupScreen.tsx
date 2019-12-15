@@ -90,7 +90,7 @@ export const SignupScreen: React.FC = () => {
       <Text style={styles.signUpTitle}>Luo profiili</Text>
       <TouchableOpacity onPress={onPickImagePress}>
         {avatarUrl.length > 0
-          ? <Image source={{uri: avatarUrl}} style={styles.profileImage}/>
+          ? <View style={styles.profileImageContainer}><Image source={{uri: avatarUrl}} style={commonStyles.profileImage}/></View>
           : <Image source={require('../../assets/user-profile-empty.png')} style={styles.noAvatarImage}/>
         }
       </TouchableOpacity>
@@ -155,8 +155,8 @@ const styles = StyleSheet.create({
     flex: 0,
     marginBottom: 50,
   },
-  profileImage: {
-    ...commonStyles.profileImage,
+  profileImageContainer: {
+    ...commonStyles.profileImageContainer,
     marginBottom: 40,
   },
   noAvatarImage: {
