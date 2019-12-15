@@ -11,6 +11,7 @@ export const commonStyles = StyleSheet.create({
     title: {
         fontSize: 18,
         fontWeight: 'bold',
+        flex: 1
     },
     textInput: {
         borderRadius: 10,

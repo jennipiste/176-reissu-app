@@ -297,6 +297,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
     marginTop: 40,
+    flexDirection: 'column'
   },
   currentUserText: {
     maxWidth: '70%',
@@ -305,6 +306,8 @@ const styles = StyleSheet.create({
   currentUserNameHeader: {
     fontSize: 18,
     marginVertical: 10,
+    minWidth: 200,
+    textAlign: 'center'
   },
   userNameHeader: {
     fontWeight: 'bold',

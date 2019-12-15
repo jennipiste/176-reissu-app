@@ -32,7 +32,8 @@
     "react-navigation-hooks": "^1.1.0",
     "react-navigation-stack": "^1.9.1",
     "react-navigation-tabs": "^2.5.6",
-    "uuid": "^3.3.3"
+    "uuid": "^3.3.3",
+    "expo-image-manipulator": "~7.0.0"
   },
   "devDependencies": {
     "@types/react-native-datepicker": "^1.7.0",
