@@ -76,7 +76,7 @@ const InfoTabIcon = (props) => (
 const TodoTabIcon = (props) => (
     <FontAwesome
       name='suitcase'
-      size={25}
+      size={24}
       color={props.focused ? primaryColor : grayLight}
     />
 );
@@ -127,8 +127,10 @@ export default createAppContainer(createMaterialTopTabNavigator({
             boxShadow: '0px -1px 8px 3px rgba(0,0,0,0.75)',
         },
         iconStyle: {
-            width: 28,
-            height: 28,
+            width: 32,
+            height: 32,
+            alignItems: 'center',
+            justifyContent: 'center',
         },
         indicatorStyle: {
             opacity: 0
