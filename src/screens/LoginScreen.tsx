@@ -47,7 +47,12 @@ export const LoginScreen: React.FC = () => {
         onFocus={() => setInputFocus('password')}
       />
       <View style={commonStyles.buttonView}>
-        <Button title="Kirjaudu" onPress={() => onLoginPress()} buttonStyle={commonStyles.button}/>
+        <Button
+          title="Kirjaudu"
+          onPress={() => onLoginPress()}
+          buttonStyle={commonStyles.button}
+          titleStyle={commonStyles.buttonTitleStyle}
+        />
       </View>
       <Text style={commonStyles.bottomText}>Eikö sinulla ole profiilia?<Text style={commonStyles.linkText}
                                                                              onPress={() => navigate('Signup')}> Luo
@@ -66,12 +71,12 @@ const styles = StyleSheet.create({
     width: 160,
     height: 160,
     borderRadius: 70,
-    marginBottom: 50,
+    marginBottom: 40,
     overflow: 'hidden',
   },
   loginTitle: {
     ...commonStyles.title,
     flex: 0,
-    marginBottom: 50,
+    marginBottom: 40,
   },
 });

@@ -332,7 +332,8 @@ const flightInfoStyles = StyleSheet.create({
   durationText: {
     marginTop: -30,
     fontSize: 10,
-    color: '#bababa'
+    color: '#bababa',
+    fontFamily: 'futuramedium',
   },
   arrow: {
     alignSelf: 'center',
@@ -342,13 +343,15 @@ const flightInfoStyles = StyleSheet.create({
     // fontWeight: 'bold',
     fontSize: 26,
     // flex: 1,
-    alignSelf: 'center'
+    alignSelf: 'center',
+    fontFamily: 'futuramedium',
   },
   cityTime: {
     fontSize: 12,
     color: '#acacac',
     alignSelf: 'center',
-    marginTop: -5
+    // marginTop: -5,
+    fontFamily: 'futuramedium',
   },
   cityContainer: {
     //   justifyContent: 'center'
@@ -420,7 +423,7 @@ export const InfoScreen: React.FC = () => {
                         </View>
                     </TouchableNativeFeedback>
                   }
-                    <Text style={{color: index <  currentIndex ? pastColor : grayDark}}>
+                    <Text style={{color: index <  currentIndex ? pastColor : grayDark, fontFamily: 'futuramedium'}}>
                       {item.previewText}
                     </Text>
                 </React.Fragment>
@@ -438,11 +441,13 @@ export const InfoScreen: React.FC = () => {
 const styles = StyleSheet.create({
   homeIconHeader: {
     fontSize: 14,
+    fontFamily: 'futuramedium',
   },
   homeIconAddress: {
     fontSize: 10,
     textDecorationLine: 'underline',
     textDecorationColor: grayDark,
+    fontFamily: 'futuramedium',
   },
   homeIconInfoContainer: {
     paddingLeft: 5
@@ -478,7 +483,8 @@ const styles = StyleSheet.create({
   dateText: {
     padding: 15,
     fontSize: 14,
-    fontWeight: 'bold',
+    fontFamily: 'futuramedium',
+    // fontWeight: 'bold',
     width: 80,
     textAlign: 'right',
     marginTop: -7 - 15 + 2
@@ -543,6 +549,7 @@ const styles = StyleSheet.create({
   },
   infoHeader: {
     fontSize: 22,
+    fontFamily: 'futuramedium',
     fontWeight: '400',
     flex: 1
   },

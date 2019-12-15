@@ -135,7 +135,12 @@ export const SignupScreen: React.FC = () => {
         onFocus={() => setInputFocus('description')}
       />
       <View style={commonStyles.buttonView}>
-        <Button title="Rekisteröidy" onPress={() => onSignupPress()} buttonStyle={commonStyles.button}/>
+        <Button
+          title="Rekisteröidy"
+          onPress={() => onSignupPress()}
+          buttonStyle={commonStyles.button}
+          titleStyle={commonStyles.buttonTitleStyle}
+        />
       </View>
       <Text style={commonStyles.bottomText}>Onko sinulla jo profiili?<Text style={commonStyles.linkText}
                                                                            onPress={() => navigate('Login')}> Kirjaudu

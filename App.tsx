@@ -6,16 +6,25 @@ import firebase from 'firebase';
 import {firebaseConfig} from './src/config';
 import {ImageBackground, Text, View} from 'react-native';
 
+import * as Font from 'expo-font';
+
 
 const App: React.FC = () => {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  const onAuthStateChanged = (user: firebase.User) => {
+  const onAuthStateChanged = async (user: firebase.User) => {
+    await fetchFont();
     setTimeout(function() { setIsLoading(false); }, 2000);
     setIsAuthenticated(!!user);
   };
+
+  const fetchFont = async () => {
+    return Font.loadAsync({
+        'futuramedium': require('./assets/fonts/futuramedium.ttf'),
+      });
+    };
 
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);

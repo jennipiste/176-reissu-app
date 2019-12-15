@@ -85,11 +85,11 @@ export const DiaryScreen: React.FC = () => {
                   color={grayLight}
                   style={{margin: 5}}
                 />
-                <Text style={{color: grayLight, margin: 5}}>Ei vielä postauksia</Text>
+                <Text style={{color: grayLight, margin: 5, fontFamily: 'futuramedium', fontSize: 16}}>Ei vielä postauksia</Text>
                 <Text
-                  style={{color: primaryColor, fontWeight: 'bold', margin: 5, width: '100%', textAlign: 'center'}}
+                  style={{color: primaryColor, fontFamily: 'futuramedium', margin: 5, width: '100%', textAlign: 'center', fontSize: 16}}
                   onPress={onCreatePress}
-                >Lisää uusi postaus painamalla +</Text>
+                >Lisää uusi postaus!</Text>
               </View> : <FlatList
                 style={styles.scrollArea}
                 data={posts}
@@ -115,20 +115,20 @@ export const DiaryScreen: React.FC = () => {
                         <FlatList
                           data={item.imageUrls}
                           renderItem={(value) => {
-                            const imageUri = value.item
+                            const imageUri = value.item;
                             return <View style={{flex: 1, flexDirection: 'column', margin: 1}}>
                               <TouchableOpacity
                                 onPress={() => onPostPress(item.uid, imageUri)}
                               >
                                 <Image source={{uri: imageUri, cache: 'force-cache'}} style={styles.postImage}/>
                               </TouchableOpacity>
-                            </View>
+                            </View>;
                           }}
                           numColumns={3}
                           keyExtractor={(_, index) => index.toString()}
                           removeClippedSubviews={false}
                         />
-                        <Text>{item.text}</Text>
+                        <Text style={{marginTop: 5, fontFamily: 'futuramedium', fontSize: 16}}>{item.text}</Text>
                       </View>
                     </View>
                   </View>;
@@ -157,24 +157,22 @@ const styles = StyleSheet.create({
   },
   view: {
     backgroundColor: backgroundColor,
-
-    // paddingVertical: 10,
-    // paddingHorizontal: 20,
     flex: 1,
   },
   scrollArea: {
     padding: 0,
-    // marginBottom: 50,
-    // paddingBottom: 20
   },
   itemHeaderUserName: {
     flexGrow: 1,
     color: primaryColor,
-    fontWeight: 'bold'
+    fontFamily: 'futuramedium',
+    fontSize: 16,
+    // fontWeight: 'bold'
   },
   itemHeaderDate: {
     color: grayDark,
-    fontSize: 10
+    fontSize: 12,
+    fontFamily: 'futuramedium',
   },
   arrowThing: {
     position: 'absolute',
@@ -191,6 +189,8 @@ const styles = StyleSheet.create({
   },
   itemHeader: {
     flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 5,
   },
   location: {
     flexDirection: 'row',
@@ -239,8 +239,6 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
-    // borderWidth: 1,
-    // borderColor: 'grey',
     overflow: 'hidden',
     margin: 20,
   },

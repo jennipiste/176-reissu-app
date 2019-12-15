@@ -20,6 +20,10 @@ const diaryNavOptions = ({ navigation }) => {
             elevation: 0,
         },
         title: navigation.getParam('location', ''),
+        headerTitleStyle: {
+            fontFamily: 'futuramedium',
+            fontWeight: '200',
+        }
     };
 };
 
@@ -29,6 +33,10 @@ const postNavOptions = ({ navigation }) => {
             backgroundColor: 'transparent',
         },
         title: `${navigation.getParam('creator', '')}      ${navigation.getParam('date', '')}`,
+        headerTitleStyle: {
+            fontFamily: 'futuramedium',
+            fontWeight: '200',
+        }
     };
 };
 
@@ -49,7 +57,11 @@ const HomeStack = createStackNavigator({
             headerStyle: {
                 backgroundColor: 'transparent',
             },
-            title: 'Uusi postaus'
+            title: 'Uusi postaus',
+            headerTitleStyle: {
+                fontFamily: 'futuramedium',
+                fontWeight: '200',
+            }
         },
     },
     Post: {

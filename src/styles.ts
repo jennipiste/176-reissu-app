@@ -9,9 +9,10 @@ export const grayLight = '#9EADCD';
 
 export const commonStyles = StyleSheet.create({
     title: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        flex: 1
+        fontSize: 20,
+        fontFamily: 'futuramedium',
+        // fontWeight: 'bold',
+        flex: 1,
     },
     textInput: {
         borderRadius: 10,
@@ -23,6 +24,7 @@ export const commonStyles = StyleSheet.create({
         margin: 10,
         backgroundColor: backgroundColor,
         fontSize: 18,
+        fontFamily: 'futuramedium',
     },
     textInputActive: {
         borderColor: primaryColor,
@@ -30,6 +32,7 @@ export const commonStyles = StyleSheet.create({
     },
     linkText: {
         color: primaryColor,
+        fontFamily: 'futuramedium',
     },
     buttonView: {
         marginTop: 40,
@@ -41,9 +44,14 @@ export const commonStyles = StyleSheet.create({
         backgroundColor: primaryColor,
         paddingVertical: 12,
     },
+    buttonTitleStyle: {
+        fontFamily: 'futuramedium',
+        fontSize: 18,
+    },
     bottomText: {
         position: 'absolute',
         bottom: 30,
+        fontFamily: 'futuramedium',
     },
     profileImageOld: {
         width: 120,

@@ -17,7 +17,7 @@ import {User} from '../interfaces';
 import * as ImagePicker from 'expo-image-picker';
 import uuid from 'uuid/v4';
 import {FontAwesome, AntDesign} from '@expo/vector-icons';
-import { backgroundColor, commonStyles, primaryColor } from '../styles';
+import { backgroundColor, commonStyles, primaryColor, grayDark } from '../styles';
 import { Button } from 'react-native-elements';
 
 
@@ -131,7 +131,7 @@ export const UserListScreen: React.FC = () => {
     }}>
       <View style={styles.header}>
         {currentUser && <>
-            <Text style={styles.title}>Profiili</Text>
+            <Text style={{...commonStyles.title, flex: 0}}>Profiili</Text>
             <View style={styles.topIcons}>
               <TouchableOpacity style={styles.topIcon} onPress={() => setIsModalVisible(true)}>
                 <FontAwesome color={primaryColor} name='pencil' size={20}/>
@@ -218,7 +218,12 @@ export const UserListScreen: React.FC = () => {
                         onFocus={() => setInputFocus('description')}
                       />
                       <View style={styles.buttonView}>
-                        <Button buttonStyle={commonStyles.button} title='Tallenna' onPress={() => onSaveUserPress()}/>
+                        <Button
+                          buttonStyle={commonStyles.button}
+                          titleStyle={commonStyles.buttonTitleStyle}
+                          title='Tallenna'
+                          onPress={() => onSaveUserPress()}
+                        />
                       </View>
                     </ScrollView>
                   }
@@ -247,7 +252,7 @@ export const UserListScreen: React.FC = () => {
                       </TouchableOpacity>
                       <Image source={{uri: modalUser.avatarUrl}} style={styles.profileImage}/>
                       <Text style={{...styles.userNameHeader, marginBottom: 20, fontSize: 20}}>{modalUser.username}</Text>
-                      <Text>{modalUser.description}</Text>
+                      <Text style={styles.currentUserText}>{modalUser.description}</Text>
                     </View>
                   </View>
                 </View>
@@ -262,7 +267,7 @@ export const UserListScreen: React.FC = () => {
                   }
                   <View style={styles.usersText}>
                     <Text style={styles.userNameHeader}>{user.username}</Text>
-                    <Text>{user.description}</Text>
+                    <Text style={styles.userText}>{user.description}</Text>
                   </View>
                 </TouchableOpacity>;
               })}
@@ -277,10 +282,6 @@ export const UserListScreen: React.FC = () => {
 const styles = StyleSheet.create({
   header: {
     padding: 30,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
   },
   topIcons: {
     position: 'absolute',
@@ -316,15 +317,27 @@ const styles = StyleSheet.create({
   currentUserText: {
     maxWidth: '70%',
     textAlign: 'center',
+    fontFamily: 'futuramedium',
+    color: grayDark,
+    fontSize: 16,
   },
   currentUserNameHeader: {
-    fontSize: 18,
+    fontFamily: 'futuramedium',
+    fontSize: 20,
     marginVertical: 10,
     minWidth: 200,
     textAlign: 'center'
   },
   userNameHeader: {
-    fontWeight: 'bold',
+    fontSize: 18,
+    fontFamily: 'futuramedium',
+    // fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  userText: {
+    color: grayDark,
+    fontFamily: 'futuramedium',
+    fontSize: 16
   },
   image: {
     width: 60,

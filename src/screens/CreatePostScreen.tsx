@@ -34,7 +34,9 @@ export const CreatePostScreen: React.FC = () => {
     const now = moment();
     const dest = destinations[destinationIndex];
     setDestination(dest);
-    if (now.diff(moment(dest.endTime)) > 0) {
+    if (now.diff(moment(dest.startTime)) < 0) {
+      setDate(moment(dest.startTime));
+    } else if (now.diff(moment(dest.endTime)) > 0) {
       setDate(moment(dest.endTime));
     } else {
       setDate(now);
@@ -138,12 +140,12 @@ export const CreatePostScreen: React.FC = () => {
               customStyles={{
                 dateInput: {
                   borderWidth: 0,
-                  marginLeft: 20,
+                  marginLeft: 10,
                 },
                 dateText: {
                   color: primaryColor,
-                  fontWeight: 'bold',
-                  fontSize: 18,
+                  fontSize: 16,
+                  fontFamily: 'futuramedium',
                 }
               }}
               onDateChange={(date) => setDate(moment(date))}
@@ -187,7 +189,8 @@ export const CreatePostScreen: React.FC = () => {
               onPress={onPickImagePress}
               buttonStyle={styles.addImagesButton}
               titleStyle={{
-                color: primaryColor
+                ...commonStyles.buttonTitleStyle,
+                color: primaryColor,
               }}
               type='outline'
               icon={<MaterialIcons
@@ -201,7 +204,12 @@ export const CreatePostScreen: React.FC = () => {
             />
           </View>
           <View style={{...commonStyles.buttonView, width: '100%', marginTop: 10, marginBottom: 10}}>
-            <Button title='Julkaise' onPress={onCreatePress} buttonStyle={commonStyles.button}/>
+            <Button
+              title='Julkaise'
+              onPress={onCreatePress}
+              buttonStyle={commonStyles.button}
+              titleStyle={commonStyles.buttonTitleStyle}
+            />
           </View>
       </View>
       }
@@ -226,9 +234,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   locationName: {
-    fontWeight: 'bold',
     marginLeft: 10,
     fontSize: 18,
+    fontFamily: 'futuramedium',
   },
   button: {
     marginTop: 10,
@@ -250,7 +258,7 @@ const styles = StyleSheet.create({
   datePicker: {
     marginTop: 10,
     marginBottom: 10,
-    width: 190,
+    width: 180,
   },
   addImagesButton: {
     ...commonStyles.button,
