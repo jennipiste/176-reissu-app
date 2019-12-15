@@ -153,6 +153,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   signUpTitle: {
+    flexGrow: 0,
     ...commonStyles.title,
     marginBottom: 50,
   },
