@@ -382,7 +382,7 @@ export const InfoScreen: React.FC = () => {
     }}>
       <React.Fragment>
         <View style={styles.header}>
-          <Text style={{...commonStyles.title, width: 100}}>Info {currentIndex} {nowString} infotin</Text>
+          <Text style={{...commonStyles.title, width: 100}}>Info</Text>
         </View>
         <View
           style={{paddingTop: 10}}
@@ -393,6 +393,7 @@ export const InfoScreen: React.FC = () => {
 
             return <View
               style={styles.listItem}
+              key={index}
             >
               <View style={index !== listItems.length - 1 ? styles.dateTextContainer : {}}>
                 <Text

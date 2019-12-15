@@ -1,12 +1,64 @@
 import React, {useState, useEffect} from 'react';
 import {useSafeArea} from 'react-native-safe-area-context';
-import {Text, View, TouchableWithoutFeedback, StyleSheet, ScrollView} from 'react-native';
+import {Text, View, Image, TouchableWithoutFeedback, StyleSheet, ScrollView} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
-import {Packing, Category, Todo} from '../interfaces';
+import {Packing, Category, Todo, User} from '../interfaces';
 import firebase from 'firebase';
 import {commonStyles, backgroundColor, primaryColor} from '../styles';
 import moment from 'moment';
 import {START_TIME} from '../constants';
+
+
+interface ITodoItem {
+  completed: boolean,
+  id: number,
+  name: string
+}
+
+interface IDoneMap {
+  [key: string]: string[]
+}
+
+interface IUserMap {
+  [key: string]: User
+}
+
+interface ICheckboxItemProps {
+  item: Todo,
+  doneMap: IDoneMap,
+  userMap: IUserMap
+}
+
+
+const CheckboxItem: React.FC<ICheckboxItemProps> = ({item, doneMap, userMap}: ICheckboxItemProps) => {
+  return <View style={styles.itemView}>
+    <Ionicons style={{
+      ...styles.icon,
+      color: item.completed === true ? primaryColor : 'lightgray',
+      fontSize: item.completed === true ? 24 : 28,
+    }}
+              name={item.completed === true ? 'ios-checkbox' : 'ios-square-outline'}
+    />
+    <View>
+      <Text style={styles.itemText}>{item.name}</Text>
+      <View style={styles.faceContainer}>
+        {(
+          doneMap[item.id] !== undefined
+        ) && doneMap[item.id].map((userId) => {
+          return <React.Fragment
+            key={userId}
+          >{
+            userMap[userId] === undefined ?
+              <Text>?</Text> :
+              <Image style={styles.faceItem} source={{uri: userMap[userId].avatarUrl}}/>
+          }
+          </React.Fragment>
+        })}
+      </View>
+    </View>
+  </View>
+
+}
 
 export const TodoScreen: React.FC = () => {
 
@@ -14,37 +66,57 @@ export const TodoScreen: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [totalItems, setTotalItems] = useState<number>(0);
   const [checkedItems, setCheckedItems] = useState<number>(0);
+  const [doneMap, setDoneMap] = useState<IDoneMap>({});
+  const [userMap, setUserMap] = useState<IUserMap>({});
 
   const userUid = firebase.auth().currentUser.uid;
-
   const insets = useSafeArea();
+
+  useEffect(() => {
+    firebase.database().ref('users').on('value', (snapshot) => {
+      const result = snapshot.val();
+      if (result) {
+        setUserMap(result)
+      }
+    });
+  }, []);
+
+  const handleSnapchot = (snapshot) => {
+    const result = snapshot.val();
+
+    let newDoneMap: IDoneMap = {}
+    if (result) {
+      Object.keys(result).forEach(anotherUserId => {
+        result[anotherUserId].forEach((todoItem: ITodoItem) => {
+          if (todoItem.completed) {
+            if (newDoneMap[todoItem.id] === undefined) {
+              newDoneMap[todoItem.id] = []
+            }
+            newDoneMap[todoItem.id] = [...newDoneMap[todoItem.id], anotherUserId]
+          }
+        })
+      })
+      setDoneMap(newDoneMap)
+
+      const todoList: Packing[] = Object.keys(result[userUid]).map(key => {
+        return result[userUid][key];
+      });
+      setTodos(todoList);
+      setTotalItems(todoList.length);
+      setCheckedItems(todoList.filter(todo => todo.completed).length);
+    }
+  }
 
   const updatePackings = async () => {
     firebase.database().ref(`packings/${userUid}`).on('value', (snapshot) => {
-      const result = snapshot.val();
-      if (result) {
-        const packingList: Packing[] = Object.keys(result).map(key => {
-          return result[key];
-        });
-        setPackings(packingList);
-        setTotalItems(packingList.length);
-        setCheckedItems(packingList.filter(packing => packing.completed).length);
-      }
+      handleSnapchot(snapshot)
     });
   };
   const tripStarted = moment().diff(moment(START_TIME)) > 0;
 
   const updateTodos = async () => {
-    firebase.database().ref(`todos/${userUid}`).on('value', (snapshot) => {
-      const result = snapshot.val();
-      if (result) {
-        const todoList: Packing[] = Object.keys(result).map(key => {
-          return result[key];
-        });
-        setTodos(todoList);
-        setTotalItems(todoList.length);
-        setCheckedItems(todoList.filter(todo => todo.completed).length);
-      }
+    firebase.database().ref(`todos`).on('value', (snapshot) => {
+      handleSnapchot(snapshot)
     });
   };
 
@@ -65,6 +137,7 @@ export const TodoScreen: React.FC = () => {
   };
 
   const toggleTodo = (id: number) => {
+    console.log('toggle todo called')
     firebase.database().ref(`todos/${userUid}/${id}`).update({
       completed: !todos.find(todo => todo.id === id).completed,
     }).then(() => {
@@ -92,15 +165,12 @@ export const TodoScreen: React.FC = () => {
                   key={item.id}
                   onPress={() => toggleTodo(item.id)}
                 >
-                  <View style={styles.itemView}>
-                    <Ionicons style={{
-                      ...styles.icon,
-                      color: item.completed === true ? primaryColor : 'lightgray',
-                      fontSize: item.completed === true ? 24 : 28,
-                    }}
-                              name={item.completed === true ? 'ios-checkbox' : 'ios-square-outline'}
+                  <View>
+                    <CheckboxItem
+                      item={item}
+                      doneMap={doneMap}
+                      userMap={userMap}
                     />
-                    <Text style={styles.itemText}>{item.name}</Text>
                   </View>
                 </TouchableWithoutFeedback>;
               })}
@@ -114,15 +184,8 @@ export const TodoScreen: React.FC = () => {
                     key={item.id}
                     onPress={() => togglePacking(item.id)}
                   >
-                    <View style={styles.itemView}>
-                      <Ionicons style={{
-                        ...styles.icon,
-                        color: item.completed === true ? primaryColor : 'lightgray',
-                        fontSize: item.completed === true ? 24 : 28,
-                      }}
-                                name={item.completed === true ? 'ios-checkbox' : 'ios-square-outline'}
-                      />
-                      <Text style={styles.itemText}>{item.name}</Text>
+                    <View>
+                      <CheckboxItem item={item} doneMap={doneMap} userMap={userMap}/>
                     </View>
                   </TouchableWithoutFeedback>;
                 })}
@@ -156,10 +219,9 @@ const styles = StyleSheet.create({
   itemView: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
-    height: 24,
+    alignItems: 'flex-start',
     marginTop: 10,
-    marginBottom: 10,
+    marginBottom: 5,
   },
   category: {
     ...commonStyles.title,
@@ -167,9 +229,19 @@ const styles = StyleSheet.create({
   },
   icon: {
     width: 40,
+    height: 24
   },
   itemText: {
     fontSize: 18,
     fontFamily: 'futuramedium',
+  },
+  faceContainer: {
+    flexDirection: 'row'
+  },
+  faceItem: {
+    height: 20,
+    width: 20,
+    borderRadius: 10,
+    marginRight: 3
   }
 });

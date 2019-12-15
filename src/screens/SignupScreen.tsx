@@ -7,7 +7,7 @@ import uuid from 'uuid/v4';
 import {packings, todos} from '../constants';
 import {commonStyles, grayDark} from '../styles';
 import {Button} from 'react-native-elements';
-import {ImageManipulator} from "expo/build/removed.web";
+import * as ImageManipulator from "expo-image-manipulator";
 
 
 export const SignupScreen: React.FC = () => {
