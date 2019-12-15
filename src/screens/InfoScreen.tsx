@@ -49,7 +49,7 @@ const listItems: IListItem[] = [
   {
     type: 'non-flight',
     header: 'Helsinki',
-    sortableDate: '2019-12-25',
+    sortableDate: '2019-12-25 14:00',
     previewText: 'Tavataan Helsinki Vantaa lentokenltällä. Etkot Oak Barrelissa tai finnair longuessa klo 14.00'
   },
   // Helsinki Hanoi
@@ -67,13 +67,13 @@ const listItems: IListItem[] = [
       duration: '10h 40min',
       flightNumber: 'AY161'
     },
-    sortableDate: '2019-12-25',
+    sortableDate: '2019-12-25 16:00',
     header: '',
   },
   {
     type: 'non-flight',
     header: 'Ho Chi Mihn City',
-    sortableDate: '2019-12-26',
+    sortableDate: '2019-12-26 08:00',
     previewText:
       'Ho Chi Mhin city (Tunnettiin aijemmin Saigon:na) on Vietnamin siirun kaupunki 8.4 miljoonalla asukkaallaan. ' +
       'Kyseessä on matkamme ensimmäinen kohde, joka sijaitsee eteläisessä vietnamissa. ' +
@@ -99,13 +99,13 @@ const listItems: IListItem[] = [
       duration: '55min',
       flightNumber: 'VJ327'
     },
-    sortableDate: '2019-12-29',
+    sortableDate: '2019-12-29 15:00',
     header: '',
   },
   {
     type: 'non-flight',
     header: 'Phu Quoc',
-    sortableDate: '2019-12-29',
+    sortableDate: '2019-12-29 16:30',
     previewText:
       'Matkamme toinen kohde on Phu Quoc paratiisisaari.',
     stayInfo: {
@@ -129,20 +129,20 @@ const listItems: IListItem[] = [
       duration: '1h 50min',
       flightNumber: 'BL840'
     },
-    sortableDate: '2020-01-03',
+    sortableDate: '2020-01-03 19:00',
     header: '',
   },
   {
     type: 'non-flight',
     header: 'Da Nang',
-    sortableDate: '2020-01-03',
+    sortableDate: '2020-01-03 21:00',
     previewText:
       'Lentomme saapuu Da Nang suurkaupunkiin, josta kuljetukset Hoi An:iin',
   },
   {
     type: 'non-flight',
     header: 'Hoi An',
-    sortableDate: '2020-01-03',
+    sortableDate: '2020-01-03 23:00',
     previewText:
       'Hoi An on maailmanperintökohde',
     stayInfo: {
@@ -166,20 +166,20 @@ const listItems: IListItem[] = [
       duration: '1h 20min',
       flightNumber: 'VJ534'
     },
-    sortableDate: '2020-01-07',
+    sortableDate: '2020-01-07 07:00',
     header: '',
   },
   {
     type: 'non-flight',
     header: 'Pikapysähdys Hanoissa',
-    sortableDate: '2020-01-07',
+    sortableDate: '2020-01-07 09:00',
     previewText:
       'Välipysähdys Hanoissa. Jatkamme matkaa bussikuljetuksella seuraavaan kohteeseen.'
   },
   {
     type: 'non-flight',
     header: 'Ha Long Bay',
-    sortableDate: '2020-01-07',
+    sortableDate: '2020-01-07 15:00',
     previewText:
       'Ha Long Bay on kaunis paikka täynnä saaria. Vietämme yhden yön näillä saarilla.',
     stayInfo: {
@@ -192,7 +192,7 @@ const listItems: IListItem[] = [
   {
     type: 'non-flight',
     header: 'Hanoi',
-    sortableDate: '2020-01-08',
+    sortableDate: '2020-01-08 21:00',
     previewText:
       'Hanoi on matkamme viimenen kohde ja Vietnamin pääkaupunki.' +
       'Hanoissa asustaa 7.7 miljoonaa ihmistä ',
@@ -217,13 +217,13 @@ const listItems: IListItem[] = [
       duration: '1h 50min',
       flightNumber: 'HX529'
     },
-    sortableDate: '2020-01-11',
+    sortableDate: '2020-01-11 19:00',
     header: '',
   },
   {
     type: 'non-flight',
     header: 'Hong Kong',
-    sortableDate: '2020-01-11',
+    sortableDate: '2020-01-11 22:00',
     previewText:
       'Välipys mielenosoituksistaan tunnetussa Hong Kong:ssa. ' +
       'Hong Kong itsehallintoalue Kiinassa. ' +
@@ -243,13 +243,13 @@ const listItems: IListItem[] = [
       duration: '10h 40min',
       flightNumber: 'AY100'
     },
-    sortableDate: '2020-01-12',
+    sortableDate: '2020-01-12 01:00',
     header: '',
   },
   {
     type: 'non-flight',
     header: 'Helsinki',
-    sortableDate: '2020-01-12',
+    sortableDate: '2020-01-12 06:00',
     previewText: 'Paluu harmaaseen arkeen'
   },
 ];
@@ -350,15 +350,17 @@ const hilightColor = primaryColor;
 export const InfoScreen: React.FC = () => {
 
   const nowString = moment(
-    '2020-01-05T14:48:00.000Z'
+    // '2020-01-04T20:48:00.000'
     // '2019-12-25'
-  ).format('YYYY-MM-DD')
+  ).format('YYYY-MM-DD HH:mm')
   let currentIndex = -1
 
   for (let i = 0; i < listItems.length - 2; i++) {
-    // if (listItems[i].sortableDate > listItems[i + 1].sortableDate) {
-    //   alert(`NOTE: Incorrectly sorted listItems ${listItems[i].sortableDate} ${listItems[i+1].sortableDate}`)
-    // }
+    if (listItems[i].sortableDate > listItems[i + 1].sortableDate) {
+      alert(`NOTE: Incorrectly sorted listItems ${listItems[i].sortableDate} ${listItems[i + 1].sortableDate}`)
+    }
+  }
+  for (let i = 0; i < listItems.length - 1; i++) {
     if (
       nowString >= listItems[i].sortableDate &&
       (
@@ -387,7 +389,7 @@ export const InfoScreen: React.FC = () => {
         >
           {listItems.map((item: IListItem, index) => {
             const thisColor = index === currentIndex ? hilightColor : (index < currentIndex ? pastColor : '#000000');
-            const dateString = moment(item.sortableDate, 'YYYY-MM-DD').format('DD.MM.')
+            const dateString = moment(item.sortableDate, 'YYYY-MM-DD HH:mm').format('DD.MM.')
 
             return <View
               style={styles.listItem}
