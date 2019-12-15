@@ -17,14 +17,15 @@ export const DiaryScreen: React.FC = () => {
 
   const [posts, setPosts] = useState<Post[]>([]);
   const [users, setUsers] = useState<User[]>([]);
-  const [loadingCounter, setLoadingCounter] = useState<number>(2)
+  const [postsLoaded, setPostsLoaded] = useState<boolean>(false)
+  const [usersLoaded, setUsersLoaded] = useState<boolean>(false)
 
   const onCreatePress = () => {
     navigate('CreatePost', {destinationIndex});
   };
 
-  const onPostPress = (postUid, imageUri) => {
-    navigate('Post', {postUid, imageUri})
+  const onPostPress = (postUid, imageUri, creator, date) => {
+    navigate('Post', {postUid, imageUri, creator, date})
   };
 
   useEffect(() => {
@@ -36,14 +37,14 @@ export const DiaryScreen: React.FC = () => {
         });
         const filteredPosts = postList.filter(post => post.destination === destination.name);
         const sortedPosts = filteredPosts.sort((post1, post2) => {
-          if (post1.date === post2.date) {
+          if (post1.createdAt === post2.createdAt) {
             return 0
           }
-          return post1.date < post2.date ? -1 : 1
+          return post1.createdAt < post2.createdAt ? 1 : -1
         })
 
         setPosts(sortedPosts);
-        setLoadingCounter((curCounter) => curCounter - 1)
+        setPostsLoaded(true)
       }
     });
   }, []);
@@ -56,7 +57,7 @@ export const DiaryScreen: React.FC = () => {
           return result[key];
         });
         setUsers(usersList);
-        setLoadingCounter((curCounter) => curCounter - 1)
+        setUsersLoaded(true)
       }
     });
   }, []);
@@ -69,7 +70,7 @@ export const DiaryScreen: React.FC = () => {
       }
     }}>
       {
-        loadingCounter === 0 ?
+        (postsLoaded && usersLoaded) ?
           <>
             <TouchableOpacity
               style={styles.button}
@@ -96,7 +97,7 @@ export const DiaryScreen: React.FC = () => {
                 renderItem={({item, index}) => {
                   const user = users.find(user => user.uid === item.userUid);
                   const userAvatarUrl = user ? user.avatarUrl : null;
-                  const date = moment(item.date).format('DD.MM.');
+                  const date = moment(item.date).format('HH:MM DD.MM.')
                   return <View
                     style={{...styles.postContainer, ...(index === posts.length - 1 ? {marginBottom: 20} : {})}}>
                     {userAvatarUrl
@@ -110,7 +111,7 @@ export const DiaryScreen: React.FC = () => {
                       <View>
                         <View style={styles.itemHeader}>
                           <Text style={styles.itemHeaderUserName}>{user.username}</Text>
-                          <Text style={styles.itemHeaderDate}>{moment(item.date).format('DD.MM.')}</Text>
+                          <Text style={styles.itemHeaderDate}>{date}</Text>
                         </View>
                         <FlatList
                           data={item.imageUrls}
@@ -118,7 +119,7 @@ export const DiaryScreen: React.FC = () => {
                             const imageUri = value.item;
                             return <View style={{flex: 1, flexDirection: 'column', margin: 1}}>
                               <TouchableOpacity
-                                onPress={() => onPostPress(item.uid, imageUri)}
+                                onPress={() => onPostPress(item.uid, imageUri, user.username, date)}
                               >
                                 <Image source={{uri: imageUri, cache: 'force-cache'}} style={styles.postImage}/>
                               </TouchableOpacity>
@@ -141,7 +142,7 @@ export const DiaryScreen: React.FC = () => {
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-            <ActivityIndicator size={60} color={primaryColor} />
+            <ActivityIndicator size={60} color={primaryColor}/>
           </View>
       }
     </View>

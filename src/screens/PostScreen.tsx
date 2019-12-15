@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Text, View, Image, StyleSheet, ScrollView, FlatList} from 'react-native';
+import {Text, View, Image, StyleSheet, ScrollView, FlatList, Dimensions} from 'react-native';
 import {useNavigationParam} from 'react-navigation-hooks';
 import firebase from 'firebase';
 import {Post, User} from '../interfaces';
@@ -29,12 +29,40 @@ export const PostScreen: React.FC = () => {
   //         });
   //     });
   // }, []);
-  return <View>
+
+  const [imageSize, setImageSize] = useState({width: 0, height: 0})
+
+  useEffect(() => {
+    Image.getSize(imageUri, (width, height) => {
+      const screenWidth = Dimensions.get('window').width
+      const scaleFactor = width / screenWidth
+      const imageHeight = height / scaleFactor
+      setImageSize({width: screenWidth, height: imageHeight})
+    }, () => {alert('failure happened')})
+  }, [])
+
+  return <ScrollView
+    style={{
+      // flex: 1,
+      // flexDirection: 'column'
+    }}>
     <Image
       source={{uri: imageUri, cache: 'force-cache'}}
-      style={{width: '100%'}}
+      style={{
+        width: imageSize.width,
+        height: imageSize.height
+        // flex: 1,
+        // // resizeMode: 'stretch'
+        // // resizeMode: 'cover'
+        // // resizeMode: 'cover'
+        // resizeMode: 'center'
+        // // width: 100,
+        // // height: 100,
+        // // borderRadius: 1,
+        // // borderColor: 'black'
+      }}
     />
-  </View>
+  </ScrollView>
   //
   // return (
   //   // loading ? <View><Text>Loading...</Text></View> : <View>
