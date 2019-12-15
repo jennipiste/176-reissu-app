@@ -36,7 +36,7 @@ export const destinations: Destination[] = [{
         y: 1300,
     },
 }, {
-    name: 'Halong Bay',
+    name: 'Ha Long Bay',
     startTime: '2020-01-07T08:20:00.000+07:00',
     endTime: '2020-01-08T13:59:59.999+07:00', // TODO: fix time
     position: {

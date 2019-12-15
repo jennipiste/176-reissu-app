@@ -217,15 +217,15 @@ const listItems: IListItem[] = [
       duration: '1h 50min',
       flightNumber: 'HX529'
     },
-    sortableDate: '2020-01-11 19:00',
+    sortableDate: '2020-01-12 19:00',
     header: '',
   },
   {
     type: 'non-flight',
     header: 'Hong Kong',
-    sortableDate: '2020-01-11 22:00',
+    sortableDate: '2020-01-12 22:00',
     previewText:
-      'Välipys mielenosoituksistaan tunnetussa Hong Kong:ssa. ' +
+      'Välipysähdys mielenosoituksistaan tunnetussa Hong Kong:ssa. ' +
       'Hong Kong itsehallintoalue Kiinassa. ' +
       'Hong Kong oli myös Englannin viimeinen siirtomaa-alue ennen luovutustaan Kiinalle 1970+luvulla.'
   },
@@ -243,13 +243,13 @@ const listItems: IListItem[] = [
       duration: '10h 40min',
       flightNumber: 'AY100'
     },
-    sortableDate: '2020-01-12 01:00',
+    sortableDate: '2020-01-13 01:00',
     header: '',
   },
   {
     type: 'non-flight',
     header: 'Helsinki',
-    sortableDate: '2020-01-12 06:00',
+    sortableDate: '2020-01-13 06:00',
     previewText: 'Paluu harmaaseen arkeen'
   },
 ];
