@@ -10,23 +10,23 @@ import {START_TIME} from '../constants';
 
 
 interface ITodoItem {
-  completed: boolean,
-  id: number,
-  name: string
+  completed: boolean;
+  id: number;
+  name: string;
 }
 
 interface IDoneMap {
-  [key: string]: string[]
+  [key: string]: string[];
 }
 
 interface IUserMap {
-  [key: string]: User
+  [key: string]: User;
 }
 
 interface ICheckboxItemProps {
-  item: Todo,
-  doneMap: IDoneMap,
-  userMap: IUserMap
+  item: Todo;
+  doneMap: IDoneMap;
+  userMap: IUserMap;
 }
 
 
@@ -35,9 +35,9 @@ const CheckboxItem: React.FC<ICheckboxItemProps> = ({item, doneMap, userMap}: IC
     <Ionicons style={{
       ...styles.icon,
       color: item.completed === true ? primaryColor : 'lightgray',
-      fontSize: item.completed === true ? 24 : 28,
     }}
-              name={item.completed === true ? 'ios-checkbox' : 'ios-square-outline'}
+      name={item.completed === true ? 'ios-checkbox' : 'md-square-outline'}
+      size={24}
     />
     <View>
       <Text style={styles.itemText}>{item.name}</Text>
@@ -52,13 +52,13 @@ const CheckboxItem: React.FC<ICheckboxItemProps> = ({item, doneMap, userMap}: IC
               <Text>?</Text> :
               <Image style={styles.faceItem} source={{uri: userMap[userId].avatarUrl}}/>
           }
-          </React.Fragment>
+          </React.Fragment>;
         })}
       </View>
     </View>
-  </View>
+  </View>;
 
-}
+};
 
 export const TodoScreen: React.FC = () => {
 
@@ -108,7 +108,7 @@ export const TodoScreen: React.FC = () => {
   }
 
   const updatePackings = async () => {
-    firebase.database().ref(`packings/${userUid}`).on('value', (snapshot) => {
+    firebase.database().ref(`packings`).on('value', (snapshot) => {
       handleSnapchot(snapshot)
     });
   };
@@ -229,19 +229,23 @@ const styles = StyleSheet.create({
   },
   icon: {
     width: 40,
-    height: 24
+    height: 24,
+    justifyContent: 'flex-start',
+    display: 'flex',
+    alignItems: 'center'
   },
   itemText: {
     fontSize: 18,
     fontFamily: 'futuramedium',
   },
   faceContainer: {
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   faceItem: {
-    height: 20,
-    width: 20,
-    borderRadius: 10,
+    height: 24,
+    width: 24,
+    borderRadius: 18,
+    marginTop: 5,
     marginRight: 3
   }
 });
