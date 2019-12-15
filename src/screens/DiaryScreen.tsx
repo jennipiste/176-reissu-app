@@ -4,7 +4,7 @@ import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
 import firebase from 'firebase';
 import { Post, User } from '../interfaces';
 import { destinations } from  '../constants';
-import { FontAwesome } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import moment from 'moment';
 
 export const DiaryScreen: React.FC = () => {
@@ -57,7 +57,7 @@ export const DiaryScreen: React.FC = () => {
                 style={styles.button}
                 onPress={onCreatePress}
             >
-                <FontAwesome name='plus' size={25} color='white' />
+                <MaterialCommunityIcons name='plus' size={28} color='white' />
             </TouchableOpacity>
             <FlatList
                 data={posts}
@@ -114,9 +114,10 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: 20,
         bottom: 20,
-        width: 46,
-        height: 46,
-        borderRadius: 23,
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        elevation: 5,
         zIndex: 1,
         backgroundColor: '#7800F9',
         justifyContent: 'center',
