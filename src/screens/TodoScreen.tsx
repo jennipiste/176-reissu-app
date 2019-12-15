@@ -72,7 +72,7 @@ export const TodoScreen: React.FC = () => {
                                         }}
                                             name={item.completed ===  true ? 'ios-checkbox' : 'ios-square-outline'}
                                         />
-                                        <Text>{item.name}</Text>
+                                        <Text style={styles.itemText}>{item.name}</Text>
                                     </View>
                                 </TouchableWithoutFeedback>;
                             })}
@@ -116,5 +116,8 @@ const styles = StyleSheet.create({
     },
     icon: {
         width: 40,
+    },
+    itemText: {
+        fontSize: 18,
     }
 });
