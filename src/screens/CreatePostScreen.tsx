@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import * as ImageManipulator from 'expo-image-manipulator';
 import {Text, View, Button, TextInput, StyleSheet, Image, ScrollView} from 'react-native';
 import {useNavigationParam, useNavigation} from 'react-navigation-hooks';
 import * as ImagePicker from 'expo-image-picker';
@@ -85,7 +86,14 @@ export const CreatePostScreen: React.FC = () => {
       mediaTypes: ImagePicker.MediaTypeOptions.All,
     });
     if (result.cancelled === false) {
-      setImageUris([...imageUris, result.uri]);
+      const resized = await ImageManipulator.manipulateAsync(
+        result.uri,
+        [
+          {resize: {width: 600}}
+        ],
+        {}
+      )
+      setImageUris([...imageUris, resized.uri])
     }
   };
 
