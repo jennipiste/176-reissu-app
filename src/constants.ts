@@ -22,31 +22,31 @@ export const destinations: Destination[] = [{
 }, {
     name: 'Phu Quoc',
     startTime: '2019-12-29T16:35:00.000+07:00',
-    endTime: '2019-01-03T20:49:59.999+07:00',
+    endTime: '2020-01-03T20:49:59.999+07:00',
     position: {
         x: 110,
         y: 950,
     },
 }, {
     name: 'Hoi An',
-    startTime: '2019-01-03T20:50:00.000+07:00',
-    endTime: '2019-01-07T08:19:59.999+07:00',
+    startTime: '2020-01-03T20:50:00.000+07:00',
+    endTime: '2020-01-07T08:19:59.999+07:00',
     position: {
         x: 320,
         y: 1300,
     },
 }, {
     name: 'Halong Bay',
-    startTime: '2019-01-07T08:20:00.000+07:00',
-    endTime: '2019-01-08T13:59:59.999+07:00', // TODO: fix time
+    startTime: '2020-01-07T08:20:00.000+07:00',
+    endTime: '2020-01-08T13:59:59.999+07:00', // TODO: fix time
     position: {
         x: 200,
         y: 1670,
     },
 }, {
     name: 'Hanoi',
-    startTime: '2019-01-08T14:00:00.000+07:00', // TODO: fix time
-    endTime: '2019-01-13T05:25:00.000+02:00',
+    startTime: '2020-01-08T14:00:00.000+07:00', // TODO: fix time
+    endTime: '2020-01-13T05:25:00.000+02:00',
     position: {
         x: 80,
         y: 2180,
