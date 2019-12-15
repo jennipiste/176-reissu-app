@@ -357,7 +357,9 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     ...commonStyles.title,
+    marginTop: 20,
     marginBottom: 30,
+    flex: 0,
   },
   buttonView: {
     ...commonStyles.buttonView,
