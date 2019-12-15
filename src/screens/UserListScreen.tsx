@@ -140,14 +140,16 @@ export const UserListScreen: React.FC = () => {
                 <FontAwesome color={primaryColor} name='sign-out' size={20}/>
               </TouchableOpacity>
             </View>
-          <View style={styles.currentUser}>
-            {currentUser.avatarUrl
-              ? <View style={commonStyles.profileImageContainer}><Image source={{uri: currentUser.avatarUrl}} style={commonStyles.profileImage}/></View>
-              : <Image source={require('../../assets/user-profile-empty.png')} style={commonStyles.noAvatarImage}/>
-            }
-              <Text style={[styles.userNameHeader, styles.currentUserNameHeader]}>{currentUser.username}</Text>
-              <Text style={styles.currentUserText}>{currentUser.description}</Text>
-          </View>
+          <TouchableOpacity onPress={() => setIsModalVisible(true)}>
+            <View style={styles.currentUser}>
+              {currentUser.avatarUrl
+                ? <View style={commonStyles.profileImageContainer}><Image source={{uri: currentUser.avatarUrl}} style={commonStyles.profileImage}/></View>
+                : <Image source={require('../../assets/user-profile-empty.png')} style={commonStyles.noAvatarImage}/>
+              }
+                <Text style={[styles.userNameHeader, styles.currentUserNameHeader]}>{currentUser.username}</Text>
+                <Text style={styles.currentUserText}>{currentUser.description}</Text>
+            </View>
+          </TouchableOpacity>
         </>}
       </View>
       <View style={styles.view}>
@@ -244,7 +246,7 @@ export const UserListScreen: React.FC = () => {
                         <AntDesign name='close' size={20} />
                       </TouchableOpacity>
                       <Image source={{uri: modalUser.avatarUrl}} style={styles.profileImage}/>
-                      <Text style={{...styles.userNameHeader, marginBottom: 20}}>{modalUser.username}</Text>
+                      <Text style={{...styles.userNameHeader, marginBottom: 20, fontSize: 20}}>{modalUser.username}</Text>
                       <Text>{modalUser.description}</Text>
                     </View>
                   </View>
