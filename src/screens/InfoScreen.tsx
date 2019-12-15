@@ -11,6 +11,7 @@ import {
 import {Linking} from 'expo';
 import {FontAwesome, Ionicons} from "@expo/vector-icons";
 import {commonStyles, backgroundColor, primaryColor, grayDark} from "../styles";
+import moment from "moment";
 
 
 interface IFlightInfoDest {
@@ -38,7 +39,6 @@ interface IListItem {
   type: string;
   header: string;
   sortableDate: string;
-  date: string;
   previewText?: string;
   flightInfo?: IFlightInfo;
   stayInfo?: IStayInfo;
@@ -49,8 +49,7 @@ const listItems: IListItem[] = [
   {
     type: 'non-flight',
     header: 'Helsinki',
-    sortableDate: '25-12-2019',
-    date: '25.12.',
+    sortableDate: '2019-12-25',
     previewText: 'Tavataan Helsinki Vantaa lentokenltällä. Etkot Oak Barrelissa tai finnair longuessa klo 14.00'
   },
   // Helsinki Hanoi
@@ -68,15 +67,13 @@ const listItems: IListItem[] = [
       duration: '10h 40min',
       flightNumber: 'AY161'
     },
-    sortableDate: '25-12-2019',
-    date: '25.12.',
+    sortableDate: '2019-12-25',
     header: '',
   },
   {
     type: 'non-flight',
     header: 'Ho Chi Mihn City',
-    sortableDate: '26-12-2019',
-    date: '26.12.',
+    sortableDate: '2019-12-26',
     previewText:
       'Ho Chi Mhin city (Tunnettiin aijemmin Saigon:na) on Vietnamin siirun kaupunki 8.4 miljoonalla asukkaallaan. ' +
       'Kyseessä on matkamme ensimmäinen kohde, joka sijaitsee eteläisessä vietnamissa. ' +
@@ -102,15 +99,13 @@ const listItems: IListItem[] = [
       duration: '55min',
       flightNumber: 'VJ327'
     },
-    sortableDate: '29-12-2019',
-    date: '29.12.',
+    sortableDate: '2019-12-29',
     header: '',
   },
   {
     type: 'non-flight',
     header: 'Phu Quoc',
-    sortableDate: '26-12-2019',
-    date: '26.12.',
+    sortableDate: '2019-12-29',
     previewText:
       'Matkamme toinen kohde on Phu Quoc paratiisisaari.',
     stayInfo: {
@@ -134,23 +129,20 @@ const listItems: IListItem[] = [
       duration: '1h 50min',
       flightNumber: 'BL840'
     },
-    sortableDate: '03-01-2020',
-    date: '3.1.',
+    sortableDate: '2020-01-03',
     header: '',
   },
   {
     type: 'non-flight',
     header: 'Da Nang',
-    sortableDate: '26-12-2019',
-    date: '26.12.',
+    sortableDate: '2020-01-03',
     previewText:
       'Lentomme saapuu Da Nang suurkaupunkiin, josta kuljetukset Hoi An:iin',
   },
   {
     type: 'non-flight',
     header: 'Hoi An',
-    sortableDate: '26-12-2019',
-    date: '26.12.',
+    sortableDate: '2020-01-03',
     previewText:
       'Hoi An on maailmanperintökohde',
     stayInfo: {
@@ -174,23 +166,20 @@ const listItems: IListItem[] = [
       duration: '1h 20min',
       flightNumber: 'VJ534'
     },
-    sortableDate: '07-01-2020',
-    date: '7.1.',
+    sortableDate: '2020-01-07',
     header: '',
   },
   {
     type: 'non-flight',
     header: 'Pikapysähdys Hanoissa',
-    sortableDate: '07-01-2020',
-    date: '7.1.',
+    sortableDate: '2020-01-07',
     previewText:
       'Välipysähdys Hanoissa. Jatkamme matkaa bussikuljetuksella seuraavaan kohteeseen.'
   },
   {
     type: 'non-flight',
     header: 'Ha Long Bay',
-    sortableDate: '07-01-2020',
-    date: '7.1.',
+    sortableDate: '2020-01-07',
     previewText:
       'Ha Long Bay on kaunis paikka täynnä saaria. Vietämme yhden yön näillä saarilla.',
     stayInfo: {
@@ -203,8 +192,7 @@ const listItems: IListItem[] = [
   {
     type: 'non-flight',
     header: 'Hanoi',
-    sortableDate: '08-01-2020',
-    date: '8.1.',
+    sortableDate: '2020-01-08',
     previewText:
       'Hanoi on matkamme viimenen kohde ja Vietnamin pääkaupunki.' +
       'Hanoissa asustaa 7.7 miljoonaa ihmistä ',
@@ -229,15 +217,13 @@ const listItems: IListItem[] = [
       duration: '1h 50min',
       flightNumber: 'HX529'
     },
-    sortableDate: '11-01-2020',
-    date: '11.1.',
+    sortableDate: '2020-01-11',
     header: '',
   },
   {
     type: 'non-flight',
     header: 'Hong Kong',
-    sortableDate: '11-01-2020',
-    date: '11.1.',
+    sortableDate: '2020-01-11',
     previewText:
       'Välipys mielenosoituksistaan tunnetussa Hong Kong:ssa. ' +
       'Hong Kong itsehallintoalue Kiinassa. ' +
@@ -257,52 +243,50 @@ const listItems: IListItem[] = [
       duration: '10h 40min',
       flightNumber: 'AY100'
     },
-    sortableDate: '12-01-2020',
-    date: '12.1.',
+    sortableDate: '2020-01-12',
     header: '',
   },
   {
     type: 'non-flight',
     header: 'Helsinki',
-    sortableDate: '12-01-2020',
-    date: '12.1.',
+    sortableDate: '2020-01-12',
     previewText: 'Paluu harmaaseen arkeen'
   },
 ];
+//
+//
+// const InfoModal: React.FC<{isVisible: boolean, item: any, setVisible: (visible: boolean) => {}}> = ({isVisible, item, setVisible}) => {
+//   return <Modal
+//     animationType="fade"
+//     transparent={false}
+//     visible={isVisible}
+//     onRequestClose={() => {
+//       setVisible(false);
+//     }}
+//   >
+//     <View style={modalStyles.wrapper}>
+//       <Button title={'Close'} onPress={() => {
+//         setVisible(false);
+//       }}/>
+//       <Text>Jee modaali!!</Text>
+//       {item.mapLink &&
+//       <Button title={'Majoitus kartta sijainti'} onPress={() => {
+//         Linking.openURL(item.mapLink);
+//       }}/>
+//       }
+//     </View>
+//   </Modal>;
+// };
+//
+//
+// const modalStyles = StyleSheet.create({
+//   wrapper: {
+//     margin: 10
+//   }
+// });
 
 
-const InfoModal: React.FC<{isVisible: boolean, item: any, setVisible: (visible: boolean) => {}}> = ({isVisible, item, setVisible}) => {
-  return <Modal
-    animationType="fade"
-    transparent={false}
-    visible={isVisible}
-    onRequestClose={() => {
-      setVisible(false);
-    }}
-  >
-    <View style={modalStyles.wrapper}>
-      <Button title={'Close'} onPress={() => {
-        setVisible(false);
-      }}/>
-      <Text>Jee modaali!!</Text>
-      {item.mapLink &&
-      <Button title={'Majoitus kartta sijainti'} onPress={() => {
-        Linking.openURL(item.mapLink);
-      }}/>
-      }
-    </View>
-  </Modal>;
-};
-
-
-const modalStyles = StyleSheet.create({
-  wrapper: {
-    margin: 10
-  }
-});
-
-
-const FlightInfo: React.FC<{flightInfo: IFlightInfo, past: boolean}> = ({flightInfo, past}) => {
+const FlightInfo: React.FC<{ flightInfo: IFlightInfo, past: boolean }> = ({flightInfo, past}) => {
   return <View style={flightInfoStyles.wrapper}>
     <View style={flightInfoStyles.innerWrapper}>
       <View style={flightInfoStyles.cityContainer}>
@@ -364,12 +348,29 @@ const hilightColor = primaryColor;
 
 
 export const InfoScreen: React.FC = () => {
-  const [modalVisible, setModalVisible] = React.useState(false);
-  const [selectedItem, setSelectedItem] = React.useState(undefined);
+
+  const nowString = moment(
+    '2020-01-05T14:48:00.000Z'
+    // '2019-12-25'
+  ).format('YYYY-MM-DD')
+  let currentIndex = -1
+
+  for (let i = 0; i < listItems.length - 2; i++) {
+    // if (listItems[i].sortableDate > listItems[i + 1].sortableDate) {
+    //   alert(`NOTE: Incorrectly sorted listItems ${listItems[i].sortableDate} ${listItems[i+1].sortableDate}`)
+    // }
+    if (
+      nowString >= listItems[i].sortableDate &&
+      (
+        currentIndex < 0 ||
+        listItems[currentIndex].sortableDate !== listItems[i].sortableDate
+      )
+    ) {
+      currentIndex = i
+    }
+  }
 
   const insets = useSafeArea();
-
-  const currentIndex = 2;
 
   return (
     <ScrollView style={{
@@ -379,13 +380,14 @@ export const InfoScreen: React.FC = () => {
     }}>
       <React.Fragment>
         <View style={styles.header}>
-          <Text style={{...commonStyles.title, width: 100}}>Info</Text>
+          <Text style={{...commonStyles.title, width: 100}}>Info {currentIndex} {nowString} infotin</Text>
         </View>
         <View
           style={{paddingTop: 10}}
         >
           {listItems.map((item: IListItem, index) => {
             const thisColor = index === currentIndex ? hilightColor : (index < currentIndex ? pastColor : '#000000');
+            const dateString = moment(item.sortableDate, 'YYYY-MM-DD').format('DD.MM.')
 
             return <View
               style={styles.listItem}
@@ -393,7 +395,7 @@ export const InfoScreen: React.FC = () => {
               <View style={index !== listItems.length - 1 ? styles.dateTextContainer : {}}>
                 <Text
                   style={{...styles.dateText, color: thisColor}}
-                >{item.date}</Text>
+                >{dateString}</Text>
                 {currentIndex === index && <View
                     style={styles.circleThing}
                 />}
@@ -404,26 +406,29 @@ export const InfoScreen: React.FC = () => {
               <View
                 style={{...styles.listItemContent, ...(index === currentIndex ? {backgroundColor: '#EEE3FE'} : {})}}>
                 <View style={{...styles.arrowThing, ...(index === currentIndex ? {borderRightColor: '#EEE3FE'} : {})}}/>
-                {item.type === 'flight' && <FlightInfo flightInfo={item.flightInfo} past={index <  currentIndex}/>}
+                {item.type === 'flight' && <FlightInfo flightInfo={item.flightInfo} past={index < currentIndex}/>}
                 {item.type !== 'flight' &&
                 <React.Fragment>
                     <Text style={{...styles.infoHeader, color: thisColor}}>{item.header}</Text>
                   {
                     item.stayInfo && <TouchableNativeFeedback
-                      onPress={() => {
-                        Linking.openURL(item.stayInfo.mapUri);
-                      }}
+                        onPress={() => {
+                          Linking.openURL(item.stayInfo.mapUri);
+                        }}
                     >
                         <View style={styles.homeIconContainer}>
                             <FontAwesome name={'home'} size={24} color={thisColor}/>
                             <View style={styles.homeIconInfoContainer}>
                                 <Text style={{...styles.homeIconHeader, color: thisColor}}>{item.stayInfo.name}</Text>
-                                <Text style={{...styles.homeIconAddress, color: index <  currentIndex ? pastColor : grayDark}}>{item.stayInfo.street}</Text>
+                                <Text style={{
+                                  ...styles.homeIconAddress,
+                                  color: index < currentIndex ? pastColor : grayDark
+                                }}>{item.stayInfo.street}</Text>
                             </View>
                         </View>
                     </TouchableNativeFeedback>
                   }
-                    <Text style={{color: index <  currentIndex ? pastColor : grayDark, fontFamily: 'futuramedium'}}>
+                    <Text style={{color: index < currentIndex ? pastColor : grayDark, fontFamily: 'futuramedium'}}>
                       {item.previewText}
                     </Text>
                 </React.Fragment>
@@ -484,13 +489,11 @@ const styles = StyleSheet.create({
     padding: 15,
     fontSize: 14,
     fontFamily: 'futuramedium',
-    // fontWeight: 'bold',
     width: 80,
     textAlign: 'right',
     marginTop: -7 - 15 + 2
   },
-  topView: {
-  },
+  topView: {},
   circleThingInner: {
     height: 10,
     width: 10,
@@ -516,7 +519,6 @@ const styles = StyleSheet.create({
   },
   listItem: {
     flexDirection: 'row',
-    // backgroundColor: 'red',
     marginBottom: -1
   },
   listItemIcon: {
@@ -529,11 +531,8 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingTop: 10,
     paddingBottom: 10,
-    // borderLeftWidth: 5,
     flex: 1,
-    // borderColor: 'black',
     borderRadius: 10,
-    // borderWidth: 1,
     marginRight: 20,
     marginLeft: 30,
     marginTop: -20,
@@ -545,7 +544,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     paddingBottom: 10,
     color: '#6a6a6a',
-    // alignSelf: 'center'
   },
   infoHeader: {
     fontSize: 22,
