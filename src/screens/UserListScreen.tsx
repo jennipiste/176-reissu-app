@@ -35,24 +35,29 @@ export const UserListScreen: React.FC = () => {
   const [inputFocus, setInputFocus] = useState<string>(undefined);
   const [modalUser, setModalUser] = useState<User>(undefined);
 
-  useEffect(() => {
-    updateUser();
-  }, []);
+  const userId = firebase.auth().currentUser.uid;
+  const ref = firebase.database().ref(`users/${userId}`);
 
-  const updateUser = () => {
-    const userId = firebase.auth().currentUser.uid;
-    firebase.database().ref(`users/${userId}`).once('value')
-      .then(async (snapshot) => {
-        const user: User = snapshot.val();
-        setCurrentUser(user);
-        setUsername(user.username);
-        setDescription(user.description);
-        setIsLoading(false);
-      });
+  const handleUpdateUser = (snapshot: firebase.database.DataSnapshot) => {
+    const user: User = snapshot.val();
+    setCurrentUser(user);
+    setUsername(user.username);
+    setDescription(user.description);
+    setIsLoading(false);
   };
 
   useEffect(() => {
-    firebase.database().ref('users').on('value', (snapshot) => {
+    updateUser();
+    return () => ref.off('value', handleUpdateUser);
+  }, []);
+
+  const updateUser = () => {
+    ref.on('value', handleUpdateUser);
+  };
+
+  useEffect(() => {
+    const ref = firebase.database().ref('users');
+    const handleSnapshot = (snapshot: firebase.database.DataSnapshot) => {
       const result = snapshot.val();
       if (result) {
         const usersList = Object.keys(result).map(key => {
@@ -60,7 +65,9 @@ export const UserListScreen: React.FC = () => {
         });
         setUsers(usersList);
       }
-    });
+    };
+    ref.on('value', handleSnapshot);
+    return () => ref.off('value', handleSnapshot);
   }, []);
 
   const onPickImagePress = async () => {

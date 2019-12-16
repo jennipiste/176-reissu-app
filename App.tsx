@@ -1,5 +1,5 @@
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import AppNavigator from './navigation/AppNavigator';
 import MainTabNavigator from './navigation/MainTabNavigator';
 import firebase from 'firebase';
@@ -29,7 +29,11 @@ const App: React.FC = () => {
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
   }
-  firebase.auth().onAuthStateChanged(onAuthStateChanged);
+
+  useEffect(() => {
+    const unsubscribe = firebase.auth().onAuthStateChanged(onAuthStateChanged);
+    return () => unsubscribe();
+  }, []);
 
   if (isLoading) {
     return <View>

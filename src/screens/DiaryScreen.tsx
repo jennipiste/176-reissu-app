@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {useSafeArea} from 'react-native-safe-area-context';
 import {Text, View, Image, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator} from 'react-native';
 import {useNavigation, useNavigationParam} from 'react-navigation-hooks';
 import firebase from 'firebase';
@@ -7,7 +6,7 @@ import {Post, User} from '../interfaces';
 import {destinations} from '../constants';
 import {FontAwesome, MaterialCommunityIcons} from '@expo/vector-icons';
 import moment from 'moment';
-import {backgroundColor, commonStyles, grayDark, grayLight, primaryColor} from "../styles";
+import {backgroundColor, grayDark, grayLight, primaryColor} from "../styles";
 
 export const DiaryScreen: React.FC = () => {
   const {navigate} = useNavigation();
@@ -17,19 +16,20 @@ export const DiaryScreen: React.FC = () => {
 
   const [posts, setPosts] = useState<Post[]>([]);
   const [users, setUsers] = useState<User[]>([]);
-  const [postsLoaded, setPostsLoaded] = useState<boolean>(false)
-  const [usersLoaded, setUsersLoaded] = useState<boolean>(false)
+  const [postsLoaded, setPostsLoaded] = useState<boolean>(false);
+  const [usersLoaded, setUsersLoaded] = useState<boolean>(false);
 
   const onCreatePress = () => {
     navigate('CreatePost', {destinationIndex});
   };
 
   const onPostPress = (postUid, imageUri, creator, date) => {
-    navigate('Post', {postUid, imageUri, creator, date})
+    navigate('Post', {postUid, imageUri, creator, date});
   };
 
   useEffect(() => {
-    firebase.database().ref('posts').on('value', (snapshot) => {
+    const ref = firebase.database().ref('posts');
+    const handleSnapshot = (snapshot: firebase.database.DataSnapshot) => {
       const result = snapshot.val();
       if (result) {
         const postList: Post[] = Object.keys(result).map(key => {
@@ -38,28 +38,33 @@ export const DiaryScreen: React.FC = () => {
         const filteredPosts = postList.filter(post => post.destination === destination.name);
         const sortedPosts = filteredPosts.sort((post1, post2) => {
           if (post1.createdAt === post2.createdAt) {
-            return 0
+            return 0;
           }
-          return post1.createdAt < post2.createdAt ? 1 : -1
-        })
+          return post1.createdAt < post2.createdAt ? 1 : -1;
+        });
 
         setPosts(sortedPosts);
-        setPostsLoaded(true)
+        setPostsLoaded(true);
       }
-    });
+    };
+    ref.on('value', handleSnapshot);
+    return () => ref.off('value', handleSnapshot);
   }, []);
 
   useEffect(() => {
-    firebase.database().ref('users').on('value', (snapshot) => {
+    const ref = firebase.database().ref('users');
+    const handleSnapshot = (snapshot: firebase.database.DataSnapshot) => {
       const result = snapshot.val();
       if (result) {
         const usersList = Object.keys(result).map(key => {
           return result[key];
         });
         setUsers(usersList);
-        setUsersLoaded(true)
+        setUsersLoaded(true);
       }
-    });
+    };
+    ref.on('value', handleSnapshot);
+    return () => ref.off('value', handleSnapshot);
   }, []);
 
   return (
@@ -97,7 +102,7 @@ export const DiaryScreen: React.FC = () => {
                 renderItem={({item, index}) => {
                   const user = users.find(user => user.uid === item.userUid);
                   const userAvatarUrl = user ? user.avatarUrl : null;
-                  const date = moment(item.date).format('HH:MM DD.MM.')
+                  const date = moment(item.date).format('DD.MM. HH:MM');
                   return <View
                     style={{...styles.postContainer, ...(index === posts.length - 1 ? {marginBottom: 20} : {})}}>
                     {userAvatarUrl

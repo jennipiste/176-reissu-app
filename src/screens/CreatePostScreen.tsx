@@ -42,10 +42,12 @@ export const CreatePostScreen: React.FC = () => {
       setDate(now);
     }
     const userId = firebase.auth().currentUser.uid;
-    firebase.database().ref(`users/${userId}`).once('value')
-      .then(async (snapshot) => {
-        setCurrentUser(snapshot.val());
-      });
+    const ref = firebase.database().ref(`users/${userId}`);
+    const handleSnapshot = (snapshot: firebase.database.DataSnapshot) => {
+      setCurrentUser(snapshot.val());
+    };
+    ref.on('value', handleSnapshot);
+    return () => ref.off('value', handleSnapshot);
   }, []);
 
   const onCreatePress = async () => {
