@@ -23,7 +23,6 @@ import * as ImageManipulator from "expo-image-manipulator";
 
 
 export const UserListScreen: React.FC = () => {
-
   const [currentUser, setCurrentUser] = useState<User>(undefined);
   const [username, setUsername] = useState<string>('');
   const [description, setDescription] = useState<string>('');
@@ -36,7 +35,6 @@ export const UserListScreen: React.FC = () => {
   const [modalUser, setModalUser] = useState<User>(undefined);
 
   const userId = firebase.auth().currentUser.uid;
-  const ref = firebase.database().ref(`users/${userId}`);
 
   const handleUpdateUser = (snapshot: firebase.database.DataSnapshot) => {
     const user: User = snapshot.val();
@@ -47,13 +45,10 @@ export const UserListScreen: React.FC = () => {
   };
 
   useEffect(() => {
-    updateUser();
+    const ref = firebase.database().ref(`users/${userId}`);
+    ref.on('value', handleUpdateUser);
     return () => ref.off('value', handleUpdateUser);
   }, []);
-
-  const updateUser = () => {
-    ref.on('value', handleUpdateUser);
-  };
 
   useEffect(() => {
     const ref = firebase.database().ref('users');
@@ -108,7 +103,6 @@ export const UserListScreen: React.FC = () => {
           username,
           description,
         }).finally(() => {
-          updateUser();
           setIsSaving(false);
           setIsModalVisible(false);
         });
@@ -118,7 +112,6 @@ export const UserListScreen: React.FC = () => {
         username,
         description,
       }).finally(() => {
-        updateUser();
         setIsSaving(false);
         setIsModalVisible(false);
       });
