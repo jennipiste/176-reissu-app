@@ -8,6 +8,7 @@ import {packings, todos} from '../constants';
 import {commonStyles, grayDark} from '../styles';
 import {Button} from 'react-native-elements';
 import * as ImageManipulator from "expo-image-manipulator";
+import {firebaseConfig} from "../config";
 
 
 export const SignupScreen: React.FC = () => {
@@ -28,7 +29,7 @@ export const SignupScreen: React.FC = () => {
       allowsEditing: true,
     });
     if (result.cancelled === false) {
-      const resized = await ImageManipulator.manipulateAsync( result.uri, [ {resize: {width: 200}} ], {} );
+      const resized = await ImageManipulator.manipulateAsync(result.uri, [{resize: {width: 200}}], {});
       setAvatarUrl(resized.uri);
     }
   };
@@ -83,8 +84,6 @@ export const SignupScreen: React.FC = () => {
             });
             await initializePackings(uid);
             await initializeTodos(uid);
-
-            navigate('Home');
           });
         }, (error) => {
           Alert.alert(error.message);
@@ -98,7 +97,8 @@ export const SignupScreen: React.FC = () => {
       <Text style={styles.signUpTitle}>Luo profiili</Text>
       <TouchableOpacity onPress={onPickImagePress}>
         {avatarUrl.length > 0
-          ? <View style={styles.profileImageContainer}><Image source={{uri: avatarUrl}} style={commonStyles.profileImage}/></View>
+          ? <View style={styles.profileImageContainer}><Image source={{uri: avatarUrl}}
+                                                              style={commonStyles.profileImage}/></View>
           : <Image source={require('../../assets/user-profile-empty.png')} style={styles.noAvatarImage}/>
         }
       </TouchableOpacity>

@@ -86,7 +86,12 @@ export const TodoScreen: React.FC = () => {
     let newDoneMap: IDoneMap = {}
     if (result) {
       Object.keys(result).forEach(anotherUserId => {
-        result[anotherUserId].forEach((todoItem: ITodoItem) => {
+        let items = result[anotherUserId]
+        if (items.forEach === undefined) {
+          // WTF WHY IS THIS NEEDED JENNI EXPLAIN!
+          items = Object.values(items)
+        }
+        items.forEach((todoItem: ITodoItem) => {
           if (todoItem.completed) {
             if (newDoneMap[todoItem.id] === undefined) {
               newDoneMap[todoItem.id] = []
@@ -96,6 +101,10 @@ export const TodoScreen: React.FC = () => {
         })
       })
       setDoneMap(newDoneMap)
+
+      if (result[userUid] === undefined) {
+        return
+      }
 
       const todoList: PackingOrTodo[] = Object.keys(result[userUid]).map(key => {
         return result[userUid][key];
@@ -136,7 +145,6 @@ export const TodoScreen: React.FC = () => {
   };
 
   const toggleTodo = (id: number) => {
-    console.log('toggle todo called')
     firebase.database().ref(`todos/${userUid}/${id}`).update({
       completed: !todos.find(todo => todo.id === id).completed,
     }).then(() => {
