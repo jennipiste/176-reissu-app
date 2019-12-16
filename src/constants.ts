@@ -1,6 +1,7 @@
 import { Destination, Packing, Category, Todo } from "./interfaces";
 
 export const START_TIME = '2019-12-07T14:00:00.000+02:00';
+// export const START_TIME = '2029-12-07T14:00:00.000+02:00';
 export const END_TIME = '2019-01-13T05:25:00.000+02:00';
 
 export const destinations: Destination[] = [{

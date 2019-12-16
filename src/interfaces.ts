@@ -26,10 +26,10 @@ export interface Destination {
     };
 }
 
-export interface Packing {
+export interface PackingOrTodo {
     id: number;
     name: string;
-    category: Category;
+    category?: Category;
     completed: boolean;
 }
 
@@ -41,10 +41,4 @@ export enum Category {
     firstaid = 'Ensiapulaukkuun',
     phone = 'Puhelimeen',
     other = 'Muuta',
-}
-
-export interface Todo {
-    id: number;
-    name: string;
-    completed: boolean;
 }

@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {useSafeArea} from 'react-native-safe-area-context';
 import {Text, View, Image, TouchableWithoutFeedback, StyleSheet, ScrollView} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
-import {Packing, Category, Todo, User} from '../interfaces';
+import {PackingOrTodo, Category, User} from '../interfaces';
 import firebase from 'firebase';
 import {commonStyles, backgroundColor, primaryColor} from '../styles';
 import moment from 'moment';
@@ -24,7 +24,7 @@ interface IUserMap {
 }
 
 interface ICheckboxItemProps {
-  item: Todo;
+  item: PackingOrTodo;
   doneMap: IDoneMap;
   userMap: IUserMap;
 }
@@ -62,8 +62,7 @@ const CheckboxItem: React.FC<ICheckboxItemProps> = ({item, doneMap, userMap}: IC
 
 export const TodoScreen: React.FC = () => {
 
-  const [packings, setPackings] = useState<Packing[]>([]);
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<PackingOrTodo[]>([]);
   const [totalItems, setTotalItems] = useState<number>(0);
   const [checkedItems, setCheckedItems] = useState<number>(0);
   const [doneMap, setDoneMap] = useState<IDoneMap>({});
@@ -98,7 +97,7 @@ export const TodoScreen: React.FC = () => {
       })
       setDoneMap(newDoneMap)
 
-      const todoList: Packing[] = Object.keys(result[userUid]).map(key => {
+      const todoList: PackingOrTodo[] = Object.keys(result[userUid]).map(key => {
         return result[userUid][key];
       });
       setTodos(todoList);
@@ -130,7 +129,7 @@ export const TodoScreen: React.FC = () => {
 
   const togglePacking = (id: number) => {
     firebase.database().ref(`packings/${userUid}/${id}`).update({
-      completed: !packings.find(packing => packing.id === id).completed,
+      completed: !todos.find(packing => packing.id === id).completed,
     }).then(() => {
       updatePackings();
     });
@@ -176,7 +175,7 @@ export const TodoScreen: React.FC = () => {
               })}
             </>
             : <>{Object.values(Category).map((category, index) => {
-              const filteredPackings = packings.filter(packing => packing.category === category);
+              const filteredPackings = todos.filter(packing => packing.category === category);
               return <React.Fragment key={index}>
                 <Text style={styles.category}>{category}</Text>
                 {filteredPackings.map(item => {
