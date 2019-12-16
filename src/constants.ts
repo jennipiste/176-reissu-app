@@ -1,4 +1,4 @@
-import { Destination, Packing, Category, Todo } from "./interfaces";
+import { Destination, PackingOrTodo, Category } from "./interfaces";
 
 export const START_TIME = '2019-12-07T14:00:00.000+02:00';
 // export const START_TIME = '2029-12-07T14:00:00.000+02:00';
@@ -54,7 +54,7 @@ export const destinations: Destination[] = [{
     },
 }];
 
-export const packings: Packing[] = [{
+export const packings: PackingOrTodo[] = [{
     id: 1,
     name: 'Passi',
     category: Category.important,
@@ -431,7 +431,7 @@ export const packings: Packing[] = [{
     completed: false,
 }];
 
-export const todos: Todo[] = [{
+export const todos: PackingOrTodo[] = [{
     id: 1,
     name: 'Saavu Vietnamiin',
     completed: false,
