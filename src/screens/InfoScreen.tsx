@@ -50,7 +50,7 @@ const listItems: IListItem[] = [
     type: 'non-flight',
     header: 'Helsinki',
     sortableDate: '2019-12-25 14:00',
-    previewText: 'Tavataan Helsinki Vantaa lentokenltällä. Etkot Oak Barrelissa tai finnair longuessa klo 14.00'
+    previewText: 'Tavataan Helsinki Vantaan lentokentällä. Etkot Oak Barrelissa tai Finnair loungessa klo 14.00.'
   },
   // Helsinki Hanoi
   {
@@ -72,15 +72,15 @@ const listItems: IListItem[] = [
   },
   {
     type: 'non-flight',
-    header: 'Ho Chi Mihn City',
+    header: 'Ho Chi Minh City',
     sortableDate: '2019-12-26 08:00',
     previewText:
-      'Ho Chi Mhin city (Tunnettiin aijemmin Saigon:na) on Vietnamin siirun kaupunki 8.4 miljoonalla asukkaallaan. ' +
-      'Kyseessä on matkamme ensimmäinen kohde, joka sijaitsee eteläisessä vietnamissa. ' +
+      'Ho Chi Minh City (Tunnettiin aijemmin Saigonina) on Vietnamin suurin kaupunki 8.4 miljoonalla asukkaallaan. ' +
+      'Kyseessä on matkamme ensimmäinen kohde, joka sijaitsee eteläisessä Vietnamissa. ' +
       'Tärkeimpiin nähtävyyksiin sisältyvät Cu Chui tunnelit ja Ben Than Market.',
     stayInfo: {
       street: '132 Bến Vân Đồn, Phường 6, Quận 4, Hồ Chí Minh, Vietnam',
-      name: 'Thai Anh Millennium Celtran',
+      name: 'Thai Anh Millennium Central',
       mapUri: 'https://www.google.fi/maps/place/Thai+Anh+Millennium+Celtran/@10.7635078,106.6988989,19z/data=!4m8!3m7!1s0x31752f683c98dcf7:0xa4c6f8b241c69247!5m2!4m1!1i2!8m2!3d10.7635078!4d106.6994461?shorturl=1'
     }
   },
@@ -137,7 +137,7 @@ const listItems: IListItem[] = [
     header: 'Da Nang',
     sortableDate: '2020-01-03 21:00',
     previewText:
-      'Lentomme saapuu Da Nang suurkaupunkiin, josta kuljetukset Hoi An:iin',
+      'Lentomme saapuu Da Nang suurkaupunkiin, josta kuljetukset Hoi Aniin.',
   },
   {
     type: 'non-flight',
@@ -183,9 +183,9 @@ const listItems: IListItem[] = [
     previewText:
       'Ha Long Bay on kaunis paikka täynnä saaria. Vietämme yhden yön näillä saarilla.',
     stayInfo: {
-      street: 'xxxx',
-      name: 'xxxxx',
-      mapUri: 'https://www.google.fi/maps/place/51+H%C3%A0ng+B%C3%A8,+H%C3%A0ng+B%E1%BA%A1c,+Ho%C3%A0n+Ki%E1%BA%BFm,+H%C3%A0+N%E1%BB%99i,+Vietnam/@21.0324095,105.8518956,1117m/data=!3m1!1e3!4m13!1m7!3m6!1s0x3135abc067c50781:0x3fa66f024d5a018d!2zNTEgSMOgbmcgQsOoLCBIw6BuZyBC4bqhYywgSG_DoG4gS2nhur9tLCBIw6AgTuG7mWksIFZpZXRuYW0!3b1!8m2!3d21.032545!4d105.853855!3m4!1s0x3135abc067c50781:0x3fa66f024d5a018d!8m2!3d21.032545!4d105.853855'
+      street: 'Cat Ba, TT. Cát Bà, Cát Hải, Hai Phong, Vietnam',
+      name: 'Dhome homestay',
+      mapUri: 'https://www.google.com/maps?q=20.735368,107.043281&shorturl=1'
     }
 
   },
@@ -194,11 +194,11 @@ const listItems: IListItem[] = [
     header: 'Hanoi',
     sortableDate: '2020-01-08 21:00',
     previewText:
-      'Hanoi on matkamme viimenen kohde ja Vietnamin pääkaupunki.' +
+      'Hanoi on matkamme viimeinen kohde ja Vietnamin pääkaupunki.' +
       'Hanoissa asustaa 7.7 miljoonaa ihmistä ',
     stayInfo: {
-      street: '51 Hàng Bè',
-      name: 'xxxxx',
+      street: '51 Hang Be, Hoan Kiem Hanoi',
+      name: 'KemKay Old Quarter',
       mapUri: 'https://www.google.fi/maps/place/51+H%C3%A0ng+B%C3%A8,+H%C3%A0ng+B%E1%BA%A1c,+Ho%C3%A0n+Ki%E1%BA%BFm,+H%C3%A0+N%E1%BB%99i,+Vietnam/@21.0324095,105.8518956,1117m/data=!3m1!1e3!4m13!1m7!3m6!1s0x3135abc067c50781:0x3fa66f024d5a018d!2zNTEgSMOgbmcgQsOoLCBIw6BuZyBC4bqhYywgSG_DoG4gS2nhur9tLCBIw6AgTuG7mWksIFZpZXRuYW0!3b1!8m2!3d21.032545!4d105.853855!3m4!1s0x3135abc067c50781:0x3fa66f024d5a018d!8m2!3d21.032545!4d105.853855'
     }
   },
@@ -225,9 +225,9 @@ const listItems: IListItem[] = [
     header: 'Hong Kong',
     sortableDate: '2020-01-12 22:00',
     previewText:
-      'Välipysähdys mielenosoituksistaan tunnetussa Hong Kong:ssa. ' +
-      'Hong Kong itsehallintoalue Kiinassa. ' +
-      'Hong Kong oli myös Englannin viimeinen siirtomaa-alue ennen luovutustaan Kiinalle 1970+luvulla.'
+      'Välipysähdys mielenosoituksistaan tunnetussa Hong Kongissa. ' +
+      'Hong Kong on itsehallintoalue Kiinassa. ' +
+      'Hong Kong oli myös Englannin viimeinen siirtomaa-alue ennen luovutustaan Kiinalle 1970-luvulla.'
   },
   {
     type: 'flight',
