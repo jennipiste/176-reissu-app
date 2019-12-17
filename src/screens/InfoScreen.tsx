@@ -6,7 +6,8 @@ import {
   StyleSheet,
   Modal,
   Button,
-  ScrollView, TouchableNativeFeedback
+  ScrollView,
+  TouchableOpacity
 } from 'react-native';
 import {Linking} from 'expo';
 import {FontAwesome, Ionicons} from "@expo/vector-icons";
@@ -414,7 +415,7 @@ export const InfoScreen: React.FC = () => {
                 <React.Fragment>
                     <Text style={{...styles.infoHeader, color: thisColor}}>{item.header}</Text>
                   {
-                    item.stayInfo && <TouchableNativeFeedback
+                    item.stayInfo && <TouchableOpacity
                         onPress={() => {
                           Linking.openURL(item.stayInfo.mapUri);
                         }}
@@ -429,7 +430,7 @@ export const InfoScreen: React.FC = () => {
                                 }}>{item.stayInfo.street}</Text>
                             </View>
                         </View>
-                    </TouchableNativeFeedback>
+                    </TouchableOpacity>
                   }
                     <Text style={{color: index < currentIndex ? pastColor : grayDark, fontFamily: 'futuramedium'}}>
                       {item.previewText}
