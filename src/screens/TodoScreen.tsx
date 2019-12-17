@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
   faceItem: {
     height: 24,
     width: 24,
-    borderRadius: 18,
+    borderRadius: 12,
     marginTop: 5,
     marginRight: 3
   }
