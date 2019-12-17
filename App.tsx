@@ -16,8 +16,9 @@ const App: React.FC = () => {
 
   const onAuthStateChanged = async (user: firebase.User) => {
     await fetchFont();
-    setTimeout(function() { setIsLoading(false); }, 2000);
+    const timeout = setTimeout(function() { setIsLoading(false); }, 2000);
     setIsAuthenticated(!!user);
+    return () => clearTimeout(timeout);
   };
 
   const fetchFont = async () => {
