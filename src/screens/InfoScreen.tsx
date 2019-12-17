@@ -382,7 +382,6 @@ export const InfoScreen: React.FC = () => {
       currentIndex = i;
     }
   }
-  currentIndex = 2;
 
   const insets = useSafeArea();
 
