@@ -185,7 +185,7 @@ const listItems: IListItem[] = [
     stayInfo: {
       street: 'Cat Ba, TT. Cát Bà, Cát Hải, Hai Phong, Vietnam',
       name: 'Dhome homestay',
-      mapUri: 'https://www.google.com/maps?q=20.735368,107.043281&shorturl=1'
+      mapUri: "https://www.google.com/maps/place/D'home+Homestay+C%C3%A1t+B%C3%A0/@20.7333416,107.0427888,17z/data=!4m11!1m2!2m1!1sDhome+homestay!3m7!1s0x314a454b8fba614b:0x5a96dfc27b8516ce!5m2!4m1!1i2!8m2!3d20.731898!4d107.0477086"
     }
 
   },
@@ -199,7 +199,7 @@ const listItems: IListItem[] = [
     stayInfo: {
       street: '51 Hang Be, Hoan Kiem Hanoi',
       name: 'KemKay Old Quarter',
-      mapUri: 'https://www.google.fi/maps/place/51+H%C3%A0ng+B%C3%A8,+H%C3%A0ng+B%E1%BA%A1c,+Ho%C3%A0n+Ki%E1%BA%BFm,+H%C3%A0+N%E1%BB%99i,+Vietnam/@21.0324095,105.8518956,1117m/data=!3m1!1e3!4m13!1m7!3m6!1s0x3135abc067c50781:0x3fa66f024d5a018d!2zNTEgSMOgbmcgQsOoLCBIw6BuZyBC4bqhYywgSG_DoG4gS2nhur9tLCBIw6AgTuG7mWksIFZpZXRuYW0!3b1!8m2!3d21.032545!4d105.853855!3m4!1s0x3135abc067c50781:0x3fa66f024d5a018d!8m2!3d21.032545!4d105.853855'
+      mapUri: 'https://www.google.fi/maps/place/Kemkay+Old+Quarter/@21.032545,105.8516663,17z/data=!3m1!4b1!4m8!3m7!1s0x3135abc067c50781:0xab7ab796b27bcc4a!5m2!4m1!1i2!8m2!3d21.032545!4d105.853855'
     }
   },
   // Takas Helsinkiin
