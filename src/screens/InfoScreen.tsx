@@ -4,8 +4,6 @@ import {
   Text,
   View,
   StyleSheet,
-  Modal,
-  Button,
   ScrollView,
   TouchableOpacity
 } from 'react-native';
@@ -33,6 +31,8 @@ interface IStayInfo {
   name: string;
   street: string;
   mapUri: string;
+  checkIn: string;
+  checkOut: string;
 }
 
 
@@ -82,7 +82,9 @@ const listItems: IListItem[] = [
     stayInfo: {
       street: '132 Bến Vân Đồn, Phường 6, Quận 4, Hồ Chí Minh, Vietnam',
       name: 'Thai Anh Millennium Central',
-      mapUri: 'https://www.google.fi/maps/place/Thai+Anh+Millennium+Celtran/@10.7635078,106.6988989,19z/data=!4m8!3m7!1s0x31752f683c98dcf7:0xa4c6f8b241c69247!5m2!4m1!1i2!8m2!3d10.7635078!4d106.6994461?shorturl=1'
+      mapUri: 'https://www.google.fi/maps/place/Thai+Anh+Millennium+Celtran/@10.7635078,106.6988989,19z/data=!4m8!3m7!1s0x31752f683c98dcf7:0xa4c6f8b241c69247!5m2!4m1!1i2!8m2!3d10.7635078!4d106.6994461?shorturl=1',
+      checkIn: '07 - 12',
+      checkOut: '07 - 12',
     }
   },
   // Ho chi imhn phu quoc
@@ -112,7 +114,9 @@ const listItems: IListItem[] = [
     stayInfo: {
       street: 'Group 4, Cửa Lấp, tỉnh Kiên Giang, Vietnam',
       name: 'Nadine Phu Quoc Resort',
-      mapUri: 'https://www.google.fi/maps/place/Nadine+Phu+Quoc+Resort/@10.1909191,103.9682541,17z/data=!3m1!4b1!4m8!3m7!1s0x31a78c51b884ed1f:0x49a7e895212f444a!5m2!4m1!1i2!8m2!3d10.1909191!4d103.9704428'
+      mapUri: 'https://www.google.fi/maps/place/Nadine+Phu+Quoc+Resort/@10.1909191,103.9682541,17z/data=!3m1!4b1!4m8!3m7!1s0x31a78c51b884ed1f:0x49a7e895212f444a!5m2!4m1!1i2!8m2!3d10.1909191!4d103.9704428',
+      checkIn: '14 ->',
+      checkOut: '12',
     }
   },
   // Phu quoc da nang
@@ -149,7 +153,9 @@ const listItems: IListItem[] = [
     stayInfo: {
       street: 'Sơn Phong, Hội An, Quang Nam Province, Vietnam',
       name: 'Gem Hoi An Villa',
-      mapUri: 'https://www.google.fi/maps/place/Gem+Hoi+An+Villa/@15.8863012,108.333255,18.47z/data=!4m8!3m7!1s0x0:0xc12909a0a877b0b7!5m2!4m1!1i2!8m2!3d15.8868775!4d108.3340151'
+      mapUri: 'https://www.google.fi/maps/place/Gem+Hoi+An+Villa/@15.8863012,108.333255,18.47z/data=!4m8!3m7!1s0x0:0xc12909a0a877b0b7!5m2!4m1!1i2!8m2!3d15.8868775!4d108.3340151',
+      checkIn: '14 ->',
+      checkOut: '12',
     }
   },
   // da nang hanoi
@@ -186,7 +192,9 @@ const listItems: IListItem[] = [
     stayInfo: {
       street: 'Cat Ba, TT. Cát Bà, Cát Hải, Hai Phong, Vietnam',
       name: 'Dhome homestay',
-      mapUri: "https://www.google.com/maps/place/D'home+Homestay+C%C3%A1t+B%C3%A0/@20.7333416,107.0427888,17z/data=!4m11!1m2!2m1!1sDhome+homestay!3m7!1s0x314a454b8fba614b:0x5a96dfc27b8516ce!5m2!4m1!1i2!8m2!3d20.731898!4d107.0477086"
+      mapUri: "https://www.google.com/maps/place/D'home+Homestay+C%C3%A1t+B%C3%A0/@20.7333416,107.0427888,17z/data=!4m11!1m2!2m1!1sDhome+homestay!3m7!1s0x314a454b8fba614b:0x5a96dfc27b8516ce!5m2!4m1!1i2!8m2!3d20.731898!4d107.0477086",
+      checkIn: '14 ->',
+      checkOut: '11',
     }
 
   },
@@ -200,7 +208,9 @@ const listItems: IListItem[] = [
     stayInfo: {
       street: '51 Hang Be, Hoan Kiem Hanoi',
       name: 'KemKay Old Quarter',
-      mapUri: 'https://www.google.fi/maps/place/Kemkay+Old+Quarter/@21.032545,105.8516663,17z/data=!3m1!4b1!4m8!3m7!1s0x3135abc067c50781:0xab7ab796b27bcc4a!5m2!4m1!1i2!8m2!3d21.032545!4d105.853855'
+      mapUri: 'https://www.google.fi/maps/place/Kemkay+Old+Quarter/@21.032545,105.8516663,17z/data=!3m1!4b1!4m8!3m7!1s0x3135abc067c50781:0xab7ab796b27bcc4a!5m2!4m1!1i2!8m2!3d21.032545!4d105.853855',
+      checkIn: '14 ->',
+      checkOut: '12',
     }
   },
   // Takas Helsinkiin
@@ -353,12 +363,12 @@ export const InfoScreen: React.FC = () => {
   const nowString = moment(
     // '2020-01-04T20:48:00.000'
     // '2019-12-25'
-  ).format('YYYY-MM-DD HH:mm')
-  let currentIndex = -1
+  ).format('YYYY-MM-DD HH:mm');
+  let currentIndex = -1;
 
   for (let i = 0; i < listItems.length - 2; i++) {
     if (listItems[i].sortableDate > listItems[i + 1].sortableDate) {
-      alert(`NOTE: Incorrectly sorted listItems ${listItems[i].sortableDate} ${listItems[i + 1].sortableDate}`)
+      alert(`NOTE: Incorrectly sorted listItems ${listItems[i].sortableDate} ${listItems[i + 1].sortableDate}`);
     }
   }
   for (let i = 0; i < listItems.length - 1; i++) {
@@ -369,9 +379,10 @@ export const InfoScreen: React.FC = () => {
         listItems[currentIndex].sortableDate !== listItems[i].sortableDate
       )
     ) {
-      currentIndex = i
+      currentIndex = i;
     }
   }
+  currentIndex = 2;
 
   const insets = useSafeArea();
 
@@ -390,7 +401,7 @@ export const InfoScreen: React.FC = () => {
         >
           {listItems.map((item: IListItem, index) => {
             const thisColor = index === currentIndex ? hilightColor : (index < currentIndex ? pastColor : '#000000');
-            const dateString = moment(item.sortableDate, 'YYYY-MM-DD HH:mm').format('DD.MM.')
+            const dateString = moment(item.sortableDate, 'YYYY-MM-DD HH:mm').format('DD.MM.');
 
             return <View
               style={styles.listItem}
@@ -413,28 +424,32 @@ export const InfoScreen: React.FC = () => {
                 {item.type === 'flight' && <FlightInfo flightInfo={item.flightInfo} past={index < currentIndex}/>}
                 {item.type !== 'flight' &&
                 <React.Fragment>
-                    <Text style={{...styles.infoHeader, color: thisColor}}>{item.header}</Text>
-                  {
-                    item.stayInfo && <TouchableOpacity
-                        onPress={() => {
-                          Linking.openURL(item.stayInfo.mapUri);
-                        }}
+                  <Text style={{...styles.infoHeader, color: thisColor}}>{item.header}</Text>
+                  {item.stayInfo &&
+                    <TouchableOpacity
+                      onPress={() => {
+                        Linking.openURL(item.stayInfo.mapUri);
+                      }}
                     >
-                        <View style={styles.homeIconContainer}>
-                            <FontAwesome name={'home'} size={24} color={thisColor}/>
-                            <View style={styles.homeIconInfoContainer}>
-                                <Text style={{...styles.homeIconHeader, color: thisColor}}>{item.stayInfo.name}</Text>
-                                <Text style={{
-                                  ...styles.homeIconAddress,
-                                  color: index < currentIndex ? pastColor : grayDark
-                                }}>{item.stayInfo.street}</Text>
-                            </View>
+                      <View style={styles.homeIconContainer}>
+                        <FontAwesome name={'home'} size={24} color={thisColor}/>
+                        <View style={styles.homeIconInfoContainer}>
+                          <Text style={{...styles.homeIconHeader, color: thisColor}}>{item.stayInfo.name}</Text>
+                          <Text style={{
+                            ...styles.homeIconAddress,
+                            color: index < currentIndex ? pastColor : grayDark
+                          }}>{item.stayInfo.street}</Text>
+                          <View style={{flexDirection: 'row', marginTop: 5}}>
+                            <Text style={{fontSize: 10, fontFamily: 'futuramedium', marginRight: 20, color: index < currentIndex ? pastColor : grayDark}}>{`Check-in: ${item.stayInfo.checkIn}`}</Text>
+                            <Text style={{fontSize: 10, fontFamily: 'futuramedium', color: index < currentIndex ? pastColor : grayDark}}>{`Check-out: ${item.stayInfo.checkOut}`}</Text>
+                          </View>
                         </View>
+                      </View>
                     </TouchableOpacity>
                   }
-                    <Text style={{color: index < currentIndex ? pastColor : grayDark, fontFamily: 'futuramedium'}}>
-                      {item.previewText}
-                    </Text>
+                  <Text style={{color: index < currentIndex ? pastColor : '#000', fontFamily: 'futuramedium'}}>
+                    {item.previewText}
+                  </Text>
                 </React.Fragment>
                 }
               </View>
