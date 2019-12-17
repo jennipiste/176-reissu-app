@@ -75,7 +75,7 @@ export const TodoScreen: React.FC = () => {
     firebase.database().ref('users').on('value', (snapshot) => {
       const result = snapshot.val();
       if (result) {
-        setUserMap(result)
+        setUserMap(result);
       }
     });
   }, []);
@@ -83,27 +83,27 @@ export const TodoScreen: React.FC = () => {
   const handleSnapchot = (snapshot) => {
     const result = snapshot.val();
 
-    let newDoneMap: IDoneMap = {}
+    const newDoneMap: IDoneMap = {};
     if (result) {
       Object.keys(result).forEach(anotherUserId => {
-        let items = result[anotherUserId]
+        let items = result[anotherUserId];
         if (items.forEach === undefined) {
           // WTF WHY IS THIS NEEDED JENNI EXPLAIN!
-          items = Object.values(items)
+          items = Object.values(items);
         }
         items.forEach((todoItem: ITodoItem) => {
           if (todoItem.completed) {
             if (newDoneMap[todoItem.id] === undefined) {
-              newDoneMap[todoItem.id] = []
+              newDoneMap[todoItem.id] = [];
             }
-            newDoneMap[todoItem.id] = [...newDoneMap[todoItem.id], anotherUserId]
+            newDoneMap[todoItem.id] = [...newDoneMap[todoItem.id], anotherUserId];
           }
-        })
-      })
-      setDoneMap(newDoneMap)
+        });
+      });
+      setDoneMap(newDoneMap);
 
       if (result[userUid] === undefined) {
-        return
+        return;
       }
 
       const todoList: PackingOrTodo[] = Object.keys(result[userUid]).map(key => {
@@ -113,18 +113,18 @@ export const TodoScreen: React.FC = () => {
       setTotalItems(todoList.length);
       setCheckedItems(todoList.filter(todo => todo.completed).length);
     }
-  }
+  };
 
   const updatePackings = async () => {
     firebase.database().ref(`packings`).on('value', (snapshot) => {
-      handleSnapchot(snapshot)
+      handleSnapchot(snapshot);
     });
   };
   const tripStarted = moment().diff(moment(START_TIME)) > 0;
 
   const updateTodos = async () => {
     firebase.database().ref(`todos`).on('value', (snapshot) => {
-      handleSnapchot(snapshot)
+      handleSnapchot(snapshot);
     });
   };
 

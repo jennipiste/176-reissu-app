@@ -8,7 +8,6 @@ import {packings, todos} from '../constants';
 import {commonStyles, grayDark} from '../styles';
 import {Button} from 'react-native-elements';
 import * as ImageManipulator from "expo-image-manipulator";
-import {firebaseConfig} from "../config";
 
 
 export const SignupScreen: React.FC = () => {
