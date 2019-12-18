@@ -1,5 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import {Text, View, Image, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator} from 'react-native';
+import {
+  Text,
+  View,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+  ActivityIndicator,
+  AsyncStorage,
+  DeviceEventEmitter
+} from 'react-native';
 import {useNavigation, useNavigationParam} from 'react-navigation-hooks';
 import firebase from 'firebase';
 import {Post, User} from '../interfaces';
@@ -42,6 +52,15 @@ export const DiaryScreen: React.FC = () => {
           }
           return post1.createdAt < post2.createdAt ? 1 : -1;
         });
+
+        const storeSeenUids = async () => {
+          const seenPostUids = JSON.parse(await AsyncStorage.getItem('SEEN_POST_UIDS')) || []
+          const newSeenPostUids = [...seenPostUids, ...sortedPosts.map(post => post.uid)]
+          await AsyncStorage.setItem('SEEN_POST_UIDS', JSON.stringify(newSeenPostUids))
+          // await AsyncStorage.setItem('SEEN_POST_UIDS', JSON.stringify([]))
+          DeviceEventEmitter.emit('SEEN_POST_CHANGE')
+        }
+        storeSeenUids()
 
         setPosts(sortedPosts);
         setPostsLoaded(true);
@@ -91,9 +110,17 @@ export const DiaryScreen: React.FC = () => {
                   color={grayLight}
                   style={{margin: 5}}
                 />
-                <Text style={{color: grayLight, margin: 5, fontFamily: 'futuramedium', fontSize: 16}}>Ei vielä postauksia</Text>
+                <Text style={{color: grayLight, margin: 5, fontFamily: 'futuramedium', fontSize: 16}}>Ei vielä
+                  postauksia</Text>
                 <Text
-                  style={{color: primaryColor, fontFamily: 'futuramedium', margin: 5, width: '100%', textAlign: 'center', fontSize: 16}}
+                  style={{
+                    color: primaryColor,
+                    fontFamily: 'futuramedium',
+                    margin: 5,
+                    width: '100%',
+                    textAlign: 'center',
+                    fontSize: 16
+                  }}
                   onPress={onCreatePress}
                 >Lisää uusi postaus!</Text>
               </View> : <FlatList

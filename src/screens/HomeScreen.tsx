@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useSafeArea} from 'react-native-safe-area-context';
+import {AsyncStorage, DeviceEventEmitter} from 'react-native';
 import {
   StyleSheet,
   Text,
@@ -17,11 +18,59 @@ import {useNavigation} from 'react-navigation-hooks';
 
 import moment from 'moment';
 import {destinations, START_TIME} from '../constants';
-import {primaryColor} from '../styles';
+import {primaryColor, secondaryColor} from '../styles';
+import firebase from "firebase";
+import {Post} from "../interfaces";
 
 const SCROLLABLE_CONTENT_HEIGHT = 2423;
 
 export const HomeScreen: React.FC = () => {
+  const [unseenPostsMap, setUnseenPostsMap] = useState<{ [key: string]: number }>({})
+
+  const [postsResult, setPostResult] = useState<any>(undefined)
+  const [eventListenerCounter, setEventListenerCounter] = useState<number>(0)
+
+  useEffect(() => {
+    DeviceEventEmitter.addListener('SEEN_POST_CHANGE', (e)=>{
+      setEventListenerCounter((currentEventListCountener) => currentEventListCountener + 1)
+    })
+  }, [])
+
+  useEffect(() => {
+    if (postsResult) {
+      const func = async () => {
+        const posts: Post[] = Object.values(postsResult)
+        let destinationPosts: { [key: string]: string[] } = {}
+        posts.forEach((post: Post) => {
+          if (!(post.destination in destinationPosts)) {
+            destinationPosts[post.destination] = []
+          }
+          destinationPosts[post.destination] = [...destinationPosts[post.destination], post.uid]
+        })
+        const seenPostUids = JSON.parse(await AsyncStorage.getItem('SEEN_POST_UIDS')) || []
+        console.log('asdf 111 seenPostUids is now', seenPostUids)
+        const newUnseenPostsMap = Object.keys(destinationPosts).map(uid => {
+          return {
+            [uid]: destinationPosts[uid].filter((postUid) => seenPostUids.indexOf(postUid) < 0).length
+          }
+        }).reduce((acc, curr) => ({...acc, ...curr}), {})
+        setUnseenPostsMap(newUnseenPostsMap)
+      }
+      func()
+    }
+  }, [postsResult, eventListenerCounter])
+
+  useEffect(() => {
+    const ref = firebase.database().ref('posts');
+    const handleSnapshot = async (snapshot: firebase.database.DataSnapshot) => {
+      const result = snapshot.val();
+      if (result) {
+        setPostResult(result)
+      }
+    };
+    ref.on('value', handleSnapshot);
+    return () => ref.off('value', handleSnapshot);
+  }, []);
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [timeUntil, setTimeUntil] = useState<{ days: number, hours: number, minutes: number, seconds: number }>(undefined);
@@ -166,6 +215,12 @@ export const HomeScreen: React.FC = () => {
                         left: destination.position.x,
                       }}
                     >
+                      {
+                        ((destination.name in unseenPostsMap) && unseenPostsMap[destination.name] > 0) &&
+                        <View style={styles.plusCounterText}>
+                          <Text style={{color: 'white', textAlign: 'center'}}>{unseenPostsMap[destination.name]}</Text>
+                        </View>
+                      }
                       <View>
                         <Text style={styles.dateText}>{`${index + 1}`}</Text>
                       </View>
@@ -224,6 +279,19 @@ const styles = StyleSheet.create({
     elevation: 10,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  plusCounterText: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    backgroundColor: secondaryColor,
+    color: 'white',
+    fontSize: 12,
+    position: 'absolute',
+    top: -10,
+    right: -10,
+    width: 30,
+    height: 30,
+    borderRadius: 15
   },
   dateText: {
     fontFamily: 'futuramedium',
