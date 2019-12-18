@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
   boat: {
     position: 'absolute',
     right: 50,
-    bottom: '2.5%',
+    bottom: '2%',
   },
   lamps: {
     position: 'absolute',
