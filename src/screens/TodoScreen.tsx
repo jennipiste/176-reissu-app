@@ -180,6 +180,7 @@ export const TodoScreen: React.FC = () => {
           <ScrollView contentContainerStyle={styles.scrollView}>
             {showTripStarted
               ? <>
+                <Text style={styles.changeButton} onPress={() => setShowTripStrated(false)}>Näytä pakkauslista</Text>
                 {todos.map((item, index) => {
                   return <TouchableWithoutFeedback
                     key={item.id}
@@ -194,9 +195,10 @@ export const TodoScreen: React.FC = () => {
                     </View>
                   </TouchableWithoutFeedback>;
                 })}
-                <Text style={styles.changeButton} onPress={() => setShowTripStrated(false)}>Näytä pakkauslista</Text>
               </>
               : <>
+                {tripStarted &&
+                <Text style={styles.changeButton} onPress={() => setShowTripStrated(true)}>Näytä matkan aikana</Text>}
                 {Object.values(Category).map((category, index) => {
                   const filteredPackings = todos.filter(packing => packing.category === category);
                   return <React.Fragment key={index}>
@@ -213,8 +215,6 @@ export const TodoScreen: React.FC = () => {
                     })}
                   </React.Fragment>;
                 })}
-                {tripStarted &&
-                <Text style={styles.changeButton} onPress={() => setShowTripStrated(true)}>Näytä matkan aikana</Text>}
               </>
             }
           </ScrollView>
@@ -276,8 +276,9 @@ const styles = StyleSheet.create({
     marginRight: 3
   },
   changeButton: {
-    marginTop: 10,
+    marginBottom: 5,
     textDecorationLine: 'underline',
     color: grayLight,
+    fontFamily: 'futuramedium',
   }
 });

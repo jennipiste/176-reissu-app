@@ -55,7 +55,7 @@ export const DiaryScreen: React.FC = () => {
 
         const storeSeenUids = async () => {
           const seenPostUids = JSON.parse(await AsyncStorage.getItem('SEEN_POST_UIDS')) || []
-          const newSeenPostUids = [...seenPostUids, ...sortedPosts.map(post => post.uid)]
+          const newSeenPostUids = Array.from(new Set([...seenPostUids, ...sortedPosts.map(post => post.uid)]))
           await AsyncStorage.setItem('SEEN_POST_UIDS', JSON.stringify(newSeenPostUids))
           // await AsyncStorage.setItem('SEEN_POST_UIDS', JSON.stringify([]))
           DeviceEventEmitter.emit('SEEN_POST_CHANGE')

@@ -48,7 +48,6 @@ export const HomeScreen: React.FC = () => {
           destinationPosts[post.destination] = [...destinationPosts[post.destination], post.uid]
         })
         const seenPostUids = JSON.parse(await AsyncStorage.getItem('SEEN_POST_UIDS')) || []
-        console.log('asdf 111 seenPostUids is now', seenPostUids)
         const newUnseenPostsMap = Object.keys(destinationPosts).map(uid => {
           return {
             [uid]: destinationPosts[uid].filter((postUid) => seenPostUids.indexOf(postUid) < 0).length
@@ -218,7 +217,7 @@ export const HomeScreen: React.FC = () => {
                       {
                         ((destination.name in unseenPostsMap) && unseenPostsMap[destination.name] > 0) &&
                         <View style={styles.plusCounterText}>
-                          <Text style={{color: 'white', textAlign: 'center'}}>{unseenPostsMap[destination.name]}</Text>
+                          <Text style={{color: 'white', textAlign: 'center'}}>+{unseenPostsMap[destination.name]}</Text>
                         </View>
                       }
                       <View>
