@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import {useSafeArea} from 'react-native-safe-area-context';
-import {Text, View, Image, TouchableWithoutFeedback, StyleSheet, ScrollView} from 'react-native';
+import {Text, View, Image, TouchableWithoutFeedback, StyleSheet, ScrollView, ActivityIndicator} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 import {PackingOrTodo, Category, User} from '../interfaces';
 import firebase from 'firebase';
-import {commonStyles, backgroundColor, primaryColor} from '../styles';
+import {commonStyles, backgroundColor, primaryColor, grayLight} from '../styles';
 import moment from 'moment';
 import {START_TIME} from '../constants';
 
@@ -36,8 +36,8 @@ const CheckboxItem: React.FC<ICheckboxItemProps> = ({item, doneMap, userMap}: IC
       ...styles.icon,
       color: item.completed === true ? primaryColor : 'lightgray',
     }}
-      name={item.completed === true ? 'ios-checkbox' : 'md-square-outline'}
-      size={24}
+              name={item.completed === true ? 'ios-checkbox' : 'md-square-outline'}
+              size={24}
     />
     <View>
       <Text style={styles.itemText}>{item.name}</Text>
@@ -61,7 +61,7 @@ const CheckboxItem: React.FC<ICheckboxItemProps> = ({item, doneMap, userMap}: IC
 };
 
 export const TodoScreen: React.FC = () => {
-
+  const [loading, setLoading] = useState<boolean>(true)
   const [todos, setTodos] = useState<PackingOrTodo[]>([]);
   const [totalItems, setTotalItems] = useState<number>(0);
   const [checkedItems, setCheckedItems] = useState<number>(0);
@@ -112,35 +112,41 @@ export const TodoScreen: React.FC = () => {
       setTodos(todoList);
       setTotalItems(todoList.length);
       setCheckedItems(todoList.filter(todo => todo.completed).length);
+      setLoading(false)
     }
   };
 
-  const updatePackings = async () => {
-    firebase.database().ref(`packings`).on('value', (snapshot) => {
-      handleSnapchot(snapshot);
-    });
-  };
   const tripStarted = moment().diff(moment(START_TIME)) > 0;
-
-  const updateTodos = async () => {
-    firebase.database().ref(`todos`).on('value', (snapshot) => {
-      handleSnapchot(snapshot);
-    });
-  };
+  const [showTripStarted, setShowTripStrated] = useState<boolean>(tripStarted)
 
   useEffect(() => {
-    if (tripStarted) {
-      updateTodos();
+    setDoneMap({});
+    setTodos([]);
+    setTotalItems(0);
+    setCheckedItems(0);
+    setLoading(true)
+
+    if (showTripStarted) {
+      const ref = firebase.database().ref(`todos`)
+      const func = (snapshot) => {
+        handleSnapchot(snapshot);
+      }
+      ref.on('value', func)
+      return () => ref.off('value', func)
     } else {
-      updatePackings();
+      const ref = firebase.database().ref(`packings`)
+      const func = (snapshot) => {
+        handleSnapchot(snapshot);
+      };
+      ref.on('value', func)
+      return () => ref.off('value', func)
     }
-  }, []);
+  }, [showTripStarted]);
 
   const togglePacking = (id: number) => {
     firebase.database().ref(`packings/${userUid}/${id}`).update({
       completed: !todos.find(packing => packing.id === id).completed,
     }).then(() => {
-      updatePackings();
     });
   };
 
@@ -148,7 +154,6 @@ export const TodoScreen: React.FC = () => {
     firebase.database().ref(`todos/${userUid}/${id}`).update({
       completed: !todos.find(todo => todo.id === id).completed,
     }).then(() => {
-      updateTodos();
     });
   };
 
@@ -160,46 +165,61 @@ export const TodoScreen: React.FC = () => {
       backgroundColor: backgroundColor,
     }}>
       <View style={styles.header}>
-        <Text style={commonStyles.title}>{tripStarted ? 'Matkan aikana' : 'Pakkaa mukaan'}</Text>
+        <Text style={commonStyles.title}>{showTripStarted ? 'Matkan aikana' : 'Pakkaa mukaan'}</Text>
         <Text style={{...commonStyles.title, textAlign: 'right'}}>{`${checkedItems}/${totalItems}`}</Text>
       </View>
       <View style={styles.view}>
-        <ScrollView contentContainerStyle={styles.scrollView}>
-          {tripStarted
-            ? <>
-              {todos.map((item, index) => {
-                return <TouchableWithoutFeedback
-                  key={item.id}
-                  onPress={() => toggleTodo(item.id)}
-                >
-                  <View>
-                    <CheckboxItem
-                      item={item}
-                      doneMap={doneMap}
-                      userMap={userMap}
-                    />
-                  </View>
-                </TouchableWithoutFeedback>;
-              })}
-            </>
-            : <>{Object.values(Category).map((category, index) => {
-              const filteredPackings = todos.filter(packing => packing.category === category);
-              return <React.Fragment key={index}>
-                <Text style={styles.category}>{category}</Text>
-                {filteredPackings.map(item => {
+        {loading ?
+          <View style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <ActivityIndicator size={60} color={primaryColor}/>
+          </View> :
+          <ScrollView contentContainerStyle={styles.scrollView}>
+            {showTripStarted
+              ? <>
+                {todos.map((item, index) => {
                   return <TouchableWithoutFeedback
                     key={item.id}
-                    onPress={() => togglePacking(item.id)}
+                    onPress={() => toggleTodo(item.id)}
                   >
                     <View>
-                      <CheckboxItem item={item} doneMap={doneMap} userMap={userMap}/>
+                      <CheckboxItem
+                        item={item}
+                        doneMap={doneMap}
+                        userMap={userMap}
+                      />
                     </View>
                   </TouchableWithoutFeedback>;
                 })}
-              </React.Fragment>;
-            })}</>
-          }
-        </ScrollView>
+                <Text style={styles.changeButton} onPress={() => setShowTripStrated(false)}>Näytä pakkauslista</Text>
+              </>
+              : <>
+                {Object.values(Category).map((category, index) => {
+                  const filteredPackings = todos.filter(packing => packing.category === category);
+                  return <React.Fragment key={index}>
+                    <Text style={styles.category}>{category}</Text>
+                    {filteredPackings.map(item => {
+                      return <TouchableWithoutFeedback
+                        key={item.id}
+                        onPress={() => togglePacking(item.id)}
+                      >
+                        <View>
+                          <CheckboxItem item={item} doneMap={doneMap} userMap={userMap}/>
+                        </View>
+                      </TouchableWithoutFeedback>;
+                    })}
+                  </React.Fragment>;
+                })}
+                {tripStarted &&
+                <Text style={styles.changeButton} onPress={() => setShowTripStrated(true)}>Näytä matkan aikana</Text>}
+              </>
+            }
+          </ScrollView>
+        }
+        
       </View>
     </View>
   );
@@ -254,5 +274,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginTop: 5,
     marginRight: 3
+  },
+  changeButton: {
+    marginTop: 10,
+    textDecorationLine: 'underline',
+    color: grayLight,
   }
 });
