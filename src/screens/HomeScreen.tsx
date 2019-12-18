@@ -6,8 +6,12 @@ import {
     View,
     TouchableOpacity,
     ScrollView,
+    Image,
     ImageBackground,
-    ActivityIndicator
+    ActivityIndicator,
+    LayoutChangeEvent,
+    NativeSyntheticEvent,
+    NativeScrollEvent
 } from 'react-native';
 import { useNavigation } from 'react-navigation-hooks';
 
@@ -15,7 +19,7 @@ import moment from 'moment';
 import { destinations, START_TIME } from  '../constants';
 import { primaryColor } from '../styles';
 
-const SCROLLABLE_CONTENT_HEIGHT = 2350;
+const SCROLLABLE_CONTENT_HEIGHT = 2423;
 
 export const HomeScreen: React.FC = () => {
 
@@ -38,12 +42,70 @@ export const HomeScreen: React.FC = () => {
 
     const insets = useSafeArea();
 
+    // States for background position
+    const [ scrollViewWidth, setScrollViewWidth ] = useState<number>(undefined);
+    const [ scrollViewHeight, setScrollViewHeight ] = useState<number>(undefined);
+    const [ progress, setProgress ] = useState<number>(undefined);
+    const [ parallaxPos, setParallaxPos ] = useState(undefined);
+    const [ parallaxLeftPos, setParallaxLeftPos ] = useState(undefined);
+    const [ parallaxRightPos, setParallaxRightPos ] = useState(undefined);
+
+    useEffect(() => {
+        if (scrollViewWidth && scrollViewHeight) {
+            updatePositions();
+        }
+    }, [progress]);
+
+    const updatePositions = () => {
+        const bgWidth = scrollViewWidth;
+        const bgHeight = bgWidth * 5.94;
+        const parallaxHeight = bgHeight * 1.3;
+        const parallaxBottom = (progress * (parallaxHeight - scrollViewHeight)) + scrollViewHeight - parallaxHeight;
+        const parallaxPos = {width: bgWidth, height: parallaxHeight, left: 0, bottom: parallaxBottom};
+        const parallaxWidth = bgWidth * 1.7;
+        const parallaxLeft = (progress * (parallaxWidth - scrollViewWidth)) + scrollViewWidth - parallaxWidth;
+        const parallaxLeftPos = {width: parallaxWidth, height: bgHeight, left: parallaxLeft, top: 0};
+        const parallaxRight = (progress * (parallaxWidth - scrollViewWidth)) + scrollViewWidth - parallaxWidth;
+        const parallaxRightPos = {width: parallaxWidth, height: bgHeight, right: parallaxRight, top: 0};
+        setParallaxPos(parallaxPos);
+        setParallaxLeftPos(parallaxLeftPos);
+        setParallaxRightPos(parallaxRightPos);
+    };
+
+    const onLayout = (event: LayoutChangeEvent) => {
+        const { width, height } = event.nativeEvent.layout;
+        setScrollViewWidth(width);
+        setScrollViewHeight(height);
+        setProgress(0);
+    };
+
+    const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) =>  {
+        const scrollY = event.nativeEvent.contentOffset.y;
+        const contentHeight = event.nativeEvent.contentSize.height;
+        const viewHeight = event.nativeEvent.layoutMeasurement.height;
+        const maxY = contentHeight - viewHeight;
+        const progress = Math.max(Math.min(scrollY / maxY, 1), 0);
+        setProgress(progress);
+    };
+
+    const parallaxImages = <>
+        <Image source={require('../../assets/monkey.png')} style={styles.monkey} />
+        <Image source={require('../../assets/lamps.png')} style={styles.lamps} />
+        <Image source={require('../../assets/rice_guy_in_boat.png')} style={styles.boat} />
+    </>;
+    const parallaxLeftImages =  <>
+        <Image source={require('../../assets/scooter.png')} style={styles.scooter} />
+    </>;
+    const parallaxRightImages =  <>
+        <Image source={require('../../assets/transparent_clouds.png')} style={styles.clouds} />
+    </>;
+
     return (
         <View style={{
             ...styles.view,
             marginTop: insets.top,
             marginBottom: insets.bottom
-        }}>
+        }} onLayout={(event) => onLayout(event)}>
             {isLoading
                 ? <View style={{
                     flex: 1,
@@ -79,28 +141,29 @@ export const HomeScreen: React.FC = () => {
                                 </View>
                             </View>
                         </ImageBackground>
-                        : <ScrollView
-                            style={styles.scrollView}
-                        >
-                           <ImageBackground source={require('../../assets/app_background.png')} style={{width: '100%', height: '100%'}}>
-                            <View style={{flex: 1, height: SCROLLABLE_CONTENT_HEIGHT}}>
-                                {destinations.map((destination, index) =>
-                                    <TouchableOpacity
-                                        onPress={() => onDestinationPress(index)}
-                                        key={index}
-                                        style={{
-                                            ...styles.date,
-                                            position: 'absolute',
-                                            top: destination.position.y,
-                                            left: destination.position.x,
-                                        }}
-                                    >
-                                        <View>
-                                            <Text style={styles.dateText}>{`${index + 1}`}</Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                )}
-                            </View>
+                        : <ScrollView style={styles.scrollView} onScroll={(event) => onScroll(event)}>
+                            <ImageBackground source={require('../../assets/home_bg.png')} style={{width: '100%', height: '100%'}}>
+                                <View style={[styles.parallax, parallaxPos]}>{parallaxImages}</View>
+                                <View style={[styles.parallax, parallaxLeftPos]}>{parallaxLeftImages}</View>
+                                <View style={[styles.parallax, parallaxRightPos]}>{parallaxRightImages}</View>
+                                <View style={{flex: 1, height: SCROLLABLE_CONTENT_HEIGHT}}>
+                                    {destinations.map((destination, index) =>
+                                        <TouchableOpacity
+                                            onPress={() => onDestinationPress(index)}
+                                            key={index}
+                                            style={{
+                                                ...styles.date,
+                                                position: 'absolute',
+                                                top: destination.position.y,
+                                                left: destination.position.x,
+                                            }}
+                                        >
+                                            <View>
+                                                <Text style={styles.dateText}>{`${index + 1}`}</Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    )}
+                                </View>
                            </ImageBackground>
                         </ScrollView>
                     }
@@ -118,9 +181,32 @@ const styles = StyleSheet.create({
     scrollView: {
         flex: 1,
     },
-    background: {
+    parallax: {
         position: 'absolute',
-        zIndex: -1,
+    },
+    monkey: {
+        position: 'absolute',
+        left: 0,
+        bottom: '96%',
+    },
+    boat: {
+        position: 'absolute',
+        right: 50,
+        bottom: '2.5%',
+    },
+    lamps: {
+        position: 'absolute',
+        left: 0,
+        bottom: '60%',
+    },
+    scooter: {
+        position: 'absolute',
+        top: 610,
+        left: '50%',
+    },
+    clouds: {
+        top: 300,
+        right: '10%',
     },
     date: {
         backgroundColor: '#fff',
@@ -180,5 +266,5 @@ const styles = StyleSheet.create({
     },
     timeUntilUnitText: {
         fontWeight: 'bold',
-    }
+    },
 });
