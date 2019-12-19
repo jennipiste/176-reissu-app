@@ -567,7 +567,7 @@ const styles = StyleSheet.create({
   infoHeader: {
     fontSize: 22,
     fontFamily: 'futuramedium',
-    fontWeight: '400',
+    // fontWeight: '400',
     flex: 1
   },
   headerBlock: {

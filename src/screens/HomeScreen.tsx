@@ -316,7 +316,7 @@ const styles = StyleSheet.create({
   timeUntilTitle: {
     fontSize: 20,
     marginBottom: 30,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
   },
   timeUntilItems: {
     flexDirection: 'row',
