@@ -5,7 +5,8 @@ import {
   View,
   StyleSheet,
   ScrollView,
-  TouchableOpacity
+  TouchableOpacity,
+  Platform
 } from 'react-native';
 import {Linking} from 'expo';
 import {FontAwesome, Ionicons} from "@expo/vector-icons";
@@ -388,7 +389,7 @@ export const InfoScreen: React.FC = () => {
   return (
     <ScrollView style={{
       marginTop: insets.top,
-      marginBottom: insets.bottom,
+      marginBottom: Platform.OS === 'ios' ? 0 : insets.bottom,
       backgroundColor: backgroundColor
     }}>
       <React.Fragment>

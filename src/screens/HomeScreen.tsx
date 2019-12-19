@@ -158,7 +158,7 @@ export const HomeScreen: React.FC = () => {
     <View style={{
       ...styles.view,
       marginTop: insets.top,
-      marginBottom: insets.bottom
+      marginBottom: Platform.OS === 'ios' ? 0 : insets.bottom,
     }} onLayout={(event) => onLayout(event)}>
       {isLoading
         ? <View style={{

@@ -129,7 +129,7 @@ export const UserListScreen: React.FC = () => {
     <View style={{
         flex: 1,
         marginTop: insets.top,
-        marginBottom: insets.bottom,
+        marginBottom: Platform.OS === 'ios' ? 0 : insets.bottom,
         backgroundColor: backgroundColor,
     }}>
       <View style={styles.header}>
