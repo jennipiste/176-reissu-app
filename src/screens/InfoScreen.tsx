@@ -79,7 +79,7 @@ const listItems: IListItem[] = [
     previewText:
       'Ho Chi Minh City (Tunnettiin aijemmin Saigonina) on Vietnamin suurin kaupunki 8.4 miljoonalla asukkaallaan. ' +
       'Kyseessä on matkamme ensimmäinen kohde, joka sijaitsee eteläisessä Vietnamissa. ' +
-      'Tärkeimpiin nähtävyyksiin sisältyvät Cu Chui tunnelit ja Ben Than Market.',
+      'Tärkeimpiin nähtävyyksiin sisältyvät Cu Chui tunnelit ja Ben Than Market.                                              .',
     stayInfo: {
       street: '132 Bến Vân Đồn, Phường 6, Quận 4, Hồ Chí Minh, Vietnam',
       name: 'Thai Anh Millennium Central',
