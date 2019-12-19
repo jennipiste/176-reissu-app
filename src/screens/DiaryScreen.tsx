@@ -134,7 +134,7 @@ export const DiaryScreen: React.FC = () => {
                   return <View
                     style={{...styles.postContainer, ...(index === posts.length - 1 ? {marginBottom: 20} : {})}}>
                     {userAvatarUrl
-                      ? <Image source={{uri: userAvatarUrl}} style={styles.avatar}/>
+                      ? <Image source={{uri: userAvatarUrl, cache: 'force-cache'}} style={styles.avatar}/>
                       : <Image source={require('../../assets/user-profile-empty.png')} style={styles.avatar}/>
                     }
                     <View

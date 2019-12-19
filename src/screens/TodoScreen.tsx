@@ -50,7 +50,7 @@ const CheckboxItem: React.FC<ICheckboxItemProps> = ({item, doneMap, userMap}: IC
           >{
             userMap[userId] === undefined ?
               <Text>?</Text> :
-              <Image style={styles.faceItem} source={{uri: userMap[userId].avatarUrl}}/>
+              <Image style={styles.faceItem} source={{uri: userMap[userId].avatarUrl, cache: 'force-cache'}}/>
           }
           </React.Fragment>;
         })}

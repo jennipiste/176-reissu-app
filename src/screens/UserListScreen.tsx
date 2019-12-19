@@ -146,7 +146,7 @@ export const UserListScreen: React.FC = () => {
           <TouchableOpacity onPress={() => setIsModalVisible(true)}>
             <View style={styles.currentUser}>
               {currentUser.avatarUrl
-                ? <View style={commonStyles.profileImageContainer}><Image source={{uri: currentUser.avatarUrl}} style={commonStyles.profileImage}/></View>
+                ? <View style={commonStyles.profileImageContainer}><Image source={{uri: currentUser.avatarUrl, cache: 'force-cache'}} style={commonStyles.profileImage}/></View>
                 : <Image source={require('../../assets/user-profile-empty.png')} style={commonStyles.noAvatarImage}/>
               }
                 <Text style={[styles.userNameHeader, styles.currentUserNameHeader]}>{currentUser.username}</Text>
@@ -196,8 +196,8 @@ export const UserListScreen: React.FC = () => {
                       <Text style={styles.modalTitle}>Muokkaa profiilia</Text>
                       <TouchableOpacity onPress={onPickImagePress}>
                         {newAvatarUrl
-                          ? <Image source={{uri: newAvatarUrl}} style={commonStyles.profileImageOld}/>
-                          : <Image source={{uri: currentUser.avatarUrl}} style={commonStyles.noAvatarImage}/>
+                          ? <Image source={{uri: newAvatarUrl, cache: 'force-cache'}} style={commonStyles.profileImageOld}/>
+                          : <Image source={{uri: currentUser.avatarUrl, cache: 'force-cache'}} style={commonStyles.noAvatarImage}/>
                         }
                       </TouchableOpacity>
                       <TextInput
@@ -263,7 +263,7 @@ export const UserListScreen: React.FC = () => {
                       >
                         <AntDesign name='close' size={20} />
                       </TouchableOpacity>
-                      <Image source={{uri: modalUser.avatarUrl}} style={styles.profileImage}/>
+                      <Image source={{uri: modalUser.avatarUrl, cache: 'force-cache'}} style={styles.profileImage}/>
                       <Text style={{...styles.userNameHeader, marginBottom: 20, fontSize: 20}}>{modalUser.username}</Text>
                       <Text style={styles.currentUserText}>{modalUser.description}</Text>
                     </View>
@@ -275,7 +275,7 @@ export const UserListScreen: React.FC = () => {
               {users.filter(user => user.uid !== currentUser.uid).map((user, index) => {
                 return <TouchableOpacity key={index} style={styles.user} onPress={() => setModalUser(user)}>
                   {user.avatarUrl
-                    ? <Image source={{uri: user.avatarUrl}} style={styles.image}/>
+                    ? <Image source={{uri: user.avatarUrl, cache: 'force-cache'}} style={styles.image}/>
                     : <Image source={require('../../assets/user-profile-empty.png')} style={styles.image}/>
                   }
                   <View style={styles.usersText}>

@@ -111,7 +111,7 @@ export const SignupScreen: React.FC = () => {
       <Text style={styles.signUpTitle}>Luo profiili</Text>
       <TouchableOpacity onPress={onPickImagePress}>
         {avatarUrl.length > 0
-          ? <View style={styles.profileImageContainer}><Image source={{uri: avatarUrl}}
+          ? <View style={styles.profileImageContainer}><Image source={{uri: avatarUrl, cache: 'force-cache'}}
                                                               style={commonStyles.profileImage}/></View>
           : <Image source={require('../../assets/user-profile-empty.png')} style={styles.noAvatarImage}/>
         }
