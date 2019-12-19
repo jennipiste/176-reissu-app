@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Text, View, TextInput, StyleSheet, Alert, Image, TouchableOpacity, KeyboardAvoidingView} from 'react-native';
 import {useNavigation} from 'react-navigation-hooks';
 import * as ImagePicker from 'expo-image-picker';
@@ -8,6 +8,8 @@ import {packings, todos} from '../constants';
 import {commonStyles, grayDark} from '../styles';
 import {Button} from 'react-native-elements';
 import * as ImageManipulator from "expo-image-manipulator";
+import Constants from 'expo-constants';
+import * as Permissions from 'expo-permissions';
 
 
 export const SignupScreen: React.FC = () => {
@@ -20,6 +22,19 @@ export const SignupScreen: React.FC = () => {
   const [inputFocus, setInputFocus] = useState<string>('');
 
   const {navigate} = useNavigation();
+
+  const getPermissionAsync = async () => {
+    if (Constants.platform.ios) {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== 'granted') {
+        alert('Sorry, we need camera roll permissions to make this work!');
+      }
+    }
+  };
+
+  useEffect(() => {
+    getPermissionAsync();
+  }, []);
 
   const onPickImagePress = async () => {
     const result: ImagePicker.ImagePickerResult = await ImagePicker.launchImageLibraryAsync({

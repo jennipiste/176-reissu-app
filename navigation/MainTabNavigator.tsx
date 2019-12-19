@@ -57,7 +57,7 @@ const HomeStack = createStackNavigator({
         screen: CreatePostScreen,
         navigationOptions: {
             headerStyle: {
-                backgroundColor: 'transparent',
+              borderBottomColor: 'transparent',
             },
             title: 'Uusi postaus',
             headerTitleStyle: {

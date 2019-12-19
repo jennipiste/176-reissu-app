@@ -12,7 +12,8 @@ import {
   ActivityIndicator,
   LayoutChangeEvent,
   NativeSyntheticEvent,
-  NativeScrollEvent
+  NativeScrollEvent,
+  Platform
 } from 'react-native';
 import {useNavigation} from 'react-navigation-hooks';
 
@@ -165,7 +166,7 @@ export const HomeScreen: React.FC = () => {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-          <ActivityIndicator size={60} color={primaryColor}/>
+          <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={primaryColor} />
         </View>
         : <>
           {(timeUntil && timeUntil.days < 0 || timeUntil.hours < 0 || timeUntil.minutes < 0 || timeUntil.seconds < 0)

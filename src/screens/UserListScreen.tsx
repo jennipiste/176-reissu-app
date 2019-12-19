@@ -10,7 +10,8 @@ import {
   TextInput,
   Alert,
   TouchableOpacity,
-  ActivityIndicator
+  ActivityIndicator,
+  Platform
 } from 'react-native';
 import firebase from 'firebase';
 import {User} from '../interfaces';
@@ -161,7 +162,7 @@ export const UserListScreen: React.FC = () => {
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-            <ActivityIndicator size={60} color={primaryColor} />
+            <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={primaryColor} />
           </View>
           : <>
             <Modal
@@ -180,7 +181,7 @@ export const UserListScreen: React.FC = () => {
                       alignItems: 'center',
                       justifyContent: 'center',
                     }}>
-                      <ActivityIndicator size={40} color={primaryColor} />
+                      <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 40} color={primaryColor} />
                     </View>
                     : <ScrollView contentContainerStyle={styles.modalContent}>
                       <TouchableOpacity

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import * as ImageManipulator from 'expo-image-manipulator';
-import {Text, View, TextInput, StyleSheet, Image, ScrollView, ActivityIndicator} from 'react-native';
+import {Text, View, TextInput, StyleSheet, Image, ScrollView, ActivityIndicator, Platform} from 'react-native';
 import {useNavigationParam, useNavigation} from 'react-navigation-hooks';
 import * as ImagePicker from 'expo-image-picker';
 import firebase from 'firebase';
@@ -113,7 +113,7 @@ export const CreatePostScreen: React.FC = () => {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-          <ActivityIndicator size={60} color={primaryColor} />
+          <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={primaryColor} />
         </View>
         : destination && <View>
           <View style={styles.header}>

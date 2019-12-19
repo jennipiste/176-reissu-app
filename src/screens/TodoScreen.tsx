@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useSafeArea} from 'react-native-safe-area-context';
-import {Text, View, Image, TouchableWithoutFeedback, StyleSheet, ScrollView, ActivityIndicator} from 'react-native';
+import {Text, View, Image, TouchableWithoutFeedback, StyleSheet, ScrollView, ActivityIndicator, Platform} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 import {PackingOrTodo, Category, User} from '../interfaces';
 import firebase from 'firebase';
@@ -175,7 +175,7 @@ export const TodoScreen: React.FC = () => {
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-            <ActivityIndicator size={60} color={primaryColor}/>
+            <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={primaryColor} />
           </View> :
           <ScrollView contentContainerStyle={styles.scrollView}>
             {showTripStarted
@@ -219,7 +219,7 @@ export const TodoScreen: React.FC = () => {
             }
           </ScrollView>
         }
-        
+
       </View>
     </View>
   );

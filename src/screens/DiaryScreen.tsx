@@ -8,7 +8,8 @@ import {
   FlatList,
   ActivityIndicator,
   AsyncStorage,
-  DeviceEventEmitter
+  DeviceEventEmitter,
+  Platform
 } from 'react-native';
 import {useNavigation, useNavigationParam} from 'react-navigation-hooks';
 import firebase from 'firebase';
@@ -174,7 +175,7 @@ export const DiaryScreen: React.FC = () => {
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-            <ActivityIndicator size={60} color={primaryColor}/>
+            <ActivityIndicator size={Platform.OS === 'ios' ? 'large' : 60} color={primaryColor} />
           </View>
       }
     </View>
