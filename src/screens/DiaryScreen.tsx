@@ -64,8 +64,8 @@ export const DiaryScreen: React.FC = () => {
         storeSeenUids()
 
         setPosts(sortedPosts);
-        setPostsLoaded(true);
       }
+      setPostsLoaded(true);
     };
     ref.on('value', handleSnapshot);
     return () => ref.off('value', handleSnapshot);
@@ -80,8 +80,8 @@ export const DiaryScreen: React.FC = () => {
           return result[key];
         });
         setUsers(usersList);
-        setUsersLoaded(true);
       }
+      setUsersLoaded(true);
     };
     ref.on('value', handleSnapshot);
     return () => ref.off('value', handleSnapshot);
