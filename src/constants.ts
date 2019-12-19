@@ -429,6 +429,16 @@ export const packings: PackingOrTodo[] = [{
     name: 'Pyykinpesuaine',
     category: Category.other,
     completed: false,
+}, {
+    id: 77,
+    name: 'Kuulokkeet',
+    category: Category.other,
+    completed: false,
+}, {
+    id: 78,
+    name: 'Hyttysmyrkky',
+    category: Category.hygiene,
+    completed: false,
 }];
 
 export const todos: PackingOrTodo[] = [{
