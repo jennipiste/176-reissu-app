@@ -439,6 +439,11 @@ export const packings: PackingOrTodo[] = [{
     name: 'Hyttysmyrkky',
     category: Category.hygiene,
     completed: false,
+}, {
+    id: 79,
+    name: 'Laastareita ja rakkolaastareita',
+    category: Category.hygiene,
+    completed: false,
 }];
 
 export const todos: PackingOrTodo[] = [{
