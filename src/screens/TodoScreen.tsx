@@ -72,12 +72,15 @@ export const TodoScreen: React.FC = () => {
   const insets = useSafeArea();
 
   useEffect(() => {
-    firebase.database().ref('users').on('value', (snapshot) => {
+    const ref = firebase.database().ref('users');
+    const handleSnapshot = (snapshot: firebase.database.DataSnapshot) => {
       const result = snapshot.val();
       if (result) {
         setUserMap(result);
       }
-    });
+    };
+    ref.on('value', handleSnapshot);
+    return () => ref.off('value', handleSnapshot);
   }, []);
 
   const handleSnapchot = (snapshot) => {
