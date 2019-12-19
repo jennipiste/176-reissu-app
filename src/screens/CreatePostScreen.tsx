@@ -20,6 +20,7 @@ export const CreatePostScreen: React.FC = () => {
   const {goBack} = useNavigation();
 
   const [date, setDate] = useState<moment.Moment>(undefined);
+  const [imageLoadingCounter, setImageLoadingCounter] = useState<number>(0);
   const [destination, setDestination] = useState<Destination>(undefined);
   const [text, setText] = useState<string>('');
   const [imageUris, setImageUris] = useState<string[]>([]);
@@ -90,6 +91,7 @@ export const CreatePostScreen: React.FC = () => {
   };
 
   const onPickImagePress = async () => {
+    setImageLoadingCounter(currentImageLoadingCounter => currentImageLoadingCounter + 1)
     const result: ImagePicker.ImagePickerResult = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
     });
@@ -101,8 +103,9 @@ export const CreatePostScreen: React.FC = () => {
         ],
         {}
       );
-      setImageUris([...imageUris, resized.uri]);
+      setImageUris(currImageUris => [...currImageUris, resized.uri]);
     }
+    setImageLoadingCounter(currentImageLoadingCounter => currentImageLoadingCounter - 1)
   };
 
   return (
@@ -217,7 +220,8 @@ export const CreatePostScreen: React.FC = () => {
           </View>
           <View style={{...commonStyles.buttonView, width: '100%', marginTop: 10, marginBottom: 10}}>
             <Button
-              title='Julkaise'
+              title={imageLoadingCounter === 0 ? 'Julkaise' : 'Odota...'}
+              disabled={imageLoadingCounter > 0}
               onPress={onCreatePress}
               buttonStyle={commonStyles.button}
               titleStyle={commonStyles.buttonTitleStyle}

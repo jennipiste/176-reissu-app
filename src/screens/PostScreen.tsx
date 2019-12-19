@@ -27,15 +27,6 @@ export const PostScreen: React.FC = () => {
       style={{
         width: imageSize.width,
         height: imageSize.height
-        // flex: 1,
-        // // resizeMode: 'stretch'
-        // // resizeMode: 'cover'
-        // // resizeMode: 'cover'
-        // resizeMode: 'center'
-        // // width: 100,
-        // // height: 100,
-        // // borderRadius: 1,
-        // // borderColor: 'black'
       }}
     />
   </ScrollView>;
