@@ -208,7 +208,17 @@ export const UserListScreen: React.FC = () => {
                         onFocus={() => setInputFocus('username')}
                       />
                       <TextInput
-                        style={inputFocus === 'description' ? [commonStyles.textInput, commonStyles.textInputActive] : commonStyles.textInput}
+                        style={inputFocus === 'description'
+                          ? {
+                              ...commonStyles.textInput,
+                              ...commonStyles.textInputActive,
+                              height: Platform.OS === 'ios' ? 20 * 4 : 'none',
+                          }
+                          : {
+                            ...commonStyles.textInput,
+                            height: Platform.OS === 'ios' ? 20 * 4 : 'none'
+                          }
+                        }
                         placeholder="Kuvaus"
                         value={description}
                         multiline={true}

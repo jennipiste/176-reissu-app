@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Text, View, TextInput, StyleSheet, Alert, Image, TouchableOpacity, KeyboardAvoidingView} from 'react-native';
+import {Text, View, TextInput, StyleSheet, Alert, Image, TouchableOpacity, KeyboardAvoidingView, Platform} from 'react-native';
 import {useNavigation} from 'react-navigation-hooks';
 import * as ImagePicker from 'expo-image-picker';
 import firebase from 'firebase';
@@ -144,7 +144,17 @@ export const SignupScreen: React.FC = () => {
         onFocus={() => setInputFocus('password')}
       />
       <TextInput
-        style={inputFocus === 'description' ? [commonStyles.textInput, commonStyles.textInputActive] : commonStyles.textInput}
+        style={inputFocus === 'description'
+          ? {
+            ...commonStyles.textInput,
+            ...commonStyles.textInputActive,
+            height: Platform.OS === 'ios' ? 20 * 4 : 'none',
+          }
+          : {
+            ...commonStyles.textInput,
+            height: Platform.OS === 'ios' ? 20 * 4 : 'none'
+          }
+        }
         placeholder="Kuvaus"
         placeholderTextColor={grayDark}
         value={description}

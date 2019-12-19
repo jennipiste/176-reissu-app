@@ -154,7 +154,17 @@ export const CreatePostScreen: React.FC = () => {
             />
           </View>
           <TextInput
-            style={isFocused ? [styles.textInput, commonStyles.textInputActive] : styles.textInput}
+            style={isFocused
+            ? {
+                ...styles.textInput,
+                ...commonStyles.textInputActive,
+                height: Platform.OS === 'ios' ? 20 * 6 : 'none',
+            }
+            : {
+              ...styles.textInput,
+              height: Platform.OS === 'ios' ? 20 * 6 : 'none'
+            }
+          }
             placeholder='Lisää postauksen teksti'
             value={text}
             onChangeText={(text) => setText(text)}
