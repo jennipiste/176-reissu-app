@@ -338,9 +338,9 @@ const styles = StyleSheet.create({
   },
   timeUntilText: {
     fontSize: 38,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
   },
   timeUntilUnitText: {
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
   },
 });
