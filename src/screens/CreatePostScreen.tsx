@@ -158,11 +158,11 @@ export const CreatePostScreen: React.FC = () => {
             ? {
                 ...styles.textInput,
                 ...commonStyles.textInputActive,
-                height: Platform.OS === 'ios' ? 20 * 6 : 'none',
+                height: 20 * 6
             }
             : {
               ...styles.textInput,
-              height: Platform.OS === 'ios' ? 20 * 6 : 'none'
+              height: 20 * 6
             }
           }
             placeholder='Lisää postauksen teksti'

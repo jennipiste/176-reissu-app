@@ -148,11 +148,11 @@ export const SignupScreen: React.FC = () => {
           ? {
             ...commonStyles.textInput,
             ...commonStyles.textInputActive,
-            height: Platform.OS === 'ios' ? 20 * 4 : 'none',
+            height: 20 * 4
           }
           : {
             ...commonStyles.textInput,
-            height: Platform.OS === 'ios' ? 20 * 4 : 'none'
+            height: 20 * 4
           }
         }
         placeholder="Kuvaus"
