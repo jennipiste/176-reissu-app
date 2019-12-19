@@ -198,7 +198,7 @@ export const HomeScreen: React.FC = () => {
                 </View>
               </View>
             </ImageBackground>
-            : <ScrollView style={styles.scrollView} onScroll={(event) => onScroll(event)}>
+            : <ScrollView style={styles.scrollView} onScroll={(event) => onScroll(event)} scrollEventThrottle={16}>
               <ImageBackground source={require('../../assets/home_bg.png')} style={{width: '100%', height: '100%'}}>
                 <View style={[styles.parallax, parallaxPos]}>{parallaxImages}</View>
                 <View style={[styles.parallax, parallaxLeftPos]}>{parallaxLeftImages}</View>
